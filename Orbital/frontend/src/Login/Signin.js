@@ -81,6 +81,9 @@ export function Signin(){
                     <div className='login-message'>
                         <center><p className='login_redirect mt-2'><b><a href='/signup'> Sign up</a></b></p></center>
                     </div>
+                    <div className='login-message'>
+                        <center><p className='login_redirect mt-2'><b><a href='/forgetpassword'> Forget Password</a></b></p></center>
+                    </div>
                 </div>
             </div>
     )

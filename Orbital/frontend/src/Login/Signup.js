@@ -9,13 +9,14 @@ function Signup() {
         email: "",
         name: "",
         password: "",
+        confirmPassword:"",
         error: "",
         loading: false,
         success: false,
     });
 
     // Destructuring values from the state
-    const { name, email, password, error, loading, success } = formValues;
+    const { name, email, password, confirmPassword, error, loading, success } = formValues;
 
     // Handles changes in the input fields
     const handleChange = name => event => {
@@ -25,6 +26,12 @@ function Signup() {
     // Submits the form data to the backend
     const onSubmit = async event => {
         event.preventDefault();
+
+        // Passwords do not match
+        if (password !== confirmPassword) {
+            setFormValues({ ...formValues, error: "Passwords do not match", success: false, loading: false });
+            return;
+        }
 
         setFormValues({ ...formValues, success: false, loading: true });
 

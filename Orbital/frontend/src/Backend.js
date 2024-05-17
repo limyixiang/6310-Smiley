@@ -37,6 +37,39 @@ export const signup = user => {
     })
 }
 
+//FORGETPASSWORD
+export const forgetPasswordAuthentication = user => {
+    // API call to check if user is in database
+    return axios.post("http://localhost:8000/api/forgetpassword", JSON.stringify(user), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
+
+export const forgetPasswordReset = user => {
+    // API call to check if user is in database
+    return axios.put("http://localhost:8000/api/forgetpassword", JSON.stringify(user), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
+
 //SETTING THE JWT TOKEN IN USER'S BROWSER
 export const authenticate = (data, next) => {
     // Storing JWT token in user's browser
