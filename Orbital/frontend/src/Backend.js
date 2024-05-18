@@ -55,7 +55,6 @@ export const forgetPasswordAuthentication = user => {
 }
 
 export const forgetPasswordReset = (user, token) => {
-    console.log(token);
     // API call to check if user is in database
     return axios.post("http://localhost:8000/api/resetpassword/" + token, JSON.stringify(user), {
         headers: {

@@ -70,22 +70,24 @@ export function ForgetPassword() {
     }
 
     return (
-        success ? <Navigate to="/resetpassword" /> :
-            <div className="form-container">
-                <div className="form-box">
-                    <h2>Forget Password</h2>
-                    {successMessage()}
-                    {loadingMessage()}
-                    {errorMessage()}
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input id="email" type="text" value={email} onChange={handleOnChange("email")} required />
-                    </div>
-                    <div className="form-group-button">
-                        <button onClick={handleOnSubmit}>Submit</button>
-                    </div>
+        <div className="form-container">
+            <div className="form-box">
+                <h2>Forget Password</h2>
+                {successMessage()}
+                {loadingMessage()}
+                {errorMessage()}
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input id="email" type="text" value={email} onChange={handleOnChange("email")} required />
+                </div>
+                <div className="form-group-button">
+                    <button onClick={handleOnSubmit}>Submit</button>
+                </div>
+                <div className='login-message'>
+                        <center><p className='login_redirect mt-2'><b><a href='/signin'>Back to Login</a></b></p></center>
                 </div>
             </div>
+        </div>
     );
 }
  

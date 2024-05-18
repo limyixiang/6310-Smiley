@@ -79,7 +79,7 @@ exports.forgetPassword = async (req,res) => {
         }
 
         //Generate a unique JWT token for the user that contains the user's id
-        const token = jwtToken.sign({ _id: user._id }, 'shhhhh', { expiresIn: '30m' });
+        const token = jwtToken.sign({ _id: user._id }, 'shhhhh', { expiresIn: '10m' });
 
         //Send the token to the user's email
         const transporter = nodemailer.createTransport({
@@ -97,7 +97,7 @@ exports.forgetPassword = async (req,res) => {
             subject: 'Reset Password Link',
             html: `<h1>Reset Password</h1>
                 <h2>Please click on the link below to reset your password:</h2>
-                <p>${process.env.CLIENT_URL}/resetpassword/${token}</p>
+                <a href='${process.env.CLIENT_URL}/resetpassword/${token}'>${process.env.CLIENT_URL}/resetpassword/${token}</a>
                 <p>This link is valid for 10 minutes.</p>
             `
         };
@@ -118,17 +118,7 @@ exports.forgetPassword = async (req,res) => {
 //RESET PASSWORD
 exports.resetPassword = async (req,res) => {
     try {
-        //Get the token from the URL
-        // const token = req.params.token;
-
         //Verify the token
-        // jwtToken.verify(token, process.env.JWT_SECRET_KEY, async (error, decoded) => {
-        //     if (error) {
-        //         return res.status(401).json({ error: 'Token is invalid or expired' });
-        //     }
-
-        //     //Find the user by the decoded id
-        //     const user = await User.findById(decoded._id
         const decoded_token = jwtToken.verify(req.params.token, 'shhhhh');
 
         //If token is invalid, return an error
@@ -140,12 +130,6 @@ exports.resetPassword = async (req,res) => {
         const user = await User.findById(decoded_token._id);
         if (!user) {
             return res.status(401).json({ error: 'User not found' });
-        }
-
-        console.log(user);
-        console.log(req.body);
-        if (!req.body.password) {
-            return res.status(400).json({ error: 'Password is required' });
         }
 
         //Update the user's password

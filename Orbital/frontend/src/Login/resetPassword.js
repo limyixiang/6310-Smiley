@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { forgetPasswordReset } from '../Backend';
 
 // ResetPassword component for the forget password page
 export function ForgetPassword() {
 
     const [inputValue, setInputValue] = useState({
-        email: '',
         password: '',
         password2: '',
         error: '',
@@ -15,7 +13,7 @@ export function ForgetPassword() {
     });
 
     // Destructuring values from the state
-    const { email, password, password2, error, loading, success } = inputValue;
+    const { password, password2, error, loading, success } = inputValue;
 
     // Handles changes in the input fields
     const handleOnChange = name => event => {
@@ -47,7 +45,7 @@ export function ForgetPassword() {
                 if (data.error) {
                     setInputValue({ ...inputValue, error: data.error, success: false, loading: false });
                 } else {
-                    setInputValue({ ...inputValue, success: true });
+                    setInputValue({ ...inputValue, password:'', password2:'', success: true });
                 }
             })
             .catch();
@@ -72,26 +70,38 @@ export function ForgetPassword() {
         );
     }
 
+    // Displays success message upon successful reset of password
+    const successMessage = () => {
+        return (
+            <div className="success-message" style={{ display: success ? "" : "none" }}>
+                <p>Password has been reset successfully. Please proceed to <a href="/signin">login</a>.</p>
+            </div>
+        );
+    }
+
     return (
-        success ? <Navigate to="/signin" /> :
-            <div className="form-container">
-                <div className="form-box">
-                    <h2>Reset Password</h2>
-                    {loadingMessage()}
-                    {errorMessage()}
-                    <div className="form-group">
-                        <label htmlFor="password">Enter your new password:</label>
-                        <input id="password" type="password" value={password} onChange={handleOnChange("password")} required />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Re-enter your new password:</label>
-                        <input id="password2" type="password" value={password2} onChange={handleOnChange("password2")} required />
-                    </div>
-                    <div className="form-group-button">
-                        <button onClick={handleOnSubmit}>Reset Password</button>
-                    </div>
+        <div className="form-container">
+            <div className="form-box">
+                <h2>Reset Password</h2>
+                {successMessage()}
+                {loadingMessage()}
+                {errorMessage()}
+                <div className="form-group">
+                    <label htmlFor="password">Enter your new password:</label>
+                    <input id="password" type="password" value={password} onChange={handleOnChange("password")} required />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Re-enter your new password:</label>
+                    <input id="password2" type="password" value={password2} onChange={handleOnChange("password2")} required />
+                </div>
+                <div className="form-group-button">
+                    <button onClick={handleOnSubmit}>Reset Password</button>
+                </div>
+                <div className='login-message'>
+                        <center><p className='login_redirect mt-2'><b><a href='/signin'>Back to Login</a></b></p></center>
                 </div>
             </div>
+        </div>
     );
 }
  
