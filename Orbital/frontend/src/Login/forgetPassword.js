@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
 import { forgetPasswordAuthentication } from '../Backend';
 
 // ForgetPassword component for the forget password page
@@ -26,7 +26,7 @@ export function ForgetPassword() {
 
     // Submits the form data to the backend
     const handleOnSubmit = async event => {
-        event.preventDefault();
+        // event.preventDefault();
         setInputValue({ ...inputValue, success: false, loading: true });
 
         // Placeholder for the forget password function calling the backend
@@ -39,6 +39,15 @@ export function ForgetPassword() {
                 }
             })
             .catch();
+    }
+
+    // Displays success message upon successful authorization of user
+    const successMessage = () => {
+        return (
+            <div className="success-message" style={{ display: success ? "" : "none" }}>
+                <p>Check your email for the reset password link</p>
+            </div>
+        );
     }
 
     // Displays error message if there's any
@@ -65,6 +74,7 @@ export function ForgetPassword() {
             <div className="form-container">
                 <div className="form-box">
                     <h2>Forget Password</h2>
+                    {successMessage()}
                     {loadingMessage()}
                     {errorMessage()}
                     <div className="form-group">

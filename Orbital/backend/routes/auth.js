@@ -1,7 +1,7 @@
 const express = require("express");
 var router = express.Router();
 const { check } = require('express-validator');
-const {signin,signup,signout,isSignedIn} = require("../controllers/authController")
+const { signin, signup, signout, isSignedIn, forgetPassword, resetPassword } = require("../controllers/authController")
 
 router.post(
     "/signup",
@@ -22,10 +22,17 @@ router.post(
     signin
 );
 
-router.get("/signout",signout)
+router.post("/forgetpassword", forgetPassword);
+router.post(
+    "/resetpassword/:token", 
+    [
+        check("password", "Password must contain 8+ chars").isLength({ min: 8 }),
+    ],
+    resetPassword);
+router.get("/signout", signout)
 
 //Protected Route for testing
-router.get("/testroute",isSignedIn, (req,res) => {
+router.get("/testroute", isSignedIn, (req,res) => {
     res.send("A protected route")
 });
 

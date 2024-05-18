@@ -38,8 +38,11 @@ export function ForgetPassword() {
 
         setInputValue({ ...inputValue, success: false, loading: true });
 
+        // Get the token from the URL
+        const token = window.location.pathname.split("/").pop();
+
         // Placeholder for the forget password function calling the backend
-        forgetPasswordReset({ email })
+        forgetPasswordReset({ password }, token)
             .then(data => {
                 if (data.error) {
                     setInputValue({ ...inputValue, error: data.error, success: false, loading: false });

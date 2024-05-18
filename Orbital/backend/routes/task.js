@@ -6,4 +6,4 @@ const {getAllTasks} = require('../controllers/taskController')
 
 router.get("/get-all",getAllTasks);
 
-module.exports =router;
+module.exports = router;
