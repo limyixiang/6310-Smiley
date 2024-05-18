@@ -1,5 +1,5 @@
 import './App.css';
-import Signin from './Login/signIn.js'
+import Signin from './Login/signIn.js';
 import Signup from './Login/signUp.js';
 import Dashboard from './Login/dashboard.js';
 import ForgetPassword from './Login/forgetPassword.js';
