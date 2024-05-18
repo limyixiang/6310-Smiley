@@ -22,7 +22,7 @@ function App() {
           {/* Route for the ForgetPassword component */}
           <Route exact path='/forgetpassword' element={<ForgetPassword/>} />
           {/* Route for the ResetPassword component */}
-          <Route exact path='/resetpassword' element={<ResetPassword/>} />
+          <Route exact path='/resetpassword/:token' element={<ResetPassword/>} />
         </Routes>
       </Router>
     </div>

@@ -2,13 +2,13 @@ const User = require("../models/userModel");
 const {check, validationResult} = require("express-validator");
 var jwtToken = require('jsonwebtoken');
 var { expressjwt: jwt } = require("express-jwt");
-
+const nodemailer = require('nodemailer');
 
 //SIGNUP
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
     const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()){
         return res.status(422).json({
             error: errors.array()[0].msg,
         })
@@ -34,10 +34,10 @@ exports.signup = (req, res) => {
 
 
 //SIGNIN
-exports.signin = async(req,res) => {
+exports.signin = async (req,res) => {
 
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()){
         return res.status(422).json({
             error: errors.array()[0].msg,
         })
@@ -67,11 +67,103 @@ exports.signin = async(req,res) => {
 
 }
 
+//FORGET PASSWORD
+exports.forgetPassword = async (req,res) => {
+    try {
+        //Find user by email
+        const user = await User.findOne({ email: req.body.email });
+        console.log(user);
+        
+        //If user is not found
+        if (!user) {
+            return res.status(404).json({ error: "User with this email does not exist" });
+        }
+
+        //Generate a unique JWT token for the user that contains the user's id
+        const token = jwtToken.sign({ _id: user._id }, 'shhhhh', { expiresIn: '30m' });
+
+        //Send the token to the user's email
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
+            }
+        });
+
+        //Email configurations
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: user.email,
+            subject: 'Reset Password Link',
+            html: `<h1>Reset Password</h1>
+                <h2>Please click on the link below to reset your password:</h2>
+                <p>${process.env.CLIENT_URL}/resetpassword/${token}</p>
+                <p>This link is valid for 10 minutes.</p>
+            `
+        };
+
+        //Send the email
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).json({ error: error.message });
+            } else {
+                return res.status(200).json({ message: 'Email has been sent to the user' });
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+//RESET PASSWORD
+exports.resetPassword = async (req,res) => {
+    try {
+        //Get the token from the URL
+        // const token = req.params.token;
+
+        //Verify the token
+        // jwtToken.verify(token, process.env.JWT_SECRET_KEY, async (error, decoded) => {
+        //     if (error) {
+        //         return res.status(401).json({ error: 'Token is invalid or expired' });
+        //     }
+
+        //     //Find the user by the decoded id
+        //     const user = await User.findById(decoded._id
+        const decoded_token = jwtToken.verify(req.params.token, 'shhhhh');
+
+        //If token is invalid, return an error
+        if (!decoded_token) {
+            return res.status(401).json({ error: 'Token is invalid or expired' });
+        }
+
+        //Find the user by the decoded id
+        const user = await User.findById(decoded_token._id);
+        if (!user) {
+            return res.status(401).json({ error: 'User not found' });
+        }
+
+        console.log(req.body);
+        if (!req.body.password) {
+            return res.status(400).json({ error: 'Password is required' });
+        }
+
+        //Update the user's password
+        user.encrypted_password = user.securedPassword(req.body.password);
+        await user.save();
+
+        //Send success message
+        res.status(200).json({ message: 'Password has been reset successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 //SIGNOUT
-exports.signout = (req,res) => {
+exports.signout = async (req,res) => {
     res.clearCookie("token");
     res.json({
-        message: "User has signedout"
+        message: "User has signed out."
     });
 }
 
