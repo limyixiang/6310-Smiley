@@ -107,7 +107,7 @@ function Signup() {
                 </div>
                 <div className='login-message'>
                         <center><p className='login_redirect mt-2'><b><a href='/signin'> Back to Login</a></b></p></center>
-                    </div>
+                </div>
                 <div className="form-group-button">
                     <button onClick={onSubmit}>Sign Up</button>
                 </div>

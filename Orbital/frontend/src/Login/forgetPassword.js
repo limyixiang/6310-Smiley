@@ -61,7 +61,7 @@ export function ForgetPassword() {
     }
 
     return (
-        success ? <Navigate to="/resetPassword" /> :
+        success ? <Navigate to="/resetpassword" /> :
             <div className="form-container">
                 <div className="form-box">
                     <h2>Forget Password</h2>

@@ -1,0 +1,74 @@
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/*the box*/
+.courses-container, .tasks-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.courses-container h2, .tasks-container h2 {
+    margin-bottom: 20px;
+}
+
+.add-a-course, .add-a-task {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.add-a-course input, .add-a-task input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #6f90d0;
+}
+
+.add-a-course button, .add-a-task button {
+    padding: 10px 20px;
+    border: 1px solid #6f90d0;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.add-a-course button:hover, .add-a-task button:hover {
+    background-color: #5292d7;
+}
+
+.courses-list, .tasks-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.course-item {
+    padding: 20px;
+    border-radius: 50px;
+    background-color: #c2e1ea;
+    box-shadow: 0px 0px 10px #b4eaee;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: centre;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.task-item {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #c2e1ea;
+    box-shadow: 0px 0px 10px #b4eaee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

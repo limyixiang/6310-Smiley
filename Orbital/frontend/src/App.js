@@ -4,6 +4,7 @@ import Signup from './Login/signUp.js';
 import Dashboard from './Login/dashboard.js';
 import ForgetPassword from './Login/forgetPassword.js';
 import ResetPassword from './Login/resetPassword.js';
+import LandingPage from './Landing/landingPage.js'; 
 import {Routes, Route, BrowserRouter as Router} from 'react-router-dom';
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
           <Route exact path='/forgetpassword' element={<ForgetPassword/>} />
           {/* Route for the ResetPassword component */}
           <Route exact path='/resetpassword' element={<ResetPassword/>} />
+          {/* Route for the LandingPage component */}
+          <Route exact path='/landingpage' element={<LandingPage/>} />
         </Routes>
       </Router>
     </div>
