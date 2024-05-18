@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { signup } from "../Backend";
-import "./Signup.css"
+import "./signUp.css"
 
 // Signup component for the signup form
 function Signup() {

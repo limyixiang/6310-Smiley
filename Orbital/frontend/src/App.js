@@ -1,7 +1,7 @@
 import './App.css';
-import Signin from './Login/Signin.js'
-import Signup from './Login/Signup.js';
-import Dashboard from './Login/Dashboard.js';
+import Signin from './Login/signIn.js'
+import Signup from './Login/signUp.js';
+import Dashboard from './Login/dashboard.js';
 import ForgetPassword from './Login/forgetPassword.js';
 import ResetPassword from './Login/resetPassword.js';
 import {Routes, Route, BrowserRouter as Router} from 'react-router-dom';
