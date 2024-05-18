@@ -42,7 +42,7 @@ export function ForgetPassword() {
         const token = window.location.pathname.split("/").pop();
 
         // Placeholder for the forget password function calling the backend
-        forgetPasswordReset({ email }, token)
+        forgetPasswordReset({ password }, token)
             .then(data => {
                 if (data.error) {
                     setInputValue({ ...inputValue, error: data.error, success: false, loading: false });

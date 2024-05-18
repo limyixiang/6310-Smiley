@@ -72,7 +72,6 @@ exports.forgetPassword = async (req,res) => {
     try {
         //Find user by email
         const user = await User.findOne({ email: req.body.email });
-        console.log(user);
         
         //If user is not found
         if (!user) {
@@ -143,6 +142,7 @@ exports.resetPassword = async (req,res) => {
             return res.status(401).json({ error: 'User not found' });
         }
 
+        console.log(user);
         console.log(req.body);
         if (!req.body.password) {
             return res.status(400).json({ error: 'Password is required' });
