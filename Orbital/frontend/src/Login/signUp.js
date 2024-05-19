@@ -72,14 +72,12 @@ function Signup() {
     const successMessage = () => {
         return (
             success && (
-                <div>
+                <div className="success-message" style={{ display: error ? "" : "none", color: "green"}}>
                     <center><p className='login_redirect mt-2'>Account created successfully <b><a href='/signin'>Login here</a></b></p></center>
                 </div>
             )
         );
     }
-
-
    
     return (
         <div className='form-container'>
@@ -99,7 +97,7 @@ function Signup() {
                 <div className='form-group'>
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" onChange={handleChange("password")} required />
-                    <label htmlFor="password">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 special character.</label>
+                    <label htmlFor="password">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</label>
                 </div>
                 <div className='form-group'>
                     <label htmlFor="confirmPassword">Re-enter password</label>

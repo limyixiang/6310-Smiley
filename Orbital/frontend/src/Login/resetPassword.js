@@ -15,6 +15,12 @@ export function ForgetPassword() {
     // Destructuring values from the state
     const { password, password2, error, loading, success } = inputValue;
 
+    // Checks for validity of password
+    const isPasswordValid = (password) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        return passwordRegex.test(password);
+    }
+
     // Handles changes in the input fields
     const handleOnChange = name => event => {
         setInputValue({
@@ -30,7 +36,18 @@ export function ForgetPassword() {
 
         // Both passwords do not match
         if (password !== password2) {
-            setInputValue({ ...inputValue, error: "Passwords do not match", success: false, loading: false });
+            setInputValue({ ...inputValue, error: "Passwords do not match.", success: false, loading: false });
+            return;
+        }
+
+        // Password is not valid
+        if (!isPasswordValid(password)) {
+            setInputValue({ 
+                ...inputValue, 
+                error: "Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.", 
+                success: false, 
+                loading: false 
+            });
             return;
         }
 
@@ -54,7 +71,7 @@ export function ForgetPassword() {
     // Displays error message if there's any
     const errorMessage = () => {
         return (
-            <div className="error-message" style={{ display: error ? "" : "none" }}>
+            <div className="error-message" style={{ display: error ? "" : "none", color: "red" }}>
                 {error}
             </div>
         );
@@ -63,7 +80,7 @@ export function ForgetPassword() {
     // Displays loading message during form submission
     const loadingMessage = () => {
         return (
-            <div className="loading-message" style={{ display: loading ? "" : "none" }}>
+            <div className="loading-message" style={{ display: loading ? "" : "none", color: "red" }}>
                 <div className="loading-spinner"></div>
                 <p>Loading...</p>
             </div>
@@ -73,7 +90,7 @@ export function ForgetPassword() {
     // Displays success message upon successful reset of password
     const successMessage = () => {
         return (
-            <div className="success-message" style={{ display: success ? "" : "none" }}>
+            <div className="success-message" style={{ display: success ? "" : "none", color: "green" }}>
                 <p>Password has been reset successfully. Please proceed to <a href="/signin">login</a>.</p>
             </div>
         );
@@ -89,6 +106,7 @@ export function ForgetPassword() {
                 <div className="form-group">
                     <label htmlFor="password">Enter your new password:</label>
                     <input id="password" type="password" value={password} onChange={handleOnChange("password")} required />
+                    <label htmlFor="password">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</label>
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Re-enter your new password:</label>

@@ -44,7 +44,7 @@ export function ForgetPassword() {
     // Displays success message upon successful authorization of user
     const successMessage = () => {
         return (
-            <div className="success-message" style={{ display: success ? "" : "none" }}>
+            <div className="success-message" style={{ display: success ? "" : "none", color: "green" }}>
                 <p>Check your email for the reset password link</p>
             </div>
         );
@@ -53,7 +53,7 @@ export function ForgetPassword() {
     // Displays error message if there's any
     const errorMessage = () => {
         return (
-            <div className="error-message" style={{ display: error ? "" : "none" }}>
+            <div className="error-message" style={{ display: error ? "" : "none", color: "red" }}>
                 {error}
             </div>
         );
@@ -62,7 +62,7 @@ export function ForgetPassword() {
     // Displays loading message during form submission
     const loadingMessage = () => {
         return (
-            <div className="loading-message" style={{ display: loading ? "" : "none" }}>
+            <div className="loading-message" style={{ display: loading ? "" : "none", color: "red" }}>
                 <div className="loading-spinner"></div>
                 <p>Loading...</p>
             </div>

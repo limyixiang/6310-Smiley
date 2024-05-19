@@ -26,7 +26,7 @@ exports.signup = async (req, res) => {
     .catch(err => {
         let errorMessage = 'Something went wrong.';
         if (err.code === 11000) {
-            errorMessage = 'User already exists, please signin'; 
+            errorMessage = 'User already exists, please sign in.'; 
         }
         return res.status(500).json({ error: errorMessage });
     });
@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
 
 
 //SIGNIN
-exports.signin = async (req,res) => {
+exports.signin = async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()){
@@ -54,7 +54,7 @@ exports.signin = async (req,res) => {
 
             if(!user.authenticate(password)){
                 return res.status(401).json({
-                    error: "Email or Password does not exist"
+                    error: "Email or Password does not exist."
                 })
             }
 
@@ -68,14 +68,14 @@ exports.signin = async (req,res) => {
 }
 
 //FORGET PASSWORD
-exports.forgetPassword = async (req,res) => {
+exports.forgetPassword = async (req, res) => {
     try {
         //Find user by email
         const user = await User.findOne({ email: req.body.email });
         
         //If user is not found
         if (!user) {
-            return res.status(404).json({ error: "User with this email does not exist" });
+            return res.status(404).json({ error: "User with this email does not exist." });
         }
 
         //Generate a unique JWT token for the user that contains the user's id
@@ -116,7 +116,7 @@ exports.forgetPassword = async (req,res) => {
 };
 
 //RESET PASSWORD
-exports.resetPassword = async (req,res) => {
+exports.resetPassword = async (req, res) => {
     try {
         //Verify the token
         const decoded_token = jwtToken.verify(req.params.token, 'shhhhh');
@@ -144,7 +144,7 @@ exports.resetPassword = async (req,res) => {
 };
 
 //SIGNOUT
-exports.signout = async (req,res) => {
+exports.signout = async (req, res) => {
     res.clearCookie("token");
     res.json({
         message: "User has signed out."
@@ -158,7 +158,7 @@ exports.isSignedIn = jwt({
     algorithms: ['HS256']
 })
 
-exports.isAuthenticated = (req,res,next) => {
+exports.isAuthenticated = (req, res, next) => {
     let checker = req.profile && req.auth && req.profile._id == req.auth._id;
     if (!checker) {
         return res.status(403).json({

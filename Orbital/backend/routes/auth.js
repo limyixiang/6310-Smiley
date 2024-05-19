@@ -6,9 +6,12 @@ const { signin, signup, signout, isSignedIn, forgetPassword, resetPassword } = r
 router.post(
     "/signup",
     [
-        check("name", "Name must be 3+ chars long").isLength({ min: 3 }),
+        check("name", "Name must be at least 3 characters long").isLength({ min: 3 }),
         check("email", "Email is required").isEmail(),
-        check("password", "Password must contain 8+ chars").isLength({ min: 8 })
+        // By default, a strong password is defined as having at least 8 characters, with at least 1 uppercase, 1 lowercase, 1 number and 1 symbol.
+        // We are not enforcing the symbol requirement here.
+        check("password", "Password does not meet the requirements. Please try again.")
+            .isStrongPassword({ minSymbols: 0, })
     ],
     signup
 );
@@ -23,16 +26,14 @@ router.post(
 );
 
 router.post("/forgetpassword", forgetPassword);
-router.post(
-    "/resetpassword/:token", 
-    [
-        check("password", "Password must contain 8+ chars").isLength({ min: 8 }),
-    ],
-    resetPassword);
+
+// Password requirements are handled on the frontend
+router.post("/resetpassword/:token", resetPassword);
+
 router.get("/signout", signout)
 
 //Protected Route for testing
-router.get("/testroute", isSignedIn, (req,res) => {
+router.get("/testroute", isSignedIn, (req, res) => {
     res.send("A protected route")
 });
 
