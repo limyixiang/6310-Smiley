@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 // import { Navigate } from 'react-router-dom';
 import { forgetPasswordAuthentication } from '../Backend';
+import "./forgetPassword.css"
 
 // ForgetPassword component for the forget password page
 export function ForgetPassword() {
@@ -62,7 +63,7 @@ export function ForgetPassword() {
     // Displays loading message during form submission
     const loadingMessage = () => {
         return (
-            <div className="loading-message" style={{ display: loading ? "" : "none", color: "red" }}>
+            <div className="loading-message" style={{ display: loading ? "" : "none", color: "black" }}>
                 <div className="loading-spinner"></div>
                 <p>Loading...</p>
             </div>
@@ -74,17 +75,17 @@ export function ForgetPassword() {
             <div className="form-box">
                 <h2>Forget Password</h2>
                 {successMessage()}
-                {loadingMessage()}
-                {errorMessage()}
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
-                    <input id="email" type="text" value={email} onChange={handleOnChange("email")} required />
+                    <input id="email" type="text" value={email} onChange={handleOnChange("email")} placeholder='Email' required />
                 </div>
-                <div className="form-group-button">
+                {loadingMessage()}
+                {errorMessage()}
+                <div className="form-button">
                     <button onClick={handleOnSubmit}>Submit</button>
                 </div>
-                <div className='login-message'>
-                        <center><p className='login_redirect mt-2'><b><a href='/signin'>Back to Login</a></b></p></center>
+                <div className='link'>
+                        <center><p className='forgetpassword-to-login'><b><a href='/signin'>Back to Login</a></b></p></center>
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { forgetPasswordReset } from '../Backend';
+import "./resetPassword.css"
 
 // ResetPassword component for the forget password page
 export function ForgetPassword() {
@@ -101,22 +102,22 @@ export function ForgetPassword() {
             <div className="form-box">
                 <h2>Reset Password</h2>
                 {successMessage()}
-                {loadingMessage()}
-                {errorMessage()}
                 <div className="form-group">
                     <label htmlFor="password">Enter your new password:</label>
-                    <input id="password" type="password" value={password} onChange={handleOnChange("password")} required />
-                    <label htmlFor="password">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</label>
+                    <input id="password" type="password" value={password} onChange={handleOnChange("password")} placeholder='Password' required />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Re-enter your new password:</label>
-                    <input id="password2" type="password" value={password2} onChange={handleOnChange("password2")} required />
+                    <input id="password2" type="password" value={password2} onChange={handleOnChange("password2")} placeholder='Re-enter password' required />
                 </div>
+                <p className="password-requirements">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</p>
+                {errorMessage()}
+                {loadingMessage()}
                 <div className="form-group-button">
                     <button onClick={handleOnSubmit}>Reset Password</button>
                 </div>
-                <div className='login-message'>
-                        <center><p className='login_redirect mt-2'><b><a href='/signin'>Back to Login</a></b></p></center>
+                <div className='link'>
+                        <center><p className='resetpassword-to-login'><b><a href='/signin'>Back to Login</a></b></p></center>
                 </div>
             </div>
         </div>

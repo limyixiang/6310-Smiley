@@ -24,7 +24,7 @@ h2 {
     text-align: center;
 }
 
-.signup-group {
+.link {
     margin-bottom: 1.5rem;
 }
 
@@ -68,15 +68,10 @@ button:hover {
     font-size: 12px;
 }
 
+
 .loading-message {
     margin-bottom: 1.5rem;
     text-align: left;
-    font-size: 12px;
-}
-
-.success-message {
-    margin-bottom: 1.5rem;
-    text-align: center;
     font-size: 12px;
 }
 
@@ -112,12 +107,8 @@ button:hover {
     }
 }
 
-.password-requirements {
-    font-size: 10px;
-    color: rgb(57, 57, 57);
-}
-
-.signup-to-login {
-    text-align: right;
+.login-to-signup, .login-to-forgetpassword {
+    text-align: left;
     font-size: 12px;
 }
+

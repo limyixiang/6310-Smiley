@@ -81,6 +81,7 @@ function LandingPage() {
                         </div>
                     ))}
                 </div>
+                <screenLeft><p className='landing-to-dashboard-redirect'><b><a href='/'>Back to Dashboard</a></b></p></screenLeft>
             </div>
         </div>
     );

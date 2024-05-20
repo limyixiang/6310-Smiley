@@ -60,7 +60,7 @@ function Signup() {
     const loadingMessage = () => {
         return (
             loading && (
-                <div className="loading-message" style={{ display: error ? "" : "none", color: "red" }}>
+                <div className="loading-message" style={{ display: loading ? "" : "none", color: "black" }}>
                     <div className="loading-spinner"></div>
                     <p>Loading...</p>
                 </div>
@@ -72,8 +72,8 @@ function Signup() {
     const successMessage = () => {
         return (
             success && (
-                <div className="success-message" style={{ display: error ? "" : "none", color: "green"}}>
-                    <center><p className='login_redirect mt-2'>Account created successfully <b><a href='/signin'>Login here</a></b></p></center>
+                <div className="success-message" style={{ display: success ? "" : "none", color: "black"}}>
+                    <center><p className='login_redirect mt-2'>Account created successfully, login <b><a href='/signin'>here</a></b>.</p></center>
                 </div>
             )
         );
@@ -83,31 +83,31 @@ function Signup() {
         <div className='form-container'>
             <div className='form-box'>
                 <h2>Create an account</h2>
-                {errorMessage()}
-                {loadingMessage()}
                 {successMessage()}
                 <div className='form-group'>
                     <label htmlFor="name">Username</label>
-                    <input type="text" id="name" name="name" onChange={handleChange("name")} required />
+                    <input type="text" id="name" name="name" onChange={handleChange("name")} placeholder="Name" required />
                 </div>
                 <div className='form-group'>
                     <label htmlFor="email">Email</label>
-                    <input type="text" id="email" name="email" onChange={handleChange("email")} required />
+                    <input type="text" id="email" name="email" onChange={handleChange("email")} placeholder="Email" required />
                 </div>
                 <div className='form-group'>
                     <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" onChange={handleChange("password")} required />
-                    <label htmlFor="password">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</label>
+                    <input type="password" id="password" name="password" onChange={handleChange("password")} placeholder="Password" required />
                 </div>
                 <div className='form-group'>
-                    <label htmlFor="confirmPassword">Re-enter password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" onChange={handleChange("confirmPassword")} required />
+                    <label htmlFor="confirmPassword">Re-enter your password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" onChange={handleChange("confirmPassword")} placeholder="Re-enter password" required />
                 </div>
-                <div className='login-message'>
-                        <center><p className='login_redirect mt-2'><b><a href='/signin'> Back to Login</a></b></p></center>
-                </div>
-                <div className="form-group-button">
+                <p className="password-requirements">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</p>
+                {errorMessage()}
+                {loadingMessage()}
+                <div className="form-button">
                     <button onClick={onSubmit}>Sign Up</button>
+                </div>
+                <div className='link'>
+                        <center><p className='signup-to-login'><b><a href='/signin'> Back to Login</a></b></p></center>
                 </div>
             </div>
         </div>

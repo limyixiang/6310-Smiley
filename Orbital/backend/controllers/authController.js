@@ -48,7 +48,7 @@ exports.signin = async (req, res) => {
         .then(user => {
             if(!user){
                 return res.status(400).json({
-                    error: "User not found"
+                    error: "User not found."
                 })
             }
 
@@ -107,7 +107,7 @@ exports.forgetPassword = async (req, res) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
             } else {
-                return res.status(200).json({ message: 'Email has been sent to the user' });
+                return res.status(200).json({ message: 'Email has been sent to the user.' });
             }
         });
     } catch (error) {
@@ -123,13 +123,13 @@ exports.resetPassword = async (req, res) => {
 
         //If token is invalid, return an error
         if (!decoded_token) {
-            return res.status(401).json({ error: 'Token is invalid or expired' });
+            return res.status(401).json({ error: 'Token is invalid or expired.' });
         }
 
         //Find the user by the decoded id
         const user = await User.findById(decoded_token._id);
         if (!user) {
-            return res.status(401).json({ error: 'User not found' });
+            return res.status(401).json({ error: 'User not found.' });
         }
 
         //Update the user's password
@@ -137,7 +137,7 @@ exports.resetPassword = async (req, res) => {
         await user.save();
 
         //Send success message
-        res.status(200).json({ message: 'Password has been reset successfully' });
+        res.status(200).json({ message: 'Password has been reset successfully.' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

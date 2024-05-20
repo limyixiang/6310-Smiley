@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { signin, authenticate} from '../Backend';
 import { Navigate } from 'react-router-dom'; 
+import "./signIn.css"
 
 // Signin component for the login form
 export function Signin(){
@@ -50,7 +51,7 @@ export function Signin(){
     const loadingMessage = () => {
         return (
             loading && (
-                <div className="loading-message" style={{ display: error ? "" : "none", color: "red" }}>
+                <div className="loading-message" style={{ display: loading ? "" : "none", color: "black" }}>
                     <div className="loading-spinner"></div>
                     <p>Loading...</p>
                 </div>
@@ -65,24 +66,24 @@ export function Signin(){
             <div className='form-container'>
                 <div className='form-box'>
                     <h2>Login</h2> 
-                    {loadingMessage()}
-                    {errorMessage()}
                     <div className='form-group'>
                         <label htmlFor="email">Email</label>
-                        <input type="text" id="email" name="email" value={email} onChange={handleChange("email")} required />
+                        <input type="text" id="email" name="email" value={email} onChange={handleChange("email")} placeholder='Email' required />
                     </div>
                     <div className='form-group'>
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" value={password} onChange={handleChange("password")} required />
+                        <input type="password" id="password" name="password" value={password} onChange={handleChange("password")} placeholder='Password' required />
                     </div>
-                    <div className="form-group-button">
+                    {errorMessage()}
+                    <div className='link'>
+                        <center><p className='login-to-signup'><b><a href='/signup'> Sign up</a></b></p></center>
+                    </div>
+                    <div className='link'>
+                        <center><p className='login-to-forgetpassword'><b><a href='/forgetpassword'> Forget Password</a></b></p></center>
+                    </div>
+                    {loadingMessage()}
+                    <div className="form-button">
                         <button onClick={onSubmit}>Login</button>
-                    </div>
-                    <div className='login-message'>
-                        <center><p className='login_redirect mt-2'><b><a href='/signup'> Sign up</a></b></p></center>
-                    </div>
-                    <div className='login-message'>
-                        <center><p className='login_redirect mt-2'><b><a href='/forgetpassword'> Forget Password</a></b></p></center>
                     </div>
                 </div>
             </div>
