@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
             required: true
         },
         salt: String,
+        numCourses: {
+            type: Number,
+            default: 0
+        },
+        courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
+        tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }]
     },
     {timestamps: true}
 );

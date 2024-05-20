@@ -105,3 +105,45 @@ export const isAuthenticated = () => {
     else
         return false
 }
+
+
+
+// TASK ROUTES
+
+// Create Task
+export const createTask = (task, userId) => {
+    // API call to create a task
+    return axios.post(`http://localhost:8000/tasks/create/${userId}`, JSON.stringify(task), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
+
+
+
+// COURSE ROUTES
+
+// Create Course
+export const createCourse = (course, userId) => {
+    // API call to create a course
+    return axios.post(`http://localhost:8000/courses/create/${userId}`, JSON.stringify(course), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}

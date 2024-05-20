@@ -8,8 +8,9 @@ require('dotenv').config();
 
 //Routes
 const TaskRoute = require("./routes/task");
-const UserRoute = require("./routes/user")
-const Authroute = require("./routes/auth")
+const UserRoute = require("./routes/user");
+const AuthRoute = require("./routes/auth");
+const courseRoute = require("./routes/course");
 
 //Database connection
 mongoose.connect("mongodb+srv://Smiley:6310-Smiley@6310-smiley.yxgidpp.mongodb.net/?retryWrites=true&w=majority&appName=6310-Smiley")
@@ -31,5 +32,6 @@ app.use(cookieParser());
 app.use(cors());
 
 //Calling the routes
-app.use("/api", Authroute)
-app.use("/tasks", TaskRoute)
+app.use("/api", AuthRoute);
+app.use("/tasks", TaskRoute);
+app.use("/courses", courseRoute);
