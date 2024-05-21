@@ -119,11 +119,16 @@ exports.forgetPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
     try {
         //Verify the token
-        const decoded_token = jwtToken.verify(req.params.token, 'shhhhh');
-
-        //If token is invalid, return an error
-        if (!decoded_token) {
-            return res.status(401).json({ error: 'Token is invalid or expired.' });
+        let decoded_token;
+        try {
+            decoded_token = jwtToken.verify(req.params.token, 'shhhhh');
+        } catch (err) {
+            if (err.name === 'TokenExpiredError') {
+                return res.status(401).json({ error: 'Session expired. Generate a new link and try again.' });
+            } else {
+                // Token is invalid
+                return res.status(401).json({ error: 'Session is invalid. Check the link in your email and try again.' });
+            }
         }
 
         //Find the user by the decoded id
