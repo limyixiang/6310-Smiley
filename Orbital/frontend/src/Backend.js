@@ -111,9 +111,9 @@ export const isAuthenticated = () => {
 // TASK ROUTES
 
 // Create Task
-export const createTask = (task, userId) => {
+export const createTask = task => {
     // API call to create a task
-    return axios.post(`http://localhost:8000/tasks/create/${userId}`, JSON.stringify(task), {
+    return axios.post("http://localhost:8000/tasks/createtask", JSON.stringify(task), {
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json"
@@ -132,9 +132,9 @@ export const createTask = (task, userId) => {
 // COURSE ROUTES
 
 // Create Course
-export const createCourse = (course, userId) => {
+export const createCourse = course => {
     // API call to create a course
-    return axios.post(`http://localhost:8000/courses/create/${userId}`, JSON.stringify(course), {
+    return axios.post("http://localhost:8000/courses/createcourse", JSON.stringify(course), {
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json"

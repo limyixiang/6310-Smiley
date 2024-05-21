@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './landingPage.css';
+import { createCourse, createTask } from '../Backend';
 
 function LandingPage() {
     const [courseName, setCourseName] = useState('');
     const [taskName, setTaskName] = useState('');
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
+
+    const location = useLocation();
+    const { user } = location.state;
 
     const handleCourseChange = (e) => {
         setCourseName(e.target.value);
@@ -20,6 +25,7 @@ function LandingPage() {
             setCourses([...courses, courseName]);
             setCourseName('');
         }
+        createCourse({ courseName: courseName, user: user });
     };
 
     const handleAddTask = () => {
@@ -27,6 +33,7 @@ function LandingPage() {
             setTasks([...tasks, { name: taskName, completed: false }]);
             setTaskName('');
         }
+        createTask(user, taskName);
     };
 
     const handleTaskCheckboxChange = (index) => {

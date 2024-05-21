@@ -46,13 +46,13 @@ exports.signin = async (req, res) => {
     const {email, password} = req.body;
     await User.findOne({email: `${email}`})
         .then(user => {
-            if(!user){
+            if (!user) {
                 return res.status(400).json({
                     error: "User not found."
                 })
             }
 
-            if(!user.authenticate(password)){
+            if (!user.authenticate(password)){
                 return res.status(401).json({
                     error: "Email or Password does not exist."
                 })
@@ -61,7 +61,7 @@ exports.signin = async (req, res) => {
             //Setting Cookies
             const token = jwtToken.sign({ _id: user._id }, 'shhhhh');
             res.cookie("token", token, {expire: new Date() + 9999})
-            const {_id,name,email} = user
+            const {_id, name, email} = user
             return res.json({token, user: {_id, name, email}});
         })
 

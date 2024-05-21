@@ -1,6 +1,6 @@
 import React from 'react';
 import { isAuthenticated, signout } from '../Backend';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './dashboard.css'
 
 const Dashboard = () => {
@@ -22,9 +22,9 @@ const Dashboard = () => {
         <div className='dashboard-postlogin'>
             <h1>Hello, {authenticatedUser.user.name}</h1>
             <button onClick={onSignout}>Sign Out</button>
-            <a href="/landingpage">
+            <Link to="/landingpage" state={{ user: authenticatedUser.user }}>
                 <button>Landing Page</button>
-            </a>
+            </Link>
         </div>
     );
     
