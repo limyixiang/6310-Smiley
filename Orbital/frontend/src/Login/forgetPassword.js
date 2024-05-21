@@ -60,16 +60,6 @@ export function ForgetPassword() {
         );
     }
 
-    // Displays loading message during form submission
-    const loadingMessage = () => {
-        return (
-            <div className="loading-message" style={{ display: loading ? "" : "none", color: "black" }}>
-                <div className="loading-spinner"></div>
-                <p>Loading...</p>
-            </div>
-        );
-    }
-
     return (
         <div className="form-container">
             <div className="form-box">
@@ -79,10 +69,13 @@ export function ForgetPassword() {
                     <label htmlFor="email">Email</label>
                     <input id="email" type="text" value={email} onChange={handleOnChange("email")} placeholder='Email' required />
                 </div>
-                {loadingMessage()}
                 {errorMessage()}
                 <div className="form-button">
-                    <button onClick={handleOnSubmit}>Submit</button>
+                    <button id='button' className ='button' onClick={handleOnSubmit} style={{ display: loading ? 'none' : 'block' }}>Submit</button>
+                    <div className="spinner" id='spinner' style={{ display: loading ? 'block' : 'none' }}>
+                        <div className="loading-spinner"></div>
+                        <p>Loading...</p>
+                    </div>
                 </div>
                 <div className='link'>
                         <center><p className='forgetpassword-to-login'><b><a href='/signin'>Back to Login</a></b></p></center>

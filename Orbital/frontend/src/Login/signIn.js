@@ -23,7 +23,7 @@ export function Signin(){
         setValues({ ...values, error: false, [name]: event.target.value });
     }
 
-    // Submits the form data to the backend for user authentication
+    // Submits the form data to the backend for user authentication & loads when click
     const onSubmit = async event => {
         event.preventDefault();
         setValues({ ...values, success: false, loading: true });
@@ -47,19 +47,6 @@ export function Signin(){
         </div>);
     }
 
-    // Displays loading message during form submission
-    const loadingMessage = () => {
-        return (
-            loading && (
-                <div className="loading-message" style={{ display: loading ? "" : "none", color: "black" }}>
-                    <div className="loading-spinner"></div>
-                    <p>Loading...</p>
-                </div>
-            )
-        );
-    }
-
-
     // Configures the sign-in page
     return (
         success ? <Navigate to="/" /> :
@@ -76,14 +63,17 @@ export function Signin(){
                     </div>
                     {errorMessage()}
                     <div className='link'>
-                        <center><p className='login-to-signup'><b><a href='/signup'> Sign up</a></b></p></center>
+                        <center><p className='login-to-signup'><b><a href='/signup'> Sign Up</a></b></p></center>
                     </div>
                     <div className='link'>
                         <center><p className='login-to-forgetpassword'><b><a href='/forgetpassword'> Forget Password</a></b></p></center>
                     </div>
-                    {loadingMessage()}
                     <div className="form-button">
-                        <button onClick={onSubmit}>Login</button>
+                        <button id='button' className ='button' onClick={onSubmit} style={{ display: loading ? 'none' : 'block' }}>Login</button>
+                        <div className="spinner" id='spinner'style={{ display: loading ? 'block' : 'none' }}>
+                            <div className="loading-spinner"></div>
+                            <p>Loading...</p>
+                        </div>
                     </div>
                 </div>
             </div>

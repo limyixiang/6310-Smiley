@@ -42,10 +42,9 @@ input {
     border-radius: 4px;
 }
 
-
 button {
     background-color: #007bff;
-    width: 100px;
+    width: fit-content;
     border: none;
     color: white;
     padding: 10px 20px;
@@ -62,17 +61,23 @@ button:hover {
     background-color: #0056b3;
 }
 
+/*contains 'button' and 'spinner'*/
+.form-button {
+    display: inline-block;
+    align-items: center;
+}
+
 .error-message {
     margin-bottom: 1.5rem;
     text-align: center;
     font-size: 12px;
 }
 
-
-.loading-message {
+.spinner {
     margin-bottom: 1.5rem;
     text-align: left;
     font-size: 12px;
+    color: black;
 }
 
 .loading-spinner {

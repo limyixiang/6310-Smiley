@@ -56,18 +56,6 @@ function Signup() {
         );
     }
 
-    // Displays loading message during form submission
-    const loadingMessage = () => {
-        return (
-            loading && (
-                <div className="loading-message" style={{ display: loading ? "" : "none", color: "black" }}>
-                    <div className="loading-spinner"></div>
-                    <p>Loading...</p>
-                </div>
-            )
-        );
-    }
-
     // Displays success message upon successful form submission
     const successMessage = () => {
         return (
@@ -102,9 +90,12 @@ function Signup() {
                 </div>
                 <p className="password-requirements">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</p>
                 {errorMessage()}
-                {loadingMessage()}
                 <div className="form-button">
-                    <button onClick={onSubmit}>Sign Up</button>
+                    <button id='button' className ='button' onClick={onSubmit} style={{ display: loading ? 'none' : 'block' }}>Sign Up</button>
+                    <div className="spinner" id='spinner' style={{ display: loading ? 'block' : 'none' }}>
+                        <div className="loading-spinner"></div>
+                        <p>Loading...</p>
+                    </div>
                 </div>
                 <div className='link'>
                         <center><p className='signup-to-login'><b><a href='/signin'> Back to Login</a></b></p></center>

@@ -78,16 +78,6 @@ export function ForgetPassword() {
         );
     }
 
-    // Displays loading message during form submission
-    const loadingMessage = () => {
-        return (
-            <div className="loading-message" style={{ display: loading ? "" : "none", color: "red" }}>
-                <div className="loading-spinner"></div>
-                <p>Loading...</p>
-            </div>
-        );
-    }
-
     // Displays success message upon successful reset of password
     const successMessage = () => {
         return (
@@ -112,9 +102,12 @@ export function ForgetPassword() {
                 </div>
                 <p className="password-requirements">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</p>
                 {errorMessage()}
-                {loadingMessage()}
-                <div className="form-group-button">
-                    <button onClick={handleOnSubmit}>Reset Password</button>
+                <div className="form-button">
+                    <button id='button' className ='button' onClick={handleOnSubmit} style={{ display: loading ? 'none' : 'block' }}>Reset Password</button>
+                    <div className="spinner" id='spinner' style={{ display: loading ? 'block' : 'none' }}>
+                        <div className="loading-spinner"></div>
+                        <p>Loading...</p>
+                    </div>
                 </div>
                 <div className='link'>
                         <center><p className='resetpassword-to-login'><b><a href='/signin'>Back to Login</a></b></p></center>
