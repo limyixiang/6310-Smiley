@@ -1,6 +1,7 @@
 import React from 'react';
 import { isAuthenticated, signout } from '../Backend';
 import { useNavigate } from 'react-router-dom';
+import './dashboard.css'
 
 const Dashboard = () => {
     const navigate = useNavigate(); // Initialize navigation
@@ -14,12 +15,19 @@ const Dashboard = () => {
     };
 
     return (
-        !authenticatedUser ? <h1>Welcome to Smiley :D, please login <a href='/signin'>here</a>!</h1>:
-            <div className='dashboard'>
-                <button onClick={onSignout}>Sign Out</button>
-                <h1>Hello, {authenticatedUser.user.name}, to go to the landing page, click <a href = '/landingpage'>here</a>!</h1> {/* Display user's name */}
-            </div>
+        !authenticatedUser ? 
+        <h1 className='dashboard-prelogin'>
+            Welcome to Smiley :D, please login <a href='/signin'>here</a>!
+        </h1> :
+        <div className='dashboard-postlogin'>
+            <h1>Hello, {authenticatedUser.user.name}</h1>
+            <button onClick={onSignout}>Sign Out</button>
+            <a href="/landingpage">
+                <button>Landing Page</button>
+            </a>
+        </div>
     );
+    
 };
 
 export default Dashboard;
