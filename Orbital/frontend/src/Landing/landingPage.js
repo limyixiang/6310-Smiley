@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 import './landingPage.css';
-import { createCourse, createTask, getCourses } from '../Backend';
+import { createCourse, createTask, getCourses, completeTask, getTasksForUser, reverseCompleteTask } from '../Backend';
 
 Modal.setAppElement('#root');
 
@@ -24,10 +24,12 @@ function LandingPage() {
     
     useEffect(() => {
         getCourses(user)
-            // .then(res => res.json())
             .then(data => setCourses(data))
             .catch(err => console.error("Error fetching data:", err));
-    }, [user]);
+        getTasksForUser(user)
+            .then(data => setTasks(data))
+            .catch(err => console.error("Error fetching data:", err));
+    }, [user, tasks]);
 
     // Handles changes in the input fields
     const handleInputChange = name => event => {
@@ -76,31 +78,44 @@ function LandingPage() {
                     if (data.error) {
                         // do we want to have loading and success states?
                     } else {
-                        console.log(data);
                         setCourses([...courses, data.data]);
                     }
                 })
                 .catch();
-            // setCourses([...courses, courseName]);
-            setLandingValues('courseName');
+            setLandingValues({ ...landingValues, courseName: '' });
         }
     };
 
     // Task inputted shown below
     const handleAddTask = () => {
         if (taskName.trim() !== '') {
-            createTask(user, taskName);
-            setTasks([...tasks, { name: taskName, completed: false }]);
-            setLandingValues('taskName');
+            createTask({ title: taskName, user: user})
+                .then(data => {
+                    if (data.error) {
+                        // do we want to have loading and success states?
+                    } else {
+                        setTasks([...tasks, data.data]);
+                    }
+                })
+                .catch();
+            setLandingValues({ ...landingValues, taskName: '' });
         }
     };
 
     // Tick off box task strikethroughs
-    const handleTaskCheckboxChange = (index) => {
-        const newTasks = [...tasks];
-        newTasks[index].completed = !newTasks[index].completed;
-        setTasks(newTasks);
-    };
+    // const handleTaskCheckboxChange = (index) => {
+    //     const newTasks = [...tasks];
+    //     newTasks[index].completed = !newTasks[index].completed;
+    //     setTasks(newTasks);
+    // };
+    const handleTaskCheckboxChange = async task => {
+        console.log(task);
+        if (task.status === 'Done') {
+            reverseCompleteTask({ task: task });
+        } else {
+            completeTask({ task: task });
+        }
+    }
 
     return (
         <div className="main-container">
@@ -140,11 +155,11 @@ function LandingPage() {
                         <div key={index} className="task-item">
                             <input
                                 type="checkbox" 
-                                checked={task.completed} 
-                                onChange={() => handleTaskCheckboxChange(index)} 
+                                onChange={() => handleTaskCheckboxChange(task)} 
+                                checked={task.status === 'Done'} 
                             />
-                            <span style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
-                                {task.name}
+                            <span style={{ textDecoration: task.status === 'Done' ? 'line-through' : 'none' }}>
+                                {task.title}
                             </span>
                         </div>
                     ))}

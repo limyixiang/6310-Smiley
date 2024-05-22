@@ -8,7 +8,7 @@ exports.createCourse = async (req, res) => {
         const user = await User.findById(req.body.user._id);
         const userCourses = user.courses;
         userCourses[userCourses.length] = course;
-        console.log(user);
+        // console.log(user);
         await course.save();
         await user.save();
         return res.status(201).json({ message: 'Course created successfully', data: course });

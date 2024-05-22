@@ -127,6 +127,74 @@ export const createTask = task => {
     })
 }
 
+// Get Tasks for User
+export const getTasksForUser = user => {
+    // API call to get courses
+    return axios.post("http://localhost:8000/tasks/gettasksforuser", JSON.stringify(user), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
+
+// Get Tasks for Course
+export const getTasksForCourse = course => {
+    // API call to get courses
+    return axios.post("http://localhost:8000/tasks/gettasksforcourse", JSON.stringify(course), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
+
+// Complete Task
+export const completeTask = task => {
+    // API call to complete a task
+    return axios.post("http://localhost:8000/tasks/completetask", JSON.stringify(task), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
+
+// Reverse Complete Task
+export const reverseCompleteTask = task => {
+    // API call to reverse complete a task
+    return axios.post("http://localhost:8000/tasks/reversecompletetask", JSON.stringify(task), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
+
 
 
 // COURSE ROUTES

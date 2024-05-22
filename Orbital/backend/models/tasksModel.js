@@ -6,22 +6,25 @@ const taskSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    // temporarily false, remember to change to true
     description: {
         type: String,
-        required: true,
+        required: false,
     },
+    // temporarily false, remember to change to true
     dueDate: {
         type: Date,
-        required: true,
+        required: false,
     },
+    // temporarily false, remember to change to true
     priority: {
         type: String,
         enum: ['High', 'Low'],
-        required: true,
+        required: false,
     },
     status: {
         type: String,
-        enum: ['Todo', 'In Progress', 'Done'],
+        enum: ['Todo', 'Done'],
         default: 'Todo',
     },
     course: {
