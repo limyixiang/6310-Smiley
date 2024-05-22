@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { signin, authenticate} from '../Backend';
+import React, { useState } from 'react';
+import { signin, authenticate } from '../Backend';
 import { Navigate } from 'react-router-dom'; 
 import "./signIn.css"
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './landingPage.css';
-import { createCourse, createTask } from '../Backend';
+import { createCourse, createTask, getCourses } from '../Backend';
 
 function LandingPage() {
     const [courseName, setCourseName] = useState('');
@@ -11,6 +11,13 @@ function LandingPage() {
 
     const location = useLocation();
     const { user } = location.state;
+    
+    useEffect(() => {
+        getCourses(user)
+            // .then(res => res.json())
+            .then(data => setCourses(data))
+            .catch(err => console.error("Error fetching data:", err));
+    }, []);
 
     const handleCourseChange = (e) => {
         setCourseName(e.target.value);
@@ -22,18 +29,27 @@ function LandingPage() {
 
     const handleAddCourse = () => {
         if (courseName.trim() !== '') {
-            setCourses([...courses, courseName]);
+            createCourse({ courseName: courseName, user: user })
+                .then(data => {
+                    if (data.error) {
+                        // do we want to have loading and success states?
+                    } else {
+                        console.log(data);
+                        setCourses([...courses, data.data]);
+                    }
+                })
+                .catch();
+            // setCourses([...courses, courseName]);
             setCourseName('');
         }
-        createCourse({ courseName: courseName, user: user });
     };
 
     const handleAddTask = () => {
         if (taskName.trim() !== '') {
+            createTask(user, taskName);
             setTasks([...tasks, { name: taskName, completed: false }]);
             setTaskName('');
         }
-        createTask(user, taskName);
     };
 
     const handleTaskCheckboxChange = (index) => {
@@ -58,7 +74,7 @@ function LandingPage() {
                 <div className="courses-list">
                     {courses.map((course, index) => (
                         <div key={index} className="course-item">
-                            {course}
+                            {course.courseName}
                         </div>
                     ))}
                 </div>

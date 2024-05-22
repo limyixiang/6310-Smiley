@@ -11,11 +11,21 @@ exports.createCourse = async (req, res) => {
         console.log(user);
         await course.save();
         await user.save();
-        res.status(201).json({ message: 'Course created successfully' });
+        return res.status(201).json({ message: 'Course created successfully', data: course });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 };
 
 // Delete a course
 
+// Get all courses for a particular user
+exports.getCourses = async (req, res) => {
+    try {
+        const user = await User.findById(req.body._id).populate('courses');
+        // console.log(user.courses);
+        return res.json(user.courses);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}

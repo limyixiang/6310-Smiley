@@ -147,3 +147,20 @@ export const createCourse = course => {
         return err.response.data; // Return error response data
     })
 }
+
+// Get Courses
+export const getCourses = user => {
+    // API call to get courses
+    return axios.post("http://localhost:8000/courses/getcourses", JSON.stringify(user), {
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        return response.data; // Return response data
+    })
+    .catch(err => {
+        return err.response.data; // Return error response data
+    })
+}
