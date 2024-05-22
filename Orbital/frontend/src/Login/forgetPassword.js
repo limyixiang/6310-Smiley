@@ -17,13 +17,13 @@ export function ForgetPassword() {
     const { email, error, loading, success } = inputValue;
 
     // Handles changes in the input fields
-    const handleOnChange = name => event => {
+    const handleInputChange = name => event => {
         setInputValue({
             ...inputValue,
             error: false,
             [name]: event.target.value
         });
-    }
+    };
 
     // Submits the form data to the backend
     const handleOnSubmit = async event => {
@@ -67,7 +67,7 @@ export function ForgetPassword() {
                 {successMessage()}
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
-                    <input id="email" type="text" value={email} onChange={handleOnChange("email")} placeholder='Email' required />
+                    <input id="email" type="text" value={email} onChange={handleInputChange("email")} placeholder='Email' required />
                 </div>
                 {errorMessage()}
                 <div className="form-button">

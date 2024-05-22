@@ -19,7 +19,7 @@ function Signup() {
     const { name, email, password, confirmPassword, error, loading, success } = formValues;
 
     // Handles changes in the input fields
-    const handleChange = name => event => {
+    const handleInputChange = name => event => {
         setFormValues({ ...formValues, error: false, [name]: event.target.value });
     }
 
@@ -74,19 +74,19 @@ function Signup() {
                 {successMessage()}
                 <div className='form-group'>
                     <label htmlFor="name">Username</label>
-                    <input type="text" id="name" name="name" onChange={handleChange("name")} placeholder="Name" required />
+                    <input type="text" id="name" name="name" onChange={handleInputChange("name")} placeholder="Name" required />
                 </div>
                 <div className='form-group'>
                     <label htmlFor="email">Email</label>
-                    <input type="text" id="email" name="email" onChange={handleChange("email")} placeholder="Email" required />
+                    <input type="text" id="email" name="email" onChange={handleInputChange("email")} placeholder="Email" required />
                 </div>
                 <div className='form-group'>
                     <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" onChange={handleChange("password")} placeholder="Password" required />
+                    <input type="password" id="password" name="password" onChange={handleInputChange("password")} placeholder="Password" required />
                 </div>
                 <div className='form-group'>
                     <label htmlFor="confirmPassword">Re-enter your password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" onChange={handleChange("confirmPassword")} placeholder="Re-enter password" required />
+                    <input type="password" id="confirmPassword" name="confirmPassword" onChange={handleInputChange("confirmPassword")} placeholder="Re-enter password" required />
                 </div>
                 <p className="password-requirements">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</p>
                 {errorMessage()}

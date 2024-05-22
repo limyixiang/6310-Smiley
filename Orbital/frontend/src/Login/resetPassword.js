@@ -23,7 +23,7 @@ export function ForgetPassword() {
     }
 
     // Handles changes in the input fields
-    const handleOnChange = name => event => {
+    const handleInputChange = name => event => {
         setInputValue({
             ...inputValue,
             error: false,
@@ -94,11 +94,11 @@ export function ForgetPassword() {
                 {successMessage()}
                 <div className="form-group">
                     <label htmlFor="password">Enter your new password:</label>
-                    <input id="password" type="password" value={password} onChange={handleOnChange("password")} placeholder='Password' required />
+                    <input id="password" type="password" value={password} onChange={handleInputChange("password")} placeholder='Password' required />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Re-enter your new password:</label>
-                    <input id="password2" type="password" value={password2} onChange={handleOnChange("password2")} placeholder='Re-enter password' required />
+                    <input id="password2" type="password" value={password2} onChange={handleInputChange("password2")} placeholder='Re-enter password' required />
                 </div>
                 <p className="password-requirements">Password should contain at least 8 characters, with at least 1 uppercase, 1 lowercase and 1 number.</p>
                 {errorMessage()}

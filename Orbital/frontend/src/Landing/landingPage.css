@@ -2,26 +2,60 @@
     display: flex;
     justify-content: space-between;
     padding: 20px;
-    max-width: 1200px;
+    width: 1200px;
     margin: 0 auto;
 }
 
-/*the box*/
-.courses-container, .tasks-container {
-    flex: 1;
-    margin-right: 20px;
+/*left courses and right upcoming ddls*/
+.courses-container {
+    flex: 5;
+    padding: auto;
+    min-width: 0;
+}
+
+.tasks-container {
+    flex: 2;
+    padding: auto;
+    min-width: 0;
 }
 
 .courses-container h2, .tasks-container h2 {
     margin-bottom: 20px;
 }
 
-.add-a-course, .add-a-task {
-    margin-bottom: 20px;
-    display: flex;
+.add-a-task-button {
+    position: flex;
+    margin: 20px;
 }
 
-.add-a-course input, .add-a-task input {
+/*popups for add a course and add a task*/
+.backdrop-course-popup, .backdrop-task-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent backdrop when popup open*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-a-course-popup, .add-a-task-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*popup boxes styling*/
+}
+
+.add-a-course-popup input, .add-a-task-popup input {
     flex: 1;
     padding: 10px;
     margin-right: 10px;
@@ -29,7 +63,7 @@
     border: 1px solid #6f90d0;
 }
 
-.add-a-course button, .add-a-task button {
+.add-a-course-popup button, .add-a-task-popup button {
     padding: 10px 20px;
     border: 1px solid #6f90d0;
     border-radius: 5px;
@@ -38,14 +72,16 @@
     cursor: pointer;
 }
 
-.add-a-course button:hover, .add-a-task button:hover {
+.add-a-course-popup button:hover, .add-a-task-popup button:hover {
     background-color: #5292d7;
 }
+
+/*courses and tasks shown in the page after adding*/
 
 .courses-list, .tasks-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
 }
 
 .course-item {
@@ -59,7 +95,7 @@
     display: flex;
     align-items: center;
     justify-content: centre;
-    overflow: hidden;
+    overflow: auto;
     word-wrap: break-word;
 }
 
@@ -69,6 +105,27 @@
     background-color: #c2e1ea;
     box-shadow: 0px 0px 10px #b4eaee;
     display: flex;
+    word-wrap: break-word;
+    overflow: auto;
     align-items: center;
     gap: 10px;
 }
+
+/*link back to dashboard*/
+.landing-to-dashboard {
+    position: fixed;
+    bottom: 50px;
+    right: 100px;
+    margin: 20px;
+    font-size: 14px;
+}
+
+.landing-to-dashboard a {
+    color: rgb(55, 0, 128);
+    text-decoration: none;
+}
+
+.landing-to-dashboard a:hover {
+    text-decoration: underline;
+}
+

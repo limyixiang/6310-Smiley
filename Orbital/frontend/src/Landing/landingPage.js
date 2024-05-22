@@ -1,11 +1,21 @@
 import { React, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import Modal from 'react-modal';
 import './landingPage.css';
 import { createCourse, createTask, getCourses } from '../Backend';
 
+Modal.setAppElement('#root');
+
 function LandingPage() {
-    const [courseName, setCourseName] = useState('');
-    const [taskName, setTaskName] = useState('');
+    
+    const [landingValues, setLandingValues] = useState({
+        openModalType: null,
+        courseName: "",
+        taskName: "",
+    });
+
+    // Destructuring values from the state
+    const { courseName, taskName } = landingValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
 
@@ -17,16 +27,48 @@ function LandingPage() {
             // .then(res => res.json())
             .then(data => setCourses(data))
             .catch(err => console.error("Error fetching data:", err));
-    }, []);
+    }, [user]);
 
-    const handleCourseChange = (e) => {
-        setCourseName(e.target.value);
+    // Handles changes in the input fields
+    const handleInputChange = name => event => {
+        setLandingValues({ ...landingValues, error: false, [name]: event.target.value });
     };
 
-    const handleTaskChange = (e) => {
-        setTaskName(e.target.value);
+    // Handles open and closing of popup
+    const openCourseModal = () => {
+        setLandingValues(landingValues => ({
+            ...landingValues,
+            openModalType: 'course'
+        }));
+    }; 
+
+    const openTaskModal = () => {
+        setLandingValues(landingValues => ({
+            ...landingValues,
+            openModalType: 'task'
+        }));
     };
 
+    const closeModal = () => {
+        setLandingValues(landingValues => ({
+            ...landingValues,
+            openModalType: null
+        }));
+    };
+
+    // Close course popup upon submission
+    const handleSubmit = () => {
+        if (landingValues.openModalType === 'course') {
+            handleAddCourse();
+            console.log('Course Name:', landingValues.courseName);
+        } else if (landingValues.openModalType === 'task') {
+            handleAddTask();
+            console.log('Task Name:', landingValues.taskName);
+        }
+        closeModal();
+    };
+
+    // Course inputted shown below
     const handleAddCourse = () => {
         if (courseName.trim() !== '') {
             createCourse({ courseName: courseName, user: user })
@@ -40,18 +82,20 @@ function LandingPage() {
                 })
                 .catch();
             // setCourses([...courses, courseName]);
-            setCourseName('');
+            setLandingValues('courseName');
         }
     };
 
+    // Task inputted shown below
     const handleAddTask = () => {
         if (taskName.trim() !== '') {
             createTask(user, taskName);
             setTasks([...tasks, { name: taskName, completed: false }]);
-            setTaskName('');
+            setLandingValues('taskName');
         }
     };
 
+    // Tick off box task strikethroughs
     const handleTaskCheckboxChange = (index) => {
         const newTasks = [...tasks];
         newTasks[index].completed = !newTasks[index].completed;
@@ -62,15 +106,24 @@ function LandingPage() {
         <div className="main-container">
             <div className="courses-container">
                 <h2>Your Courses</h2>
-                <div className="add-a-course">
+                <button className="add-a-course-button" onClick={openCourseModal}>Add a course</button>
+                <Modal
+                    isOpen={landingValues.openModalType === 'course'} 
+                    onRequestClose={closeModal}
+                    contentLabel='Add-a-course-modal'
+                    className='add-a-course-popup'
+                    overlayClassName='backdrop-course-popup'
+                >
+                    <h2>Add Your Course</h2>
                     <input 
-                        type= "text" 
-                        value={courseName} 
-                        onChange={handleCourseChange} 
-                        placeholder="Enter course name" 
+                        type='text'
+                        value={landingValues.courseName}
+                        onChange={handleInputChange('courseName')}
+                        placeholder='Course Name'
                     />
-                    <button onClick={handleAddCourse}>Add Course</button>
-                </div>
+                    <button onClick={handleSubmit}>Submit</button>
+                    <button onClick={closeModal}>Close</button>
+                </Modal>
                 <div className="courses-list">
                     {courses.map((course, index) => (
                         <div key={index} className="course-item">
@@ -79,17 +132,9 @@ function LandingPage() {
                     ))}
                 </div>
             </div>
+            
             <div className="tasks-container">
                 <h2>Upcoming Deadlines</h2>
-                <div className="add-a-task">
-                    <input 
-                        type="text" 
-                        value={taskName} 
-                        onChange={handleTaskChange} 
-                        placeholder="Enter task name" 
-                    />
-                    <button onClick={handleAddTask}>Add Task</button>
-                </div>
                 <div className="tasks-list">
                     {tasks.map((task, index) => (
                         <div key={index} className="task-item">
@@ -104,10 +149,28 @@ function LandingPage() {
                         </div>
                     ))}
                 </div>
-                <screenLeft><p className='landing-to-dashboard-redirect'><b><a href='/'>Back to Dashboard</a></b></p></screenLeft>
+                <button className="add-a-task-button" onClick={openTaskModal}>Add a task</button>
+                <Modal
+                    isOpen={landingValues.openModalType === 'task'} 
+                    onRequestClose={closeModal}
+                    contentLabel='Add-a-task-modal'
+                    className='add-a-task-popup'
+                    overlayClassName='backdrop-task-popup'
+                >
+                    <h2>Add Your Task</h2>
+                    <input 
+                        type='text'
+                        value={landingValues.taskName}
+                        onChange={handleInputChange('taskName')}
+                        placeholder='Task Name'
+                    />
+                    <button onClick={handleSubmit}>Submit</button>
+                    <button onClick={closeModal}>Close</button>
+                </Modal>
+                <center><p className='landing-to-dashboard'><b><a href='/'>Back to Dashboard</a></b></p></center>
             </div>
         </div>
     );
-}
+};
 
 export default LandingPage;

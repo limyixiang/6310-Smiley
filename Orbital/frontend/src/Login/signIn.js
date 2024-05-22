@@ -19,7 +19,7 @@ export function Signin(){
     const { email, password, error, loading, success } = values;
     
     // Handles changes in the input fields
-    const handleChange = name => event => {
+    const handleInputChange = name => event => {
         setValues({ ...values, error: false, [name]: event.target.value });
     }
 
@@ -55,11 +55,11 @@ export function Signin(){
                     <h2>Login</h2> 
                     <div className='form-group'>
                         <label htmlFor="email">Email</label>
-                        <input type="text" id="email" name="email" value={email} onChange={handleChange("email")} placeholder='Email' required />
+                        <input type="text" id="email" name="email" value={email} onChange={handleInputChange("email")} placeholder='Email' required />
                     </div>
                     <div className='form-group'>
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" value={password} onChange={handleChange("password")} placeholder='Password' required />
+                        <input type="password" id="password" name="password" value={password} onChange={handleInputChange("password")} placeholder='Password' required />
                     </div>
                     {errorMessage()}
                     <div className='link'>
