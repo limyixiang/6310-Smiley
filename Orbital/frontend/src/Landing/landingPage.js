@@ -180,7 +180,7 @@ function LandingPage() {
                     {courses.map((course, index) => (
                         <div key={index} className="course-item">
                             {course.courseCode}
-                            <button onClick ={()=>handleDeleteCourse(course._id)}>Delete</button>
+                            <button onClick ={() => handleDeleteCourse(course._id)}>Delete</button>
                         </div>
                     ))}
                 </div>
@@ -190,16 +190,17 @@ function LandingPage() {
                 <h2>Upcoming Deadlines</h2>
                 <div className="tasks-list">
                     {tasks.map((task, index) => (
-                        <div key={index} className="task-item">
+                        <div className="task-row" key={index}>
                             <input
+                                className='task-checkbox'
                                 type="checkbox" 
                                 onChange={() => handleTaskCheckboxChange(task)} 
                                 checked={task.status === 'Done'} 
                             />
-                            <span style={{ textDecoration: task.status === 'Done' ? 'line-through' : 'none' }}>
+                            <span className="task-item" style={{ textDecoration: task.status === 'Done' ? 'line-through' : 'none' }}>
                                 {task.taskName}
-                                <button onClick ={()=>handleDeleteTask(task._id)}>Delete</button>
                             </span>
+                            <button onClick ={()=>handleDeleteTask(task._id)}>Delete</button>
                         </div>
                     ))}
                 </div>

@@ -78,10 +78,16 @@
 
 /*courses and tasks shown in the page after adding*/
 
-.courses-list, .tasks-list {
+.courses-list {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 .course-item {
@@ -110,26 +116,38 @@
     background-color: #ff1a1a;
 }
 
-
-.task-item {
-    padding: 10px;
-    border-radius: 5px;
-    background-color: transparent;
-    display: inline-flex;
-    word-wrap: break-word;
-    overflow: auto;
-    text-align: center;
+.task-row {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    overflow: auto;
+    word-wrap: break-word;
 }
 
-.task-item button {
+.task-checkbox {
+    flex: 1;
+    margin: 0px;
+}
+
+.task-item {
+    flex: 9;
+    padding: 10px;
+    text-align: left;
+}
+
+.task-row button {
     background-color: #ff4d4d;
     color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    align-items: right;
 }
 
 .task-item button:hover {
