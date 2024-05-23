@@ -18,6 +18,27 @@ exports.createCourse = async (req, res) => {
 };
 
 // Delete a course
+exports.deleteCourse = async (req, res) => {
+    try {
+        // Extract course ID from request parameters
+        const courseId = req.params.id;
+
+        // Find course by ID and delete it
+        const deletedCourse = await Course.findByIdAndDelete(courseId);
+
+        if (!deletedCourse) {
+            // If course with given ID is not found, return error
+            return res.status(404).json({ success: false, error: 'Course not found.' });
+        }
+
+        // Respond with success message
+        res.status(200).json({ success: true, message: 'Course deleted successfully.' });
+    } catch (error) {
+        // Handle errors
+        console.error(error);
+        res.status(500).json({ success: false, error: 'Internal server error.' });
+    }
+};
 
 // Get all courses for a particular user
 exports.getCourses = async (req, res) => {

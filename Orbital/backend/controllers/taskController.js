@@ -22,6 +22,27 @@ exports.createTask = async (req, res) => {
 }
 
 // Delete a task
+exports.deleteTask = async (req, res) => {
+    try {
+        // Extract task ID from request parameters
+        const taskId = req.params.id;
+
+        // Find course by ID and delete it
+        const deletedTask = await Task.findByIdAndDelete(taskId);
+
+        if (!deletedTask) {
+            // If course with given ID is not found, return error
+            return res.status(404).json({ success: false, error: 'Task not found.' });
+        }
+
+        // Respond with success message
+        res.status(200).json({ success: true, message: 'Task deleted successfully.' });
+    } catch (error) {
+        // Handle errors
+        console.error(error);
+        res.status(500).json({ success: false, error: 'Internal server error.' });
+    }
+};
 
 // Get all tasks for a particular user
 exports.getTasksForUser = async (req, res) => {

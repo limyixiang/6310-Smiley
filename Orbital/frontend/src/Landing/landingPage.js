@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 import './landingPage.css';
-import { createCourse, createTask, getCourses, completeTask, getTasksForUser, reverseCompleteTask } from '../Backend';
+import { createCourse, createTask, getCourses, completeTask, getTasksForUser, reverseCompleteTask, deleteCourse, deleteTask } from '../Backend';
 
 Modal.setAppElement('#root');
 
@@ -11,11 +11,12 @@ function LandingPage() {
     const [landingValues, setLandingValues] = useState({
         openModalType: null,
         courseName: "",
+        courseCode: "",
         taskName: "",
     });
 
     // Destructuring values from the state
-    const { courseName, taskName } = landingValues;
+    const { courseCode, courseName, taskName } = landingValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
 
@@ -62,7 +63,8 @@ function LandingPage() {
     const handleSubmit = () => {
         if (landingValues.openModalType === 'course') {
             handleAddCourse();
-            console.log('Course Name:', landingValues.courseName);
+            console.log('Course Code:', landingValues.courseCode);
+            console.log('Course Name', landingValues.courseName);
         } else if (landingValues.openModalType === 'task') {
             handleAddTask();
             console.log('Task Name:', landingValues.taskName);
@@ -72,8 +74,8 @@ function LandingPage() {
 
     // Course inputted shown below
     const handleAddCourse = () => {
-        if (courseName.trim() !== '') {
-            createCourse({ courseName: courseName, user: user })
+        if (courseCode.trim() !== '') {
+            createCourse({ courseName: courseName, courseCode: courseCode, user: user })
                 .then(data => {
                     if (data.error) {
                         // do we want to have loading and success states?
@@ -82,14 +84,27 @@ function LandingPage() {
                     }
                 })
                 .catch();
-            setLandingValues({ ...landingValues, courseName: '' });
+            setLandingValues({ ...landingValues, courseCode: '', courseName: '' });
         }
+    };
+
+    // Course deleted shown below
+    const handleDeleteCourse = (courseId) => {
+        deleteCourse(courseId)
+            .then(data => {
+                if(data.error) {
+                    
+                } else {
+                    setCourses(courses.filter(course => course._id !== courseId))
+                }
+            })
+            .catch();
     };
 
     // Task inputted shown below
     const handleAddTask = () => {
         if (taskName.trim() !== '') {
-            createTask({ title: taskName, user: user})
+            createTask({ taskName: taskName, user: user})
                 .then(data => {
                     if (data.error) {
                         // do we want to have loading and success states?
@@ -98,9 +113,23 @@ function LandingPage() {
                     }
                 })
                 .catch();
-            setLandingValues({ ...landingValues, taskName: '' });
+            setLandingValues({ ...landingValues, taskName: '' }); 
         }
     };
+
+    // Task deleted shown below
+    const handleDeleteTask = (taskId) => {
+        deleteTask(taskId)
+            .then(data => {
+                if(data.error) {
+                    
+                } else {
+                    setTasks(tasks.filter(task => task._id !== taskId))
+                }
+            })
+            .catch();
+    };
+
 
     // Tick off box task strikethroughs
     // const handleTaskCheckboxChange = (index) => {
@@ -132,6 +161,12 @@ function LandingPage() {
                     <h2>Add Your Course</h2>
                     <input 
                         type='text'
+                        value={landingValues.courseCode}
+                        onChange={handleInputChange('courseCode')}
+                        placeholder='Course Code'
+                    />
+                    <input 
+                        type='text'
                         value={landingValues.courseName}
                         onChange={handleInputChange('courseName')}
                         placeholder='Course Name'
@@ -139,10 +174,13 @@ function LandingPage() {
                     <button onClick={handleSubmit}>Submit</button>
                     <button onClick={closeModal}>Close</button>
                 </Modal>
-                <div className="courses-list">
+
+                {/* only display courseCode */}
+                <div className="courses-list"> 
                     {courses.map((course, index) => (
                         <div key={index} className="course-item">
-                            {course.courseName}
+                            {course.courseCode}
+                            <button onClick ={()=>handleDeleteCourse(course._id)}>Delete</button>
                         </div>
                     ))}
                 </div>
@@ -159,7 +197,8 @@ function LandingPage() {
                                 checked={task.status === 'Done'} 
                             />
                             <span style={{ textDecoration: task.status === 'Done' ? 'line-through' : 'none' }}>
-                                {task.title}
+                                {task.taskName}
+                                <button onClick ={()=>handleDeleteTask(task._id)}>Delete</button>
                             </span>
                         </div>
                     ))}

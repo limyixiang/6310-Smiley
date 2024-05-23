@@ -85,30 +85,55 @@
 }
 
 .course-item {
-    padding: 20px;
-    border-radius: 50px;
-    background-color: #c2e1ea;
-    box-shadow: 0px 0px 10px #b4eaee;
-    text-align: center;
-    width: 120px;
-    height: 120px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: centre;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
     overflow: auto;
     word-wrap: break-word;
 }
 
+.course-item button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.course-item button:hover {
+    background-color: #ff1a1a;
+}
+
+
 .task-item {
     padding: 10px;
     border-radius: 5px;
-    background-color: #c2e1ea;
-    box-shadow: 0px 0px 10px #b4eaee;
-    display: flex;
+    background-color: transparent;
+    display: inline-flex;
     word-wrap: break-word;
     overflow: auto;
+    text-align: center;
     align-items: center;
     gap: 10px;
+}
+
+.task-item button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.task-item button:hover {
+    background-color: #ff1a1a;
 }
 
 /*link back to dashboard*/

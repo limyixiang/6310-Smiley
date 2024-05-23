@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 // Define the schema for the Task collection
 const taskSchema = new mongoose.Schema({
-    title: {
+    taskName: {
         type: String,
         required: true,
     },

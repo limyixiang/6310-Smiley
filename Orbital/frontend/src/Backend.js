@@ -127,6 +127,17 @@ export const createTask = task => {
     })
 }
 
+// Delete Tasks
+export const deleteTask = async (taskId) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/tasks/deletetask/${taskId}`);
+        return response.data; // Return response data
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: 'Error deleting task.' };
+    }
+};
+
 // Get Tasks for User
 export const getTasksForUser = user => {
     // API call to get courses
@@ -216,6 +227,17 @@ export const createCourse = course => {
     })
 }
 
+// Delete Courses
+export const deleteCourse = async (courseId) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/courses/deletecourse/${courseId}`);
+        return response.data; // Return response data
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: 'Error deleting course.' };
+    }
+};
+
 // Get Courses
 export const getCourses = user => {
     // API call to get courses
@@ -232,3 +254,4 @@ export const getCourses = user => {
         return err.response.data; // Return error response data
     })
 }
+
