@@ -5,6 +5,7 @@ import Dashboard from './Login/dashboard.js';
 import ForgetPassword from './Login/forgetPassword.js';
 import ResetPassword from './Login/resetPassword.js';
 import LandingPage from './Landing/landingPage.js'; 
+import CoursePage from './Course/coursePage.js';
 import {Routes, Route, BrowserRouter as Router} from 'react-router-dom';
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
           <Route exact path='/resetpassword/:token' element={<ResetPassword/>} />
           {/* Route for the LandingPage component */}
           <Route exact path='/landingpage' element={<LandingPage/>} />
+          {/* Route for the CoursePage component */}
+          <Route exact path='/coursepage' element={<CoursePage/>} />
         </Routes>
       </Router>
     </div>

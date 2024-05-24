@@ -3,7 +3,7 @@ import AddTaskModal from './addTaskModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-function TaskContainer({ tasks, openTaskModal, handleInputChange, closeModal, handleSubmit, handleDeleteTask, landingValues, handleTaskCheckboxChange }) {
+function TaskContainer({ courses, tasks, openTaskModal, handleInputChange, closeModal, handleSubmit, handleDeleteTask, landingValues, handleTaskCheckboxChange }) {
     return (
         <div className="tasks-container">
             <h2>Upcoming Deadlines</h2>
@@ -25,6 +25,7 @@ function TaskContainer({ tasks, openTaskModal, handleInputChange, closeModal, ha
             </div>
             <button className="add-a-task-button" onClick={openTaskModal}>Add a task</button>
             <AddTaskModal 
+                courses={courses}
                 landingValues={landingValues}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}

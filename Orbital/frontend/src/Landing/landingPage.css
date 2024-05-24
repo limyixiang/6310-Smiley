@@ -45,6 +45,7 @@
 }
 
 .add-a-course-popup, .add-a-task-popup {
+    flex-direction: column;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -58,12 +59,13 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*popup boxes styling*/
 }
 
-.add-a-course-popup input, .add-a-task-popup input {
+.add-a-course-popup input, .add-a-task-popup input, .add-a-task-popup select {
     flex: 1;
     padding: 10px;
     margin-right: 10px;
     border-radius: 5px;
     border: 1px solid #6f90d0;
+    margin-bottom: 20px;
 }
 
 .add-a-course-popup button, .add-a-task-popup button {
@@ -112,6 +114,12 @@
     position: absolute;
     transform: translate(-50%, -50%);
     font-size: 24px;
+    color: black;
+}
+
+.course-item:hover {
+    cursor: pointer;
+    background-color: #e6e6e6;
 }
 
 .task-row {
@@ -175,4 +183,3 @@
 .landing-to-dashboard a:hover {
     text-decoration: underline;
 }
-

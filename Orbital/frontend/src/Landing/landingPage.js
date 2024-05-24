@@ -150,6 +150,7 @@ function LandingPage() {
                 courses={courses}
                 handleDeleteCourse={handleDeleteCourse} />
             <TaskContainer
+                courses={courses}
                 tasks={tasks}
                 openTaskModal={openTaskModal}
                 handleInputChange={handleInputChange}
