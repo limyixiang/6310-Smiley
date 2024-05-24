@@ -1,10 +1,9 @@
 import { React, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Modal from 'react-modal';
 import './landingPage.css';
 import { createCourse, createTask, getCourses, completeTask, getTasksForUser, reverseCompleteTask, deleteCourse, deleteTask } from '../Backend';
-
-Modal.setAppElement('#root');
+import CourseContainer from './courseContainer';
+import TaskContainer from './taskContainer';
 
 function LandingPage() {
     
@@ -130,13 +129,7 @@ function LandingPage() {
             .catch();
     };
 
-
     // Tick off box task strikethroughs
-    // const handleTaskCheckboxChange = (index) => {
-    //     const newTasks = [...tasks];
-    //     newTasks[index].completed = !newTasks[index].completed;
-    //     setTasks(newTasks);
-    // };
     const handleTaskCheckboxChange = async task => {
         console.log(task);
         if (task.status === 'Done') {
@@ -148,82 +141,23 @@ function LandingPage() {
 
     return (
         <div className="main-container">
-            <div className="courses-container">
-                <h2>Your Courses</h2>
-                <button className="add-a-course-button" onClick={openCourseModal}>Add a course</button>
-                <Modal
-                    isOpen={landingValues.openModalType === 'course'} 
-                    onRequestClose={closeModal}
-                    contentLabel='Add-a-course-modal'
-                    className='add-a-course-popup'
-                    overlayClassName='backdrop-course-popup'
-                >
-                    <h2>Add Your Course</h2>
-                    <input 
-                        type='text'
-                        value={landingValues.courseCode}
-                        onChange={handleInputChange('courseCode')}
-                        placeholder='Course Code'
-                    />
-                    <input 
-                        type='text'
-                        value={landingValues.courseName}
-                        onChange={handleInputChange('courseName')}
-                        placeholder='Course Name'
-                    />
-                    <button onClick={handleSubmit}>Submit</button>
-                    <button onClick={closeModal}>Close</button>
-                </Modal>
-
-                {/* only display courseCode */}
-                <div className="courses-list"> 
-                    {courses.map((course, index) => (
-                        <div key={index} className="course-item">
-                            {course.courseCode}
-                            <button onClick ={() => handleDeleteCourse(course._id)}>Delete</button>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            
-            <div className="tasks-container">
-                <h2>Upcoming Deadlines</h2>
-                <div className="tasks-list">
-                    {tasks.map((task, index) => (
-                        <div className="task-row" key={index}>
-                            <input
-                                className='task-checkbox'
-                                type="checkbox" 
-                                onChange={() => handleTaskCheckboxChange(task)} 
-                                checked={task.status === 'Done'} 
-                            />
-                            <span className="task-item" style={{ textDecoration: task.status === 'Done' ? 'line-through' : 'none' }}>
-                                {task.taskName}
-                            </span>
-                            <button onClick ={()=>handleDeleteTask(task._id)}>Delete</button>
-                        </div>
-                    ))}
-                </div>
-                <button className="add-a-task-button" onClick={openTaskModal}>Add a task</button>
-                <Modal
-                    isOpen={landingValues.openModalType === 'task'} 
-                    onRequestClose={closeModal}
-                    contentLabel='Add-a-task-modal'
-                    className='add-a-task-popup'
-                    overlayClassName='backdrop-task-popup'
-                >
-                    <h2>Add Your Task</h2>
-                    <input 
-                        type='text'
-                        value={landingValues.taskName}
-                        onChange={handleInputChange('taskName')}
-                        placeholder='Task Name'
-                    />
-                    <button onClick={handleSubmit}>Submit</button>
-                    <button onClick={closeModal}>Close</button>
-                </Modal>
-                <center><p className='landing-to-dashboard'><b><a href='/'>Back to Dashboard</a></b></p></center>
-            </div>
+            <CourseContainer 
+                openCourseModal={openCourseModal}
+                landingValues={landingValues}
+                handleInputChange={handleInputChange}
+                closeModal={closeModal}
+                handleSubmit={handleSubmit}
+                courses={courses}
+                handleDeleteCourse={handleDeleteCourse} />
+            <TaskContainer
+                tasks={tasks}
+                openTaskModal={openTaskModal}
+                handleInputChange={handleInputChange}
+                closeModal={closeModal}
+                handleSubmit={handleSubmit}
+                handleDeleteTask={handleDeleteTask}
+                landingValues={landingValues}
+                handleTaskCheckboxChange={handleTaskCheckboxChange} />
         </div>
     );
 };
