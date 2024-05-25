@@ -3,10 +3,10 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-function AddTaskModal({ courses, landingValues, handleInputChange, closeModal, handleSubmit }) {
+function AddTaskModal({ courses, taskValues, handleInputChange, closeModal, handleAddTask }) {
     return (
         <Modal
-            isOpen={landingValues.openModalType === 'task'} 
+            isOpen={taskValues.openModalType === 'task'} 
             onRequestClose={closeModal}
             contentLabel='Add-a-task-modal'
             className='add-a-task-popup'
@@ -32,21 +32,21 @@ function AddTaskModal({ courses, landingValues, handleInputChange, closeModal, h
                 <label>Name of Task</label>
                 <input 
                     type='text'
-                    value={landingValues.taskName}
-                    onChange={handleInputChange('taskName')}
+                    value={taskValues.taskName}
+                    onChange={handleInputChange('task', 'taskName')}
                     placeholder='Task Name'
                 />
             </div>
-            <div className="select-task-date">
+            <div className="select-due-date">
                 <label>Deadline</label>
                 <input 
                     type='date'
-                    value={landingValues.taskDate}
-                    onChange={handleInputChange('taskDate')}
+                    value={taskValues.taskDate}
+                    onChange={handleInputChange('task', 'taskDate')}
                 />
             </div>
-            <button onClick={handleSubmit}>Submit</button>
-            <button onClick={closeModal}>Close</button>
+            <button onClick={handleAddTask}>Submit</button>
+            <button onClick={() => closeModal('task')}>Close</button>
         </Modal>
     );
 }

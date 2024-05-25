@@ -7,15 +7,23 @@ import TaskContainer from './taskContainer';
 
 function LandingPage() {
     
-    const [landingValues, setLandingValues] = useState({
+    const [courseValues, setCourseValues] = useState({
         openModalType: null,
         courseName: "",
         courseCode: "",
+    });
+
+    const [taskValues, setTaskValues] = useState({
+        openModalType: null,
+        taskCourse: "",
+        priorityLevel: "",
         taskName: "",
+        dueDate: "",
     });
 
     // Destructuring values from the state
-    const { courseCode, courseName, taskName } = landingValues;
+    const { courseName, courseCode } = courseValues;
+    const { taskCourse: taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
 
@@ -32,43 +40,37 @@ function LandingPage() {
     }, [user, tasks]);
 
     // Handles changes in the input fields
-    const handleInputChange = name => event => {
-        setLandingValues({ ...landingValues, error: false, [name]: event.target.value });
+    const handleInputChange = (type, name) => event => {
+        type === "course"
+            ? setCourseValues({ ...courseValues, error: false, [name]: event.target.value })
+            : setTaskValues({ ...taskValues, error: false, [name]: event.target.value });
     };
 
     // Handles open and closing of popup
     const openCourseModal = () => {
-        setLandingValues(landingValues => ({
-            ...landingValues,
+        setCourseValues(courseValues => ({
+            ...courseValues,
             openModalType: 'course'
         }));
     }; 
 
     const openTaskModal = () => {
-        setLandingValues(landingValues => ({
-            ...landingValues,
+        setTaskValues(taskValues => ({
+            ...taskValues,
             openModalType: 'task'
         }));
     };
 
-    const closeModal = () => {
-        setLandingValues(landingValues => ({
-            ...landingValues,
-            openModalType: null
-        }));
-    };
-
-    // Close course popup upon submission
-    const handleSubmit = () => {
-        if (landingValues.openModalType === 'course') {
-            handleAddCourse();
-            console.log('Course Code:', landingValues.courseCode);
-            console.log('Course Name', landingValues.courseName);
-        } else if (landingValues.openModalType === 'task') {
-            handleAddTask();
-            console.log('Task Name:', landingValues.taskName);
-        }
-        closeModal();
+    const closeModal = (modalType) => {
+        modalType === 'course'
+            ? setCourseValues(courseValues => ({
+                ...courseValues,
+                openModalType: null
+            }))
+            : setTaskValues(taskValues => ({
+                ...taskValues,
+                openModalType: null
+            }));
     };
 
     // Course inputted shown below
@@ -83,8 +85,9 @@ function LandingPage() {
                     }
                 })
                 .catch();
-            setLandingValues({ ...landingValues, courseCode: '', courseName: '' });
+            setCourseValues({ ...courseValues, courseCode: '', courseName: '' });
         }
+        closeModal('course');
     };
 
     // Course deleted shown below
@@ -94,6 +97,8 @@ function LandingPage() {
                 if(data.error) {
                     
                 } else {
+                    // try data.data later
+                    // setCourses(data.data);
                     setCourses(courses.filter(course => course._id !== courseId))
                 }
             })
@@ -103,7 +108,13 @@ function LandingPage() {
     // Task inputted shown below
     const handleAddTask = () => {
         if (taskName.trim() !== '') {
-            createTask({ taskName: taskName, user: user})
+            createTask({ 
+                taskName: taskName, 
+                dueDate: dueDate,
+                priority: priorityLevel,
+                course: courses.filter(course => course._id === taskCourseId)[0],
+                user: user 
+            })
                 .then(data => {
                     if (data.error) {
                         // do we want to have loading and success states?
@@ -112,8 +123,14 @@ function LandingPage() {
                     }
                 })
                 .catch();
-            setLandingValues({ ...landingValues, taskName: '' }); 
+            setTaskValues({ ...taskValues, 
+                taskCourse: '',
+                priorityLevel: '',
+                taskName: '',
+                dueDate: '',
+            }); 
         }
+        closeModal('task');
     };
 
     // Task deleted shown below
@@ -123,6 +140,7 @@ function LandingPage() {
                 if(data.error) {
                     
                 } else {
+                    // try data.data?
                     setTasks(tasks.filter(task => task._id !== taskId))
                 }
             })
@@ -143,10 +161,10 @@ function LandingPage() {
         <div className="main-container">
             <CourseContainer 
                 openCourseModal={openCourseModal}
-                landingValues={landingValues}
+                courseValues={courseValues}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}
-                handleSubmit={handleSubmit}
+                handleAddCourse={handleAddCourse}
                 courses={courses}
                 handleDeleteCourse={handleDeleteCourse} />
             <TaskContainer
@@ -155,9 +173,9 @@ function LandingPage() {
                 openTaskModal={openTaskModal}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}
-                handleSubmit={handleSubmit}
+                handleAddTask={handleAddTask}
                 handleDeleteTask={handleDeleteTask}
-                landingValues={landingValues}
+                taskValues={taskValues}
                 handleTaskCheckboxChange={handleTaskCheckboxChange} />
         </div>
     );

@@ -3,10 +3,10 @@ import './landingPage.css';
 
 Modal.setAppElement('#root');
 
-function AddCourseModal({ landingValues, handleInputChange, closeModal, handleSubmit }) {
+function AddCourseModal({ courseValues, handleInputChange, closeModal, handleAddCourse }) {
     return (
         <Modal
-            isOpen={landingValues.openModalType === 'course'} 
+            isOpen={courseValues.openModalType === 'course'} 
             onRequestClose={closeModal}
             contentLabel='Add-a-course-modal'
             className='add-a-course-popup'
@@ -15,18 +15,18 @@ function AddCourseModal({ landingValues, handleInputChange, closeModal, handleSu
             <h2>Add Your Course</h2>
             <input 
                 type='text'
-                value={landingValues.courseCode}
-                onChange={handleInputChange('courseCode')}
+                value={courseValues.courseCode}
+                onChange={handleInputChange('course', 'courseCode')}
                 placeholder='Course Code'
             />
             <input 
                 type='text'
-                value={landingValues.courseName}
-                onChange={handleInputChange('courseName')}
+                value={courseValues.courseName}
+                onChange={handleInputChange('course', 'courseName')}
                 placeholder='Course Name'
             />
-            <button onClick={handleSubmit}>Submit</button>
-            <button onClick={closeModal}>Close</button>
+            <button onClick={handleAddCourse}>Submit</button>
+            <button onClick={() => closeModal('course')}>Close</button>
         </Modal>
     );
 }

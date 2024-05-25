@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
-function CourseContainer({ courses, openCourseModal, handleInputChange, closeModal, handleSubmit, handleDeleteCourse, landingValues}) {
+function CourseContainer({ courses, openCourseModal, handleInputChange, closeModal, handleAddCourse, handleDeleteCourse, courseValues}) {
     return (
         <div className="courses-container">
             <div className="courses-header">
@@ -12,10 +12,10 @@ function CourseContainer({ courses, openCourseModal, handleInputChange, closeMod
                 <button className="add-a-course-button" onClick={openCourseModal}>Add a course</button>
             </div>
             <AddCourseModal 
-                landingValues={landingValues} 
+                courseValues={courseValues} 
                 handleInputChange={handleInputChange} 
                 closeModal={closeModal} 
-                handleSubmit={handleSubmit} />
+                handleAddCourse={handleAddCourse} />
             {/* only display courseCode */}
             <div className="courses-list"> 
                 {courses.map((course, index) => (
