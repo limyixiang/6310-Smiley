@@ -1,11 +1,19 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getTasksForCourse } from '../Backend';
 import './coursePage.css';
 
 function CoursePage() {
+    const [tasks, setTasks] = useState([]);
 
     const location = useLocation();
     const { course } = location.state;
+
+    useEffect(() => {
+        getTasksForCourse(course)
+            .then(data => setTasks(data))
+            .catch(err => console.error("Error fetching data:", err));
+    });
 
     return (
         <div className='main-container'>
@@ -13,7 +21,7 @@ function CoursePage() {
                 {course.courseCode + " " + course.courseName}
             </div>
             <div className="course-tasks-list">
-                {course.tasks.map((task, index) => (
+                {tasks.map((task, index) => (
                     <div key={index} className="course-task-item">
                         <div className="task-item-text">
                             {task.taskName}

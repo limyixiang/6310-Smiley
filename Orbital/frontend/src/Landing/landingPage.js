@@ -15,7 +15,7 @@ function LandingPage() {
 
     const [taskValues, setTaskValues] = useState({
         openModalType: null,
-        taskCourse: "",
+        taskCourseId: "",
         priorityLevel: "",
         taskName: "",
         dueDate: "",
@@ -23,7 +23,7 @@ function LandingPage() {
 
     // Destructuring values from the state
     const { courseName, courseCode } = courseValues;
-    const { taskCourse: taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
+    const { taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
 
@@ -97,8 +97,6 @@ function LandingPage() {
                 if(data.error) {
                     
                 } else {
-                    // try data.data later
-                    // setCourses(data.data);
                     setCourses(courses.filter(course => course._id !== courseId))
                 }
             })
@@ -124,7 +122,7 @@ function LandingPage() {
                 })
                 .catch();
             setTaskValues({ ...taskValues, 
-                taskCourse: '',
+                taskCourseId: '',
                 priorityLevel: '',
                 taskName: '',
                 dueDate: '',
@@ -140,7 +138,6 @@ function LandingPage() {
                 if(data.error) {
                     
                 } else {
-                    // try data.data?
                     setTasks(tasks.filter(task => task._id !== taskId))
                 }
             })

@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-// import './landingPage.css';
+import './landingPage.css';
 
 Modal.setAppElement('#root');
 
@@ -15,7 +15,8 @@ function AddTaskModal({ courses, taskValues, handleInputChange, closeModal, hand
             <h2>Add Your Task</h2>
             <div className="select-course">
                 <label>Select a Course</label>
-                <select>
+                <select value={taskValues.taskCourseId} onChange={handleInputChange('task', 'taskCourseId')}>
+                    <option value="" disabled hidden>Select a Course</option>
                     {courses.map((course, index) => (
                         <option key={index} value={course._id}>{course.courseCode + " " + course.courseName}</option>
                     ))}
@@ -23,9 +24,10 @@ function AddTaskModal({ courses, taskValues, handleInputChange, closeModal, hand
             </div>
             <div className="select-priority-level">
                 <label>Select Priority Level</label>
-                <select>
-                    <option value='high'>High</option>
-                    <option value='low'>Low</option>
+                <select value={taskValues.priorityLevel} onChange={handleInputChange('task', 'priorityLevel')}>
+                    <option value="" disabled hidden>Select Priority Level</option>
+                    <option value='High'>High</option>
+                    <option value='Low'>Low</option>
                 </select>
             </div>
             <div className="input-task-name">
@@ -41,8 +43,8 @@ function AddTaskModal({ courses, taskValues, handleInputChange, closeModal, hand
                 <label>Deadline</label>
                 <input 
                     type='date'
-                    value={taskValues.taskDate}
-                    onChange={handleInputChange('task', 'taskDate')}
+                    value={taskValues.dueDate}
+                    onChange={handleInputChange('task', 'dueDate')}
                 />
             </div>
             <button onClick={handleAddTask}>Submit</button>

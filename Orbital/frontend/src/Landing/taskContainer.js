@@ -4,6 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 function TaskContainer({ courses, tasks, openTaskModal, handleInputChange, closeModal, handleAddTask, handleDeleteTask, taskValues, handleTaskCheckboxChange }) {
+    
+    function courseDescription(courseId) {
+        const course = courses.filter(course => course._id === courseId)[0];
+        return course.courseCode + " " + course.courseName;
+    }
+    
     return (
         <div className="tasks-container">
             <h2>Upcoming Deadlines</h2>
@@ -17,7 +23,7 @@ function TaskContainer({ courses, tasks, openTaskModal, handleInputChange, close
                             checked={task.status === 'Done'} 
                         />
                         <span className="task-item" style={{ textDecoration: task.status === 'Done' ? 'line-through' : 'none' }}>
-                            {task.taskName}
+                            {courseDescription(task.course) + " - " + task.taskName}
                         </span>
                         <FontAwesomeIcon className='trashcan task-trashcan' icon={faTrashCan} onClick={() => handleDeleteTask(task._id)}/>
                     </div>

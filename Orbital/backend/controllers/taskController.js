@@ -5,16 +5,17 @@ const Course = require('../models/courseModel');
 // Create a task (Currently, the task is not tied to the course so these parts are commented out)
 exports.createTask = async (req, res) => {
     try {
+        // console.log(req.body);
         const task = new Task(req.body);
         const user = await User.findById(req.body.user._id);
-        // const course = await Course.findById(req.body.course._id);
+        const course = await Course.findById(req.body.course._id);
         const userTasks = user.tasks;
-        // const courseTasks = course.tasks;
+        const courseTasks = course.tasks;
         userTasks[userTasks.length] = task;
-        // courseTasks[courseTasks.length] = task;
+        courseTasks[courseTasks.length] = task;
         await task.save();
         await user.save();
-        // await course.save();
+        await course.save();
         return res.status(201).json({ message: 'Task created successfully', data: task });
     } catch (error) {
         return res.status(400).json({ error: error.message });
