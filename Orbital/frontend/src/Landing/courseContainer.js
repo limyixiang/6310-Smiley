@@ -19,16 +19,16 @@ function CourseContainer({ courses, openCourseModal, handleInputChange, closeMod
             {/* only display courseCode */}
             <div className="courses-list"> 
                 {courses.map((course, index) => (
-                    <Link to={"/coursepage"} state={{ course: course }}>
-                        <div key={index} className="course-item">
+                    <div key={index} className="course-item">
+                        <Link to={"/coursepage"} state={{ course: course }}>
                             <div className="course-item-text">
                                 {course.courseCode}
                             </div>
-                            <div>
-                                <FontAwesomeIcon className='trashcan course-trashcan' icon={faTrashCan} onClick={() => handleDeleteCourse(course._id)}/>
-                            </div>
+                        </Link>
+                        <div>
+                            <FontAwesomeIcon className='trashcan course-trashcan' icon={faTrashCan} onClick={() => handleDeleteCourse(course._id)}/>
                         </div>
-                    </Link>
+                    </div>
                 ))}
             </div>
         </div>
