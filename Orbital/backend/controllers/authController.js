@@ -16,20 +16,20 @@ exports.signup = async (req, res) => {
 
     const user = new User(req.body);
     user.save()
-    .then(user => {
-        res.json({
-            id: user._id,
-            name: user.name,
-            email: user.email,
+        .then(user => {
+            res.json({
+                id: user._id,
+                name: user.name,
+                email: user.email,
+            });
+        })
+        .catch(err => {
+            let errorMessage = 'Something went wrong.';
+            if (err.code === 11000) {
+                errorMessage = 'User already exists, please sign in.'; 
+            }
+            return res.status(500).json({ error: errorMessage });
         });
-    })
-    .catch(err => {
-        let errorMessage = 'Something went wrong.';
-        if (err.code === 11000) {
-            errorMessage = 'User already exists, please sign in.'; 
-        }
-        return res.status(500).json({ error: errorMessage });
-    });
 }
 
 

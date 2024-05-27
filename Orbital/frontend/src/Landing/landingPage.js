@@ -6,13 +6,15 @@ import CourseContainer from './courseContainer';
 import TaskContainer from './taskContainer';
 
 function LandingPage() {
+
+    const [err, setErr] = useState("");
     
     const [courseValues, setCourseValues] = useState({
         openModalType: null,
         courseName: "",
         courseCode: "",
     });
-
+    
     const [taskValues, setTaskValues] = useState({
         openModalType: null,
         taskCourseId: "",
@@ -20,7 +22,7 @@ function LandingPage() {
         taskName: "",
         dueDate: "",
     });
-
+    
     // Destructuring values from the state
     const { courseName, courseCode } = courseValues;
     const { taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
@@ -30,6 +32,7 @@ function LandingPage() {
     const location = useLocation();
     const { user } = location.state;
     
+    // Fetches courses and tasks for the user everytime user and tasks are updated
     useEffect(() => {
         getCourses(user)
             .then(data => setCourses(data))
@@ -39,6 +42,13 @@ function LandingPage() {
             .catch(err => console.error("Error fetching data:", err));
     }, [user, tasks]);
 
+    // Displays error message if there's any
+    const errorMessage = () => {
+        return (<div className='error-message' style={{ display: err ? "" : "none", color: "red" }}>
+            {err}
+        </div>);
+    }
+
     // Handles changes in the input fields
     const handleInputChange = (type, name) => event => {
         type === "course"
@@ -46,7 +56,7 @@ function LandingPage() {
             : setTaskValues({ ...taskValues, error: false, [name]: event.target.value });
     };
 
-    // Handles open and closing of popup
+    // Handles open and closing of course popup
     const openCourseModal = () => {
         setCourseValues(courseValues => ({
             ...courseValues,
@@ -54,6 +64,7 @@ function LandingPage() {
         }));
     }; 
 
+    // Handles open and closing of task popup
     const openTaskModal = () => {
         setTaskValues(taskValues => ({
             ...taskValues,
@@ -61,37 +72,50 @@ function LandingPage() {
         }));
     };
 
+    // Closes the popup and reset all values
     const closeModal = (modalType) => {
         modalType === 'course'
             ? setCourseValues(courseValues => ({
                 ...courseValues,
+                courseCode: '',
+                courseName: '',
                 openModalType: null
             }))
             : setTaskValues(taskValues => ({
                 ...taskValues,
+                taskCourseId: '',
+                priorityLevel: '',
+                taskName: '',
+                dueDate: '',
                 openModalType: null
             }));
+        setErr("");
     };
 
     // Course inputted shown below
-    const handleAddCourse = () => {
-        if (courseCode.trim() !== '') {
+    const handleAddCourse = async () => {
+        if (courseCode.trim() === '') {
+            setErr('Invalid course code.');
+            return;
+        } else if (courseName.trim() === '') {
+            setErr('Invalid course name.');
+            return;
+        } else {
             createCourse({ courseName: courseName, courseCode: courseCode, user: user })
                 .then(data => {
                     if (data.error) {
-                        // do we want to have loading and success states?
+                        setErr(data.error);
                     } else {
                         setCourses([...courses, data.data]);
+                        closeModal('course');
                     }
                 })
                 .catch();
-            setCourseValues({ ...courseValues, courseCode: '', courseName: '' });
         }
-        closeModal('course');
     };
 
     // Course deleted shown below
-    const handleDeleteCourse = (courseId) => {
+    const handleDeleteCourse = async (courseId) => {
         deleteCourse(courseId)
             .then(data => {
                 if(data.error) {
@@ -104,10 +128,23 @@ function LandingPage() {
     };
 
     // Task inputted shown below
-    const handleAddTask = () => {
-        if (taskName.trim() !== '') {
+    const handleAddTask = async event => {
+        event.preventDefault();
+        if (taskCourseId === '') {
+            setErr('Please select a course.');
+            return;
+        } else if (priorityLevel === '') {
+            setErr('Please select a priority level.');
+            return;
+        } else if (taskName.trim() === '') {
+            setErr('Invalid task name.');
+            return;
+        } else if (dueDate === '') {
+            setErr('Please select a due date.');
+            return;
+        } else {
             createTask({ 
-                taskName: taskName, 
+                taskName: taskName.trim(), 
                 dueDate: dueDate,
                 priority: priorityLevel,
                 course: courses.filter(course => course._id === taskCourseId)[0],
@@ -115,24 +152,18 @@ function LandingPage() {
             })
                 .then(data => {
                     if (data.error) {
-                        // do we want to have loading and success states?
+                        setErr(data.error);
                     } else {
                         setTasks([...tasks, data.data]);
+                        closeModal('task');
                     }
                 })
                 .catch();
-            setTaskValues({ ...taskValues, 
-                taskCourseId: '',
-                priorityLevel: '',
-                taskName: '',
-                dueDate: '',
-            }); 
         }
-        closeModal('task');
     };
 
     // Task deleted shown below
-    const handleDeleteTask = (taskId) => {
+    const handleDeleteTask = async (taskId) => {
         deleteTask(taskId)
             .then(data => {
                 if(data.error) {
@@ -163,7 +194,8 @@ function LandingPage() {
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 courses={courses}
-                handleDeleteCourse={handleDeleteCourse} />
+                handleDeleteCourse={handleDeleteCourse}
+                errorMessage = {errorMessage} />
             <TaskContainer
                 courses={courses}
                 tasks={tasks}
@@ -173,7 +205,8 @@ function LandingPage() {
                 handleAddTask={handleAddTask}
                 handleDeleteTask={handleDeleteTask}
                 taskValues={taskValues}
-                handleTaskCheckboxChange={handleTaskCheckboxChange} />
+                handleTaskCheckboxChange={handleTaskCheckboxChange}
+                errorMessage={errorMessage} />
         </div>
     );
 };
