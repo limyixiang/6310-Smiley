@@ -115,7 +115,8 @@ function LandingPage() {
     };
 
     // Course deleted shown below
-    const handleDeleteCourse = async (courseId) => {
+    const handleDeleteCourse = async (event, courseId) => {
+        event.preventDefault();
         deleteCourse(courseId)
             .then(data => {
                 if(data.error) {

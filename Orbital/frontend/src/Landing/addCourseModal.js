@@ -1,35 +1,43 @@
-import Modal from 'react-modal';
-import './landingPage.css';
+import Modal from "react-modal";
+import "./landingPage.css";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
-function AddCourseModal({ courseValues, handleInputChange, closeModal, handleAddCourse, errorMessage }) {
+function AddCourseModal({
+    courseValues,
+    handleInputChange,
+    closeModal,
+    handleAddCourse,
+    errorMessage,
+}) {
     return (
         <Modal
-            isOpen={courseValues.openModalType === 'course'} 
+            isOpen={courseValues.openModalType === "course"}
             onRequestClose={closeModal}
-            contentLabel='Add-a-course-modal'
-            className='add-a-course-popup'
-            overlayClassName='backdrop-course-popup'
+            contentLabel="Add-a-course-modal"
+            className="add-a-course-popup"
+            overlayClassName="backdrop-course-popup"
         >
             <h2>Add Your Course</h2>
             {/* Input Course Code text box */}
-            <input 
-                type='text'
+            <input
+                id="addCourseCode"
+                type="text"
                 value={courseValues.courseCode}
-                onChange={handleInputChange('course', 'courseCode')}
-                placeholder='Course Code'
+                onChange={handleInputChange("course", "courseCode")}
+                placeholder="Course Code"
             />
             {/* Input Course Name text box */}
-            <input 
-                type='text'
+            <input
+                id="addCourseName"
+                type="text"
                 value={courseValues.courseName}
-                onChange={handleInputChange('course', 'courseName')}
-                placeholder='Course Name'
+                onChange={handleInputChange("course", "courseName")}
+                placeholder="Course Name"
             />
             {errorMessage()}
             <button onClick={handleAddCourse}>Submit</button>
-            <button onClick={() => closeModal('course')}>Close</button>
+            <button onClick={() => closeModal("course")}>Close</button>
         </Modal>
     );
 }
