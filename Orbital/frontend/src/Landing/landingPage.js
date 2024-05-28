@@ -167,6 +167,10 @@ function LandingPage() {
         } else if (dueDate === "") {
             setErr("Please select a due date.");
             return;
+            // Check if due date is in the past
+            // Since dueDate is at 0000H for now, we can compare with Date.now() - 1 without any issues to allow the user to add
+        } else if (new Date(dueDate) < Date.now() - 1) {
+            setErr("Invalid date! Please select a future date.");
         } else {
             createTask({
                 taskName: taskName.trim(),

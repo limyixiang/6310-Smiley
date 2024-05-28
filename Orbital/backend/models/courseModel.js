@@ -1,11 +1,10 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 // Define the schema for the Course collection
 const courseSchema = new mongoose.Schema({
-    // turned required off for now, for testing purposes
     courseCode: {
         type: String,
-        required: false,
+        required: true,
     },
     courseName: {
         type: String,
@@ -16,17 +15,15 @@ const courseSchema = new mongoose.Schema({
         type: Number,
         required: false,
     },
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
+    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
     },
     createdAt: {
         type: Date,
         default: Date.now,
     },
-   
 });
-  
 
-module.exports = mongoose.model('Course', courseSchema);
+module.exports = mongoose.model("Course", courseSchema);
