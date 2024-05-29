@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 var crypto = require("crypto");
-const {v4: uuidv4} =  require('uuid')
+const { v4: uuidv4 } = require("uuid");
 
 //User Schema
 const userSchema = new mongoose.Schema(
@@ -16,51 +16,47 @@ const userSchema = new mongoose.Schema(
             type: String,
             trim: true,
             required: true,
-            unique: true
+            unique: true,
         },
         encrypted_password: {
             type: String,
-            required: true
+            required: true,
         },
         salt: String,
-        numCourses: {
-            type: Number,
-            default: 0
-        },
-        courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
-        tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }]
+        courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
+        tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     },
-    {timestamps: true}
+    { timestamps: true }
 );
 
-userSchema.virtual("password")
-    .set(function(password){
+userSchema
+    .virtual("password")
+    .set(function (password) {
         this._password = password;
         this.salt = uuidv4();
         this.encrypted_password = this.securedPassword(password);
     })
-    .get(function(){
-        return this._password
-    })
-
+    .get(function () {
+        return this._password;
+    });
 
 userSchema.method({
-    authenticate: function(plainpassword){
-        return this.securedPassword(plainpassword) === this.encrypted_password
+    authenticate: function (plainpassword) {
+        return this.securedPassword(plainpassword) === this.encrypted_password;
     },
 
-    securedPassword: function(plainpassword){
-        if(!plainpassword) return "";
+    securedPassword: function (plainpassword) {
+        if (!plainpassword) return "";
 
         try {
-            return crypto.createHmac('sha256', this.salt)
-                    .update(plainpassword)
-                    .digest('hex')
-        }
-        catch(err){
+            return crypto
+                .createHmac("sha256", this.salt)
+                .update(plainpassword)
+                .digest("hex");
+        } catch (err) {
             return "Error in hashing the password";
         }
     },
-})
+});
 
 module.exports = mongoose.model("User", userSchema);
