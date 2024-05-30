@@ -20,7 +20,7 @@
     "uuid": "^9.0.1"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon server.js",
     "test": "jest",
     "server": "nodemon server"
   },

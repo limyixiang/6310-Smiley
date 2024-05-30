@@ -11,5 +11,8 @@
     "create-react-app": "^5.0.1"
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
 }

@@ -126,18 +126,14 @@ exports.resetPassword = async (req, res) => {
             decoded_token = jwtToken.verify(req.params.token, "shhhhh");
         } catch (err) {
             if (err.name === "TokenExpiredError") {
-                return res
-                    .status(401)
-                    .json({
-                        error: "Session expired. Generate a new link and try again.",
-                    });
+                return res.status(401).json({
+                    error: "Session expired. Generate a new link and try again.",
+                });
             } else {
                 // Token is invalid
-                return res
-                    .status(401)
-                    .json({
-                        error: "Session is invalid. Check the link in your email and try again.",
-                    });
+                return res.status(401).json({
+                    error: "Session is invalid. Check the link in your email and try again.",
+                });
             }
         }
 
