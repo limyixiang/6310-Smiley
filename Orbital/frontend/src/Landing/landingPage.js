@@ -42,10 +42,10 @@ function LandingPage() {
 
     // Fetches courses and tasks for the user everytime user and tasks are updated
     useEffect(() => {
-        getCourses(user)
+        getCourses({ userid: user._id })
             .then((data) => setCourses(data))
             .catch((err) => console.error("Error fetching data:", err));
-        getTasksForUser(user)
+        getTasksForUser({ userid: user._id })
             .then((data) => setTasks(data))
             .catch((err) => console.error("Error fetching data:", err));
     }, [user, tasks]);
@@ -125,7 +125,7 @@ function LandingPage() {
             createCourse({
                 courseName: courseName,
                 courseCode: courseCode,
-                user: user,
+                userid: user._id,
             })
                 .then((data) => {
                     if (data.error) {
@@ -176,10 +176,10 @@ function LandingPage() {
                 taskName: taskName.trim(),
                 dueDate: dueDate,
                 priority: priorityLevel,
-                course: courses.filter(
+                courseid: courses.filter(
                     (course) => course._id === taskCourseId
-                )[0],
-                user: user,
+                )[0]._id,
+                userid: user._id,
             })
                 .then((data) => {
                     if (data.error) {

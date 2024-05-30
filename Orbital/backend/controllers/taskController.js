@@ -7,8 +7,8 @@ exports.createTask = async (req, res) => {
     try {
         // console.log(req.body);
         const task = new Task(req.body);
-        const user = await User.findById(req.body.user._id);
-        const course = await Course.findById(req.body.course._id);
+        const user = await User.findById(req.body.userid);
+        const course = await Course.findById(req.body.courseid);
         const userTasks = user.tasks;
         const courseTasks = course.tasks;
         userTasks[userTasks.length] = task;
@@ -64,7 +64,7 @@ exports.deleteTask = async (req, res) => {
 // Get all tasks for a particular user
 exports.getTasksForUser = async (req, res) => {
     try {
-        const user = await User.findById(req.body._id).populate("tasks");
+        const user = await User.findById(req.body.userid).populate("tasks");
         return res.json(user.tasks);
     } catch (error) {
         return res.status(400).json({ error: error.message });

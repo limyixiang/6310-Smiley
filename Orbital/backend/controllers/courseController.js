@@ -5,7 +5,7 @@ const User = require("../models/userModel");
 exports.createCourse = async (req, res) => {
     try {
         const course = new Course(req.body);
-        const user = await User.findById(req.body.user._id);
+        const user = await User.findById(req.body.userid);
         const userCourses = user.courses;
         userCourses[userCourses.length] = course;
         // console.log(user);
@@ -59,7 +59,7 @@ exports.deleteCourse = async (req, res) => {
 // Get all courses for a particular user
 exports.getCourses = async (req, res) => {
     try {
-        const user = await User.findById(req.body._id).populate("courses");
+        const user = await User.findById(req.body.userid).populate("courses");
         // console.log(user.courses);
         return res.json(user.courses);
     } catch (error) {
