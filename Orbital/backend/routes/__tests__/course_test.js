@@ -6,9 +6,9 @@ const User = require("../../models/userModel");
 // Access Test Database
 const mongoose = require("mongoose");
 var mongoDB =
-    "mongodb+srv://Smiley:6310-Smiley@6310-smiley.yxgidpp.mongodb.net/integrationTesting?retryWrites=true&w=majority&appName=6310-Smiley";
+    "mongodb+srv://Smiley:6310-Smiley@6310-smiley.yxgidpp.mongodb.net/integrationTestingCourse?retryWrites=true&w=majority&appName=6310-Smiley";
 
-const PORT = 8001;
+const PORT = 8002;
 
 let server;
 let userid;
