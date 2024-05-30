@@ -34,16 +34,29 @@ router.post(
     signin
 );
 
-router.post("/forgetpassword", forgetPassword);
+router.post(
+    "/forgetpassword",
+    [check("email", "Email is required.").isEmail()],
+    forgetPassword
+);
 
 // Password requirements are handled on the frontend
-router.post("/resetpassword/:token", resetPassword);
+router.post(
+    "/resetpassword/:token",
+    [
+        check(
+            "password",
+            "Password does not meet the requirements. Please try again."
+        ).isStrongPassword({ minSymbols: 0 }),
+    ],
+    resetPassword
+);
 
 router.get("/signout", signout);
 
 //Protected Route for testing
-router.get("/testroute", isSignedIn, (req, res) => {
-    res.send("A protected route.");
-});
+// router.get("/testroute", isSignedIn, (req, res) => {
+//     res.send("A protected route.");
+// });
 
 module.exports = router;

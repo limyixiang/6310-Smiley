@@ -65,6 +65,14 @@ exports.signin = async (req, res) => {
 
 //FORGET PASSWORD
 exports.forgetPassword = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({
+            error: errors.array()[0].msg,
+        });
+    }
+
     try {
         //Find user by email
         const user = await User.findOne({ email: req.body.email });
@@ -107,9 +115,10 @@ exports.forgetPassword = async (req, res) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
             } else {
-                return res
-                    .status(200)
-                    .json({ message: "Email has been sent to the user." });
+                return res.status(200).json({
+                    message: "Email has been sent to the user.",
+                    token: token,
+                });
             }
         });
     } catch (error) {
@@ -119,6 +128,14 @@ exports.forgetPassword = async (req, res) => {
 
 //RESET PASSWORD
 exports.resetPassword = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({
+            error: errors.array()[0].msg,
+        });
+    }
+
     try {
         //Verify the token
         let decoded_token;
