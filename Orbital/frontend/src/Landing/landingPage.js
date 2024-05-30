@@ -209,9 +209,9 @@ function LandingPage() {
     const handleTaskCheckboxChange = async (task) => {
         console.log(task);
         if (task.status === "Done") {
-            reverseCompleteTask({ task: task });
+            reverseCompleteTask({ taskid: task._id });
         } else {
-            completeTask({ task: task });
+            completeTask({ taskid: task._id });
         }
     };
 

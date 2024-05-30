@@ -92,8 +92,8 @@ describe("course route testing", () => {
         });
 
     it("can delete a course", async () => {
-        const course = await Course.find({ courseName: "bar" });
-        const courseid = course[0]._id;
+        const course = await Course.findOne({ courseName: "bar" });
+        const courseid = course._id;
         await request(server)
             .delete(`/courses/deletecourse/${courseid}`)
             .send({ courseid: courseid })

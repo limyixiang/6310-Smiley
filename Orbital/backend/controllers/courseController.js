@@ -61,7 +61,7 @@ exports.deleteCourse = async (req, res) => {
         });
     } catch (error) {
         // Handle errors
-        console.error(error);
+        // console.error(error);
         res.status(500).json({
             success: false,
             error: "Internal server error.",

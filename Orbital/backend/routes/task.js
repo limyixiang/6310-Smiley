@@ -1,8 +1,26 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { createTask, getTasksForUser, getTasksForCourse, completeTask, reverseCompleteTask, deleteTask } = require('../controllers/taskController')
+const { check } = require("express-validator");
+const {
+    createTask,
+    getTasksForUser,
+    getTasksForCourse,
+    completeTask,
+    reverseCompleteTask,
+    deleteTask,
+} = require("../controllers/taskController");
 
-router.post("/createtask", createTask);
+router.post(
+    "/createtask",
+    [
+        check("taskName", "Task Name is required.").notEmpty(),
+        check("dueDate", "Task Deadline is required.").isDate({
+            format: "MM-DD-YYYY",
+        }),
+        check("priority", "Task Course is required.").notEmpty(),
+    ],
+    createTask
+);
 router.post("/gettasksforuser", getTasksForUser);
 router.post("/gettasksforcourse", getTasksForCourse);
 router.post("/completetask", completeTask);

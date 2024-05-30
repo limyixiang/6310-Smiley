@@ -1,12 +1,19 @@
 const Task = require("../models/tasksModel");
 const User = require("../models/userModel");
 const Course = require("../models/courseModel");
+const { validationResult } = require("express-validator");
 
 // Create a task (Currently, the task is not tied to the course so these parts are commented out)
 exports.createTask = async (req, res) => {
     try {
-        // console.log(req.body);
-        // const task = new Task(req.body);
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({
+                error: errors.array()[0].msg,
+            });
+        }
+
         const user = await User.findById(req.body.userid);
         const course = await Course.findById(req.body.courseid);
         const task = new Task({
@@ -60,7 +67,7 @@ exports.deleteTask = async (req, res) => {
         });
     } catch (error) {
         // Handle errors
-        console.error(error);
+        // console.error(error);
         res.status(500).json({
             success: false,
             error: "Internal server error.",
@@ -93,7 +100,7 @@ exports.getTasksForCourse = async (req, res) => {
 // Complete a task
 exports.completeTask = async (req, res) => {
     try {
-        const task = await Task.findById(req.body.task._id);
+        const task = await Task.findById(req.body.taskid);
         if (task.status === "Done") {
             return res.status(200).json({ message: "Task already completed" });
         }
@@ -108,7 +115,7 @@ exports.completeTask = async (req, res) => {
 // Reverse of complete a task
 exports.reverseCompleteTask = async (req, res) => {
     try {
-        const task = await Task.findById(req.body.task._id);
+        const task = await Task.findById(req.body.taskid);
         if (task.status === "Todo") {
             return res
                 .status(200)
