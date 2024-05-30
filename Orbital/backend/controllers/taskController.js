@@ -27,7 +27,7 @@ exports.createTask = async (req, res) => {
             .status(201)
             .json({ message: "Task created successfully", data: task });
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -74,17 +74,19 @@ exports.getTasksForUser = async (req, res) => {
         const user = await User.findById(req.body.userid).populate("tasks");
         return res.json(user.tasks);
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
 // Get all tasks for a particular course
 exports.getTasksForCourse = async (req, res) => {
     try {
-        const course = await Course.findById(req.body._id).populate("tasks");
+        const course = await Course.findById(req.body.courseid).populate(
+            "tasks"
+        );
         return res.json(course.tasks);
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -92,11 +94,14 @@ exports.getTasksForCourse = async (req, res) => {
 exports.completeTask = async (req, res) => {
     try {
         const task = await Task.findById(req.body.task._id);
+        if (task.status === "Done") {
+            return res.status(200).json({ message: "Task already completed" });
+        }
         task.status = "Done";
         await task.save();
         return res.status(200).json({ message: "Task completed successfully" });
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -104,12 +109,17 @@ exports.completeTask = async (req, res) => {
 exports.reverseCompleteTask = async (req, res) => {
     try {
         const task = await Task.findById(req.body.task._id);
+        if (task.status === "Todo") {
+            return res
+                .status(200)
+                .json({ message: "Task already not completed" });
+        }
         task.status = "Todo";
         await task.save();
         return res
             .status(200)
             .json({ message: "Completion of task reversed successfully" });
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
