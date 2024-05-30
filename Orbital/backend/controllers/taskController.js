@@ -6,9 +6,16 @@ const Course = require("../models/courseModel");
 exports.createTask = async (req, res) => {
     try {
         // console.log(req.body);
-        const task = new Task(req.body);
+        // const task = new Task(req.body);
         const user = await User.findById(req.body.userid);
         const course = await Course.findById(req.body.courseid);
+        const task = new Task({
+            taskName: req.body.taskName,
+            dueDate: req.body.dueDate,
+            priority: req.body.priority,
+            user: user,
+            course: course,
+        });
         const userTasks = user.tasks;
         const courseTasks = course.tasks;
         userTasks[userTasks.length] = task;
