@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const { check, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 var jwtToken = require("jsonwebtoken");
 var { expressjwt: jwt } = require("express-jwt");
 const nodemailer = require("nodemailer");

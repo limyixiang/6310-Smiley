@@ -1,10 +1,18 @@
 const Course = require("../models/courseModel");
 const User = require("../models/userModel");
+const { validationResult } = require("express-validator");
 
 // Create a new course
 exports.createCourse = async (req, res) => {
     try {
-        // const course = new Course(req.body);
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({
+                error: errors.array()[0].msg,
+            });
+        }
+
         const user = await User.findById(req.body.userid);
         const course = new Course({
             courseName: req.body.courseName,
@@ -20,7 +28,7 @@ exports.createCourse = async (req, res) => {
             .status(201)
             .json({ message: "Course created successfully", data: course });
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -64,10 +72,14 @@ exports.deleteCourse = async (req, res) => {
 // Get all courses for a particular user
 exports.getCourses = async (req, res) => {
     try {
-        const user = await User.findById(req.body.userid).populate("courses");
+        const user = await User.findById(req.body.userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+        await user.populate("courses");
         // console.log(user.courses);
         return res.json(user.courses);
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
