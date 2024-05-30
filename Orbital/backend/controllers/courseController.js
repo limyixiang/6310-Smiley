@@ -4,8 +4,13 @@ const User = require("../models/userModel");
 // Create a new course
 exports.createCourse = async (req, res) => {
     try {
-        const course = new Course(req.body);
+        // const course = new Course(req.body);
         const user = await User.findById(req.body.userid);
+        const course = new Course({
+            courseName: req.body.courseName,
+            courseCode: req.body.courseCode,
+            user: user,
+        });
         const userCourses = user.courses;
         userCourses[userCourses.length] = course;
         // console.log(user);
