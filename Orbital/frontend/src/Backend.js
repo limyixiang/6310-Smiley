@@ -28,12 +28,16 @@ export const signin = (user) => {
 export const signup = (user) => {
     // API call to sign up a user
     return axios
-        .post("http://localhost:8000/api/signup", JSON.stringify(user), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
+        .post(
+            "https://6310-smiley-server.vercel.app/api/signup",
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        )
         .then((response) => {
             console.log(response.data);
             return response.data; // Return response data
