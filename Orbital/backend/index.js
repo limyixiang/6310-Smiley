@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const app = require("./app");
 
 //Database connection
+console.log("Attempting to connect to database...");
 mongoose
     .connect(
         process.env.MONGODB_URI ||
