@@ -16,11 +16,14 @@ const courseRoute = require("./routes/course");
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-app.use(
-    cors({
-        origin: process.env.CLIENT_URL,
-    })
-);
+// app.use(
+//     cors({
+//         origin: ["localhost:3000", "localhost:8000"],
+//         // origin: ["https://6310-smiley.vercel.app/", "", "localhost:3000"],
+//         // methods: ["POST", "GET", "DELETE"],
+//         credentials: true,
+//     })
+// );
 
 //Calling the routes
 app.use("/api", AuthRoute);
