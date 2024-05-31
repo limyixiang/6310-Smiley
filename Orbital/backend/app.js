@@ -30,4 +30,8 @@ app.use("/api", AuthRoute);
 app.use("/tasks", TaskRoute);
 app.use("/courses", courseRoute);
 
+app.get("/", (req, res) => {
+    res.send("Hello, World!");
+});
+
 module.exports = app;
