@@ -155,6 +155,7 @@ function LandingPage() {
     // Task inputted shown below
     const handleAddTask = async (event) => {
         event.preventDefault();
+        // console.log(dueDate);
         if (taskCourseId === "") {
             setErr("Please select a course.");
             return;
@@ -169,7 +170,9 @@ function LandingPage() {
             return;
             // Check if due date is in the past
             // Since dueDate is at 0000H for now, we can compare with Date.now() - 1 without any issues to allow the user to add
-        } else if (new Date(dueDate) < Date.now() - 1) {
+        } else if (
+            new Date(dueDate) < new Date(Date.now()).setHours(0, 0, 0, 0)
+        ) {
             setErr("Invalid date! Please select a future date.");
         } else {
             createTask({

@@ -63,7 +63,7 @@ describe("task route testing", () => {
             .post("/tasks/createtask")
             .send({
                 taskName: "fooo",
-                dueDate: "05-30-2024",
+                dueDate: "2024-05-30",
                 priority: "High",
                 courseid: courseid,
                 userid: userid,
@@ -75,7 +75,7 @@ describe("task route testing", () => {
                 .post("/tasks/createtask")
                 .send({
                     taskName: "",
-                    dueDate: "05-30-2024",
+                    dueDate: "2024-05-30",
                     priority: "High",
                     courseid: courseid,
                     userid: userid,
@@ -111,7 +111,7 @@ describe("task route testing", () => {
                 .post("/tasks/createtask")
                 .send({
                     taskName: "fooo",
-                    dueDate: "05-30-2024",
+                    dueDate: "2024-05-30",
                     priority: "",
                     courseid: courseid,
                     userid: userid,

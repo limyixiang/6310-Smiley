@@ -15,7 +15,7 @@ router.post(
     [
         check("taskName", "Task Name is required.").notEmpty(),
         check("dueDate", "Task Deadline is required.").isDate({
-            format: "MM-DD-YYYY",
+            format: "YYYY-MM-DD",
         }),
         check("priority", "Task Course is required.").notEmpty(),
     ],
