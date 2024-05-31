@@ -7,6 +7,7 @@ describe("Course Controller Test", () => {
         expect(CourseController).toBeDefined();
     });
 
+    // this is still a work in progress, i dont think its supposed to work like that
     describe("list courses", () => {
         it("returns a list of courses", async () => {
             // Create a stub for the Course.find method
