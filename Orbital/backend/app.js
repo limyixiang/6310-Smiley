@@ -16,6 +16,11 @@ const courseRoute = require("./routes/course");
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(
+    cors({
+        origin: process.env.CLIENT_URL,
+    })
+);
 
 //Calling the routes
 app.use("/api", AuthRoute);
