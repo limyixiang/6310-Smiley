@@ -15,6 +15,7 @@ import CourseContainer from "./courseContainer";
 import TaskContainer from "./taskContainer";
 
 function LandingPage() {
+    const [refresh, setRefresh] = useState(false);
     const [err, setErr] = useState("");
 
     const [courseValues, setCourseValues] = useState({
@@ -40,15 +41,19 @@ function LandingPage() {
     const location = useLocation();
     const { user } = location.state;
 
-    // Fetches courses and tasks for the user everytime user and tasks are updated
+    // Fetches courses and tasks for the user everytime a submit is made
     useEffect(() => {
+        console.log("Fetching data");
         getCourses({ userid: user._id })
             .then((data) => setCourses(data))
+            .then(() =>
+                getTasksForUser({ userid: user._id }).then((data) =>
+                    setTasks(data)
+                )
+            )
+            .then(() => setRefresh(false))
             .catch((err) => console.error("Error fetching data:", err));
-        getTasksForUser({ userid: user._id })
-            .then((data) => setTasks(data))
-            .catch((err) => console.error("Error fetching data:", err));
-    }, [user, tasks]);
+    }, [refresh, user._id]);
 
     // Displays error message if there's any
     const errorMessage = () => {
@@ -111,6 +116,7 @@ function LandingPage() {
                   openModalType: null,
               }));
         setErr("");
+        setRefresh(true);
     };
 
     // Course inputted shown below
@@ -143,12 +149,7 @@ function LandingPage() {
     const handleDeleteCourse = async (event, courseId) => {
         event.preventDefault();
         deleteCourse(courseId)
-            .then((data) => {
-                if (data.error) {
-                } else {
-                    setCourses(data.data);
-                }
-            })
+            .then(() => setRefresh(true))
             .catch();
     };
 
@@ -199,12 +200,7 @@ function LandingPage() {
     // Task deleted shown below
     const handleDeleteTask = async (taskId) => {
         deleteTask(taskId)
-            .then((data) => {
-                if (data.error) {
-                } else {
-                    setTasks(data.data);
-                }
-            })
+            .then(() => setRefresh(true))
             .catch();
     };
 
@@ -212,9 +208,11 @@ function LandingPage() {
     const handleTaskCheckboxChange = async (task) => {
         console.log(task);
         if (task.status === "Done") {
-            reverseCompleteTask({ taskid: task._id });
+            reverseCompleteTask({ taskid: task._id }).then(() =>
+                setRefresh(true)
+            );
         } else {
-            completeTask({ taskid: task._id });
+            completeTask({ taskid: task._id }).then(() => setRefresh(true));
         }
     };
 

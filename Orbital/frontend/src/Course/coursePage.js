@@ -15,6 +15,7 @@ function CoursePage() {
             .catch((err) => console.error("Error fetching data:", err));
     });
 
+    // test comment
     return (
         <div className="main-container">
             <div className="course-header">
