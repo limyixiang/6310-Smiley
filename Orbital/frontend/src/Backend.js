@@ -1,21 +1,21 @@
 import axios from "axios";
 
+const VERCEL_URL = "https://6310-smiley-server.vercel.app";
+const LOCAL_URL = "http://localhost:8000";
+const URL = LOCAL_URL;
+
 //USER AND AUTH ROUTES
 
 //SIGNIN
 export const signin = (user) => {
     // API call to sign in a user
     return axios
-        .post(
-            "https://6310-smiley-server.vercel.app/api/signin",
-            JSON.stringify(user),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/api/signin`, JSON.stringify(user), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -28,16 +28,12 @@ export const signin = (user) => {
 export const signup = (user) => {
     // API call to sign up a user
     return axios
-        .post(
-            "https://6310-smiley-server.vercel.app/api/signup",
-            JSON.stringify(user),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/api/signup`, JSON.stringify(user), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             console.log(response.data);
             return response.data; // Return response data
@@ -51,16 +47,12 @@ export const signup = (user) => {
 export const forgetPasswordAuthentication = (user) => {
     // API call to check if user is in database
     return axios
-        .post(
-            "http://localhost:8000/api/forgetpassword",
-            JSON.stringify(user),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/api/forgetpassword`, JSON.stringify(user), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -72,16 +64,12 @@ export const forgetPasswordAuthentication = (user) => {
 export const forgetPasswordReset = (user, token) => {
     // API call to check if user is in database
     return axios
-        .post(
-            `http://localhost:8000/api/resetpassword/${token}`,
-            JSON.stringify(user),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/api/resetpassword/${token}`, JSON.stringify(user), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -106,7 +94,7 @@ export const signout = (next) => {
         localStorage.removeItem("jwt");
 
         axios
-            .get("http://localhost:8000/api/signout")
+            .get(`${URL}/api/signout`)
             .then((response) => {
                 console.log(response.data);
                 next();
@@ -132,7 +120,7 @@ export const isAuthenticated = () => {
 export const createTask = (task) => {
     // API call to create a task
     return axios
-        .post("http://localhost:8000/tasks/createtask", JSON.stringify(task), {
+        .post(`${URL}/tasks/createtask`, JSON.stringify(task), {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -150,7 +138,7 @@ export const createTask = (task) => {
 export const deleteTask = async (taskId) => {
     try {
         const response = await axios.delete(
-            `http://localhost:8000/tasks/deletetask/${taskId}`
+            `${URL}/tasks/deletetask/${taskId}`
         );
         return response.data; // Return response data
     } catch (error) {
@@ -163,16 +151,12 @@ export const deleteTask = async (taskId) => {
 export const getTasksForUser = (user) => {
     // API call to get courses
     return axios
-        .post(
-            "http://localhost:8000/tasks/gettasksforuser",
-            JSON.stringify(user),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/tasks/gettasksforuser`, JSON.stringify(user), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -185,16 +169,12 @@ export const getTasksForUser = (user) => {
 export const getTasksForCourse = (course) => {
     // API call to get courses
     return axios
-        .post(
-            "http://localhost:8000/tasks/gettasksforcourse",
-            JSON.stringify(course),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/tasks/gettasksforcourse`, JSON.stringify(course), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -207,16 +187,12 @@ export const getTasksForCourse = (course) => {
 export const completeTask = (task) => {
     // API call to complete a task
     return axios
-        .post(
-            "http://localhost:8000/tasks/completetask",
-            JSON.stringify(task),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/tasks/completetask`, JSON.stringify(task), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -229,16 +205,12 @@ export const completeTask = (task) => {
 export const reverseCompleteTask = (task) => {
     // API call to reverse complete a task
     return axios
-        .post(
-            "http://localhost:8000/tasks/reversecompletetask",
-            JSON.stringify(task),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/tasks/reversecompletetask`, JSON.stringify(task), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -253,16 +225,12 @@ export const reverseCompleteTask = (task) => {
 export const createCourse = (course) => {
     // API call to create a course
     return axios
-        .post(
-            "http://localhost:8000/courses/createcourse",
-            JSON.stringify(course),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/courses/createcourse`, JSON.stringify(course), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
@@ -275,7 +243,7 @@ export const createCourse = (course) => {
 export const deleteCourse = async (courseId) => {
     try {
         const response = await axios.delete(
-            `http://localhost:8000/courses/deletecourse/${courseId}`
+            `${URL}/courses/deletecourse/${courseId}`
         );
         return response.data; // Return response data
     } catch (error) {
@@ -288,16 +256,12 @@ export const deleteCourse = async (courseId) => {
 export const getCourses = (user) => {
     // API call to get courses
     return axios
-        .post(
-            "http://localhost:8000/courses/getcourses",
-            JSON.stringify(user),
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            }
-        )
+        .post(`${URL}/courses/getcourses`, JSON.stringify(user), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
         .then((response) => {
             return response.data; // Return response data
         })
