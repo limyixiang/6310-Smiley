@@ -149,12 +149,6 @@ function LandingPage() {
     const handleDeleteCourse = async (event, courseId) => {
         event.preventDefault();
         deleteCourse(courseId)
-            .then((data) => {
-                if (data.error) {
-                } else {
-                    setCourses(data.data);
-                }
-            })
             .then(() => setRefresh(true))
             .catch();
     };
@@ -206,12 +200,6 @@ function LandingPage() {
     // Task deleted shown below
     const handleDeleteTask = async (taskId) => {
         deleteTask(taskId)
-            .then((data) => {
-                if (data.error) {
-                } else {
-                    setTasks(data.data);
-                }
-            })
             .then(() => setRefresh(true))
             .catch();
     };
