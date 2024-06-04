@@ -3,7 +3,8 @@ const router = express.Router();
 const { check } = require("express-validator");
 const {
     createTask,
-    getTasksForUser,
+    getTasksByDateForUser,
+    getTasksByPriorityForUser,
     getTasksForCourse,
     completeTask,
     reverseCompleteTask,
@@ -21,7 +22,8 @@ router.post(
     ],
     createTask
 );
-router.post("/gettasksforuser", getTasksForUser);
+router.post("/gettasksbydateforuser", getTasksByDateForUser);
+router.post("/gettasksbypriorityforuser", getTasksByPriorityForUser);
 router.post("/gettasksforcourse", getTasksForCourse);
 router.post("/completetask", completeTask);
 router.post("/reversecompletetask", reverseCompleteTask);

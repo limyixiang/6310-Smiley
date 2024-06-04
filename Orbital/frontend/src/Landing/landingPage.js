@@ -6,7 +6,8 @@ import {
     createTask,
     getCourses,
     completeTask,
-    getTasksForUser,
+    getTasksByDateForUser,
+    getTasksByPriorityForUser,
     reverseCompleteTask,
     deleteCourse,
     deleteTask,
@@ -15,7 +16,11 @@ import CourseContainer from "./courseContainer";
 import TaskContainer from "./taskContainer";
 
 function LandingPage() {
-    const [refresh, setRefresh] = useState(false);
+    const [landingPageValues, setLandingPageValues] = useState({
+        refresh: false,
+        sortBy: "date",
+    });
+    // const [refresh, setRefresh] = useState(false);
     const [err, setErr] = useState("");
 
     const [courseValues, setCourseValues] = useState({
@@ -33,6 +38,7 @@ function LandingPage() {
     });
 
     // Destructuring values from the state
+    const { refresh, sortBy } = landingPageValues;
     const { courseName, courseCode } = courseValues;
     const { taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
     const [courses, setCourses] = useState([]);
@@ -47,13 +53,19 @@ function LandingPage() {
         getCourses({ userid: user._id })
             .then((data) => setCourses(data))
             .then(() =>
-                getTasksForUser({ userid: user._id }).then((data) =>
-                    setTasks(data)
-                )
+                sortBy === "date"
+                    ? getTasksByDateForUser({ userid: user._id }).then((data) =>
+                          setTasks(data)
+                      )
+                    : getTasksByPriorityForUser({ userid: user._id }).then(
+                          (data) => setTasks(data)
+                      )
             )
-            .then(() => setRefresh(false))
+            .then(() =>
+                setLandingPageValues({ ...landingPageValues, refresh: false })
+            )
             .catch((err) => console.error("Error fetching data:", err));
-    }, [refresh, user._id]);
+    }, [refresh, user._id, sortBy]);
 
     // Displays error message if there's any
     const errorMessage = () => {
@@ -75,9 +87,14 @@ function LandingPage() {
                   error: false,
                   [name]: event.target.value,
               })
-            : setTaskValues({
+            : type === "task"
+            ? setTaskValues({
                   ...taskValues,
                   error: false,
+                  [name]: event.target.value,
+              })
+            : setLandingPageValues({
+                  ...landingPageValues,
                   [name]: event.target.value,
               });
     };
@@ -116,7 +133,7 @@ function LandingPage() {
                   openModalType: null,
               }));
         setErr("");
-        setRefresh(true);
+        setLandingPageValues({ ...landingPageValues, refresh: true });
     };
 
     // Course inputted shown below
@@ -149,7 +166,9 @@ function LandingPage() {
     const handleDeleteCourse = async (event, courseId) => {
         event.preventDefault();
         deleteCourse(courseId)
-            .then(() => setRefresh(true))
+            .then(() =>
+                setLandingPageValues({ ...landingPageValues, refresh: true })
+            )
             .catch();
     };
 
@@ -200,7 +219,9 @@ function LandingPage() {
     // Task deleted shown below
     const handleDeleteTask = async (taskId) => {
         deleteTask(taskId)
-            .then(() => setRefresh(true))
+            .then(() =>
+                setLandingPageValues({ ...landingPageValues, refresh: true })
+            )
             .catch();
     };
 
@@ -209,10 +230,12 @@ function LandingPage() {
         console.log(task);
         if (task.status === "Done") {
             reverseCompleteTask({ taskid: task._id }).then(() =>
-                setRefresh(true)
+                setLandingPageValues({ ...landingPageValues, refresh: true })
             );
         } else {
-            completeTask({ taskid: task._id }).then(() => setRefresh(true));
+            completeTask({ taskid: task._id }).then(() =>
+                setLandingPageValues({ ...landingPageValues, refresh: true })
+            );
         }
     };
 
@@ -237,6 +260,7 @@ function LandingPage() {
                 handleAddTask={handleAddTask}
                 handleDeleteTask={handleDeleteTask}
                 taskValues={taskValues}
+                landingPageValues={landingPageValues}
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />

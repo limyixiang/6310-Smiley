@@ -24,7 +24,10 @@ const userSchema = new mongoose.Schema(
         },
         salt: String,
         courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
-        tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+        tasksByDate: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+        tasksByPriority: [
+            { type: mongoose.Schema.Types.ObjectId, ref: "Task" },
+        ],
     },
     { timestamps: true }
 );
