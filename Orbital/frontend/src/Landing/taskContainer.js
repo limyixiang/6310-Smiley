@@ -12,6 +12,7 @@ function TaskContainer({
     handleAddTask,
     handleDeleteTask,
     taskValues,
+    landingPageValues,
     handleTaskCheckboxChange,
     errorMessage,
 }) {
@@ -29,6 +30,18 @@ function TaskContainer({
     return (
         <div className="tasks-container">
             <h2>Upcoming Deadlines</h2>
+            <select
+                id="sortBy"
+                value={landingPageValues.sortBy}
+                onChange={handleInputChange("landingPageValues", "sortBy")}
+            >
+                <option name="sortByOption" value="date">
+                    Nearest Deadline
+                </option>
+                <option name="sortByOption" value="priorityLevel">
+                    Priority Level
+                </option>
+            </select>
             <div className="tasks-list">
                 {tasks.map((task, index) => (
                     <div className="task-row" key={index}>

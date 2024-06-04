@@ -147,11 +147,29 @@ export const deleteTask = async (taskId) => {
     }
 };
 
-// Get Tasks for User
-export const getTasksForUser = (user) => {
+// Get Tasks for User (Sorted By Date)
+export const getTasksByDateForUser = (user) => {
     // API call to get courses
     return axios
-        .post(`${URL}/tasks/gettasksforuser`, JSON.stringify(user), {
+        .post(`${URL}/tasks/gettasksbydateforuser`, JSON.stringify(user), {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            return response.data; // Return response data
+        })
+        .catch((err) => {
+            return err.response.data; // Return error response data
+        });
+};
+
+// Get Tasks for User (Sorted by Priority)
+export const getTasksByPriorityForUser = (user) => {
+    // API call to get courses
+    return axios
+        .post(`${URL}/tasks/gettasksbypriorityforuser`, JSON.stringify(user), {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
