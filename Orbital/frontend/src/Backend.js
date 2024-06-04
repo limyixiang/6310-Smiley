@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const VERCEL_URL = "https://6310-smiley-server.vercel.app";
+/*const VERCEL_URL = "https://6310-smiley-server.vercel.app";*/
 const LOCAL_URL = "http://localhost:8000";
 const URL = LOCAL_URL;
 

@@ -219,13 +219,13 @@ function LandingPage() {
     return (
         <div className="main-container">
             <CourseContainer
+                courses={courses}
                 openCourseModal={openCourseModal}
-                courseValues={courseValues}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
-                courses={courses}
                 handleDeleteCourse={handleDeleteCourse}
+                courseValues={courseValues}
                 errorMessage={errorMessage}
             />
             <TaskContainer

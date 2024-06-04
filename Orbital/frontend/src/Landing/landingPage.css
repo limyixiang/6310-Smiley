@@ -81,6 +81,55 @@
     background-color: #5292d7;
 }
 
+/*course popout*/
+
+.select-reminder-frequency label {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.select-reminder-frequency form {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 10px;
+    overflow: auto;
+    word-wrap: break-word;
+}
+
+.reminder-checkbox {
+    padding: 10px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    display: flex;
+}
+
+.reminder-checkbox input[type="checkbox"] {
+    width: 14px; 
+    height: 14px; 
+    color: #6f90d0;
+}
+
+.select-reminder-frequency select {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #6f90d0;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.select-reminder-frequency select:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
 /*courses and tasks shown in the page after adding*/
 
 .courses-list {

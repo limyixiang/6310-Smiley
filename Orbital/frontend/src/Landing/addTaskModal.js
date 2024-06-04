@@ -23,15 +23,6 @@ function AddTaskModal({ courses, taskValues, handleInputChange, closeModal, hand
                     ))}
                 </select>
             </div>
-            {/* Select Priority Level dropdown */}
-            <div className="select-priority-level">
-                <label htmlFor='priorityLevel'>Select Priority Level</label>
-                <select id='priorityLevel' value={taskValues.priorityLevel} onChange={handleInputChange('task', 'priorityLevel')}>
-                    <option value="" disabled hidden>Select Priority Level</option>
-                    <option value='High'>High</option>
-                    <option value='Low'>Low</option>
-                </select>
-            </div>
             {/* Input task name text box */}
             <div className="input-task-name">
                 <label htmlFor='taskName'>Name of Task</label>
@@ -42,6 +33,15 @@ function AddTaskModal({ courses, taskValues, handleInputChange, closeModal, hand
                     onChange={handleInputChange('task', 'taskName')}
                     placeholder='Task Name'
                 />
+            </div>
+            {/* Select Priority Level dropdown */}
+            <div className="select-priority-level">
+                <label htmlFor='priorityLevel'>Select Priority Level</label>
+                <select id='priorityLevel' value={taskValues.priorityLevel} onChange={handleInputChange('task', 'priorityLevel')}>
+                    <option value="" disabled hidden>Select Priority Level</option>
+                    <option value='High'>High</option>
+                    <option value='Low'>Low</option>
+                </select>
             </div>
             {/* Deadline date selector */}
             <div className="select-due-date">
