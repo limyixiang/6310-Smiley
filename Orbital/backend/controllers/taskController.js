@@ -43,13 +43,24 @@ exports.createTask = async (req, res) => {
                     userTasksByDate.splice(i, 0, task);
                     break;
                 } else if (newDeadline == iDeadline) {
-                    userTasksByDate.splice(i + 1, 0, task);
-                    break;
+                    if (i === numTasks - 1) {
+                        userTasksByDate.splice(i + 1, 0, task);
+                        break;
+                    } else {
+                        const nextDeadline = new Date(
+                            (
+                                await Task.findById(userTasksByDate[i + 1])
+                            ).dueDate
+                        ).getTime();
+                        if (newDeadline < nextDeadline) {
+                            userTasksByDate.splice(i + 1, 0, task);
+                            break;
+                        }
+                    }
                 } else if (i === numTasks - 1) {
                     userTasksByDate[numTasks] = task;
                 }
             }
-            console.log("reached here");
             // Insert new Task into user's array of tasks that is sorted by priority
             for (let i = 0; i < numTasks; i++) {
                 const iTask = await Task.findById(userTasksByPriority[i]);
@@ -63,8 +74,22 @@ exports.createTask = async (req, res) => {
                             userTasksByPriority.splice(i, 0, task);
                             break;
                         } else if (newDeadline == iDeadline) {
-                            userTasksByPriority.splice(i + 1, 0, task);
-                            break;
+                            if (i === numTasks - 1) {
+                                userTasksByPriority.splice(i + 1, 0, task);
+                                break;
+                            } else {
+                                const nextDeadline = new Date(
+                                    (
+                                        await Task.findById(
+                                            userTasksByPriority[i + 1]
+                                        )
+                                    ).dueDate
+                                ).getTime();
+                                if (newDeadline < nextDeadline) {
+                                    userTasksByPriority.splice(i + 1, 0, task);
+                                    break;
+                                }
+                            }
                         }
                     }
                 } else {
@@ -81,7 +106,6 @@ exports.createTask = async (req, res) => {
                 }
                 if (i === numTasks - 1) {
                     userTasksByPriority[numTasks] = task;
-                    userTasksByDate[numTasks] = task;
                 }
             }
         }
