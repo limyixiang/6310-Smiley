@@ -3,7 +3,6 @@ const User = require("../models/userModel");
 const Course = require("../models/courseModel");
 const { validationResult } = require("express-validator");
 
-// Create a task (Currently, the task is not tied to the course so these parts are commented out)
 exports.createTask = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -25,7 +24,27 @@ exports.createTask = async (req, res) => {
         });
         const userTasks = user.tasks;
         const courseTasks = course.tasks;
-        userTasks[userTasks.length] = task;
+
+        // Insert new Task into user's array of tasks that is sorted by deadline
+        if (userTasks.length === 0) {
+            userTasks[0] = task;
+        } else {
+            const numTasks = userTasks.length;
+            const newDeadline = new Date(task.dueDate).getTime();
+            for (let i = 0; i < numTasks; i++) {
+                const iTask = await Task.findById(userTasks[i]);
+                const iDeadline = new Date(iTask.dueDate).getTime();
+                if (newDeadline < iDeadline) {
+                    userTasks.splice(i, 0, task);
+                    break;
+                } else if (newDeadline == iDeadline) {
+                    userTasks.splice(i + 1, 0, task);
+                    break;
+                }
+            }
+            userTasks[numTasks] = task;
+        }
+
         courseTasks[courseTasks.length] = task;
         await task.save();
         await user.save();
