@@ -65,7 +65,7 @@ function LandingPage() {
                 setLandingPageValues({ ...landingPageValues, refresh: false })
             )
             .catch((err) => console.error("Error fetching data:", err));
-    }, [refresh, user._id, sortBy]);
+    }, [refresh, user._id, sortBy, landingPageValues]);
 
     // Displays error message if there's any
     const errorMessage = () => {

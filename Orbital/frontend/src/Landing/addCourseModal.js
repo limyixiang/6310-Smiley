@@ -18,115 +18,64 @@ function AddCourseModal({
             className="add-a-course-popup"
             overlayClassName="backdrop-course-popup"
         >
-            <h2 className="course-popup-1">Please provide some details of the course.</h2>
+            <h2>Please provide some details of the course.</h2>
             {/* Input Course Code text box */}
-            <input
-                id="addCourseCode"
-                type="text"
-                value={courseValues.courseCode}
-                onChange={handleInputChange("course", "courseCode")}
-                placeholder="Course Code"
-            />
+            <div className="form-group">
+                <input
+                    id="addCourseCode"
+                    type="text"
+                    value={courseValues.courseCode}
+                    onChange={handleInputChange("course", "courseCode")}
+                    placeholder="Course Code"
+                />
+            </div>
             {/* Input Course Name text box */}
-            <input
-                id="addCourseName"
-                type="text"
-                value={courseValues.courseName}
-                onChange={handleInputChange("course", "courseName")}
-                placeholder="Course Name"
-            />
+            <div className="form-group">
+                <input
+                    id="addCourseName"
+                    type="text"
+                    value={courseValues.courseName}
+                    onChange={handleInputChange("course", "courseName")}
+                    placeholder="Course Name"
+                />
+            </div>
             {/* Select repeated reminders dropdown */}
             <div className="select-reminder-frequency">
-                <label>Turn on Repeated Reminders:</label>
-                <form>
-                    <div className="reminder-checkbox">
-                        <input type='checkbox' id="tutorial-reminder" name="Tutorial"/>
-                        <label for="tutorial-reminder">Tutorial</label>
+                <h3>Turn on Repeated Reminders:</h3>
+                {['Tutorial', 'Lecture', 'Quiz', 'Others'].map((reminder) => (
+                    <div key={reminder} className="reminder-group">
+                        <div className="checkbox-container">
+                            <input type="checkbox" id={`${reminder}Checkbox`} />
+                            <label htmlFor={`${reminder}Checkbox`}>{reminder}</label>
+                        </div>
+                        <div className="dropdown-container">
+                            {reminder === "Others" && (
+                                <input type="text" name="taskName" placeholder="Name of Task"/>
+                            )}
+                            <select>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                            <select>
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Bi-weekly">Bi-weekly</option>
+                                <option value="Monthly">Monthly</option>
+                            </select>
+                            {reminder === "Others" && (
+                                <select>
+                                    <option value="High">High</option>
+                                    <option value="Low">Low</option>
+                                </select>
+                        )}
+                        </div>
                     </div>
-                    <select>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                        <option value="Saturday">Saturday</option>
-                        <option value="Sunday">Sunday</option>
-                    </select>
-                    <select>
-                        <option value="Daily">Daily</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Bi-weekly">Bi-weekly</option>
-                        <option value="Monthly">Monthly</option>
-                    </select>
-                </form>
-                <form>
-                    <div className="reminder-checkbox">
-                        <input type='checkbox' id="lecture-reminder" name="Lecture"/>
-                        <label for="tutorial-reminder">Lecture</label>
-                    </div>
-                    <select>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                        <option value="Saturday">Saturday</option>
-                        <option value="Sunday">Sunday</option>
-                    </select>
-                    <select>
-                        <option value="Daily">Daily</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Bi-weekly">Bi-weekly</option>
-                        <option value="Monthly">Monthly</option>
-                    </select>
-                </form>
-                <form>
-                    <div className="reminder-checkbox">
-                        <input type='checkbox' id="quiz-reminder" name="Quiz"/>
-                        <label for="tutorial-reminder">Quiz</label>
-                    </div>
-                    <select>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                        <option value="Saturday">Saturday</option>
-                        <option value="Sunday">Sunday</option>
-                    </select>
-                    <select>
-                        <option value="Daily">Daily</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Bi-weekly">Bi-weekly</option>
-                        <option value="Monthly">Monthly</option>
-                    </select>
-                </form>
-                <form>
-                    <div className="reminder-checkbox">
-                        <input type='checkbox' id="other-reminder" name="Others"/>
-                        <label for="tutorial-reminder">Others</label>
-                    </div>
-                    <input id="other-reminder" type="text" placeholder="Name of Task"/>
-                    <select>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                        <option value="Saturday">Saturday</option>
-                        <option value="Sunday">Sunday</option>
-                    </select>
-                    <select>
-                        <option value="Daily">Daily</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Bi-weekly">Bi-weekly</option>
-                        <option value="Monthly">Monthly</option>
-                    </select>
-                    <select id='priorityLevel'>
-                        <option value='High'>High</option>
-                        <option value='Low'>Low</option>
-                    </select>            
-                </form>
+                ))}
             </div>
             {errorMessage()}
             <button onClick={handleAddCourse}>Submit</button>
