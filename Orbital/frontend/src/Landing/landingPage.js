@@ -20,7 +20,7 @@ function LandingPage() {
         refresh: false,
         sortBy: "date",
     });
-    // const [refresh, setRefresh] = useState(false);
+
     const [err, setErr] = useState("");
 
     const [courseValues, setCourseValues] = useState({
@@ -62,7 +62,10 @@ function LandingPage() {
                       )
             )
             .then(() =>
-                setLandingPageValues({ ...landingPageValues, refresh: false })
+                setLandingPageValues((prevValues) => ({
+                    ...prevValues,
+                    refresh: false,
+                }))
             )
             .catch((err) => console.error("Error fetching data:", err));
     }, [refresh, user._id, sortBy]);
@@ -242,25 +245,26 @@ function LandingPage() {
     return (
         <div className="main-container">
             <CourseContainer
+                user={user}
                 courses={courses}
+                courseValues={courseValues}
                 openCourseModal={openCourseModal}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 handleDeleteCourse={handleDeleteCourse}
-                courseValues={courseValues}
                 errorMessage={errorMessage}
             />
             <TaskContainer
                 courses={courses}
                 tasks={tasks}
+                taskValues={taskValues}
+                landingPageValues={landingPageValues}
                 openTaskModal={openTaskModal}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}
                 handleAddTask={handleAddTask}
                 handleDeleteTask={handleDeleteTask}
-                taskValues={taskValues}
-                landingPageValues={landingPageValues}
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />

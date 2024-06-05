@@ -13,6 +13,7 @@ function CourseContainer({
     handleDeleteCourse,
     courseValues,
     errorMessage,
+    user,
 }) {
     return (
         <div className="courses-container">
@@ -38,7 +39,10 @@ function CourseContainer({
                     <Link
                         key={index}
                         to={"/coursepage"}
-                        state={{ course: course }}
+                        state={{
+                            course: course,
+                            user: user,
+                        }}
                     >
                         <div className="course-item">
                             <div className="course-item-text">
