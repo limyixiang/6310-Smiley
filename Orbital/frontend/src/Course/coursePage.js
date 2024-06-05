@@ -53,6 +53,13 @@ function CoursePage() {
         }
     };
 
+    const handleSortByChange = async (event) => {
+        setCoursePageValues({
+            ...coursePageValues,
+            sortBy: event.target.value,
+        });
+    };
+
     function deadlineDescription(task) {
         return task.dueDate == null
             ? ""
@@ -65,6 +72,18 @@ function CoursePage() {
                 {course.courseCode + " " + course.courseName}
             </div>
             <div className={styles.courseTasksList}>
+                <select
+                    id="courseTasksSortBy"
+                    value={sortBy}
+                    onChange={handleSortByChange}
+                >
+                    <option name="sortByOption" value="date">
+                        Nearest Deadline
+                    </option>
+                    <option name="sortByOption" value="priorityLevel">
+                        Priority Level
+                    </option>
+                </select>
                 {tasks.map((task, index) => (
                     <div key={index} className={styles.courseTaskItem}>
                         <input
