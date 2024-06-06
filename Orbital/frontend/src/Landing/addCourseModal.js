@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import { React, useState, useEffect } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./landingPage.css";
 
 Modal.setAppElement("#root");
