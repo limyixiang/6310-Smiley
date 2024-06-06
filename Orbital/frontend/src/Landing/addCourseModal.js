@@ -1,19 +1,82 @@
 import Modal from "react-modal";
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "./landingPage.css";
 
 Modal.setAppElement("#root");
 
 function AddCourseModal({
+    courses,
     courseValues,
     handleInputChange,
     closeModal,
     handleAddCourse,
     errorMessage,
 }) {
+    /*for modal to have two pages*/
     const [currentPage, setCurrentPage] = useState(1);
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
+    const [isClicked, setIsClicked] = useState(false);
+    const [temporaryCourses, setTemporaryCourses] = useState(
+        courses.map((course) => ({ _id: course._id, courseCode: course.courseCode, courseName: course.courseName }))
+    );
+    const nextPage = () => {
+        setCurrentPage(currentPage + 1);
+        if (!isClicked) {
+            handleClick();
+            setIsClicked(true);
+        }
+    };    
+    const prevPage = () => {setCurrentPage(currentPage - 1);};
+    
+    useEffect(() => {
+        // Cleanup function to reset temporaryCourses when the modal is closed
+        return () => {
+            setTemporaryCourses(courses.map((course) => ({ _id: course._id, courseCode: course.courseCode, courseName: course.courseName })));
+            setIsClicked(false);
+        };
+    }, [closeModal, courses]); // Run this effect when closeModal or courses updates
+    const handleClick = () => {
+        if (!isClicked) {
+          handleAddToTemporaryCourseArray();
+          setIsClicked(true);
+        }
+    };
+    
+    const handleAddToTemporaryCourseArray = () => {
+        // Check if both course code and course name are provided
+        if (courseValues.courseCode && courseValues.courseName) {
+          // Add courseValues to temporaryCourses array
+          setTemporaryCourses([...temporaryCourses, { _id: Math.random().toString(), courseCode: courseValues.courseCode, courseName: courseValues.courseName }]);
+        } 
+    };
+
+    const handleTemporaryCourseArrayInputChange = (field, index) => (event) => {
+        const updatedCourses = [...temporaryCourses];
+        if (index !== -1) {
+            updatedCourses[index] = {
+                ...updatedCourses[index],
+                [field]: event.target.value,
+            };
+            setTemporaryCourses(updatedCourses);
+        }
+    };
+
+    const handleOnDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        const { source, destination } = result;
+        // If item dropped in the same position, do nothing
+        if (source.index === destination.index) {
+            return;
+        }
+        const updatedCourses = Array.from(temporaryCourses);
+        const [reorderedItem] = updatedCourses.splice(source.index, 1);
+        updatedCourses.splice(destination.index, 0, reorderedItem);
+        setTemporaryCourses(updatedCourses);
+    };
+    
+
     return (
         <Modal
             isOpen={courseValues.openModalType === "course"}
@@ -31,7 +94,11 @@ function AddCourseModal({
                             id="addCourseCode"
                             type="text"
                             value={courseValues.courseCode}
-                            onChange={handleInputChange("course", "courseCode")}
+                            onChange={(event) => {
+                                handleInputChange("course", "courseCode")(event);
+                                const index = temporaryCourses.findIndex(course => course.courseCode === courseValues.courseCode);
+                                handleTemporaryCourseArrayInputChange('courseCode', index)(event);
+                            }}
                             placeholder="Course Code"
                         />
                     </div>
@@ -41,7 +108,11 @@ function AddCourseModal({
                             id="addCourseName"
                             type="text"
                             value={courseValues.courseName}
-                            onChange={handleInputChange("course", "courseName")}
+                            onChange={(event) => {
+                                handleInputChange("course", "courseName")(event);
+                                const index = temporaryCourses.findIndex(course => course.courseName === courseValues.courseName);
+                                handleTemporaryCourseArrayInputChange('courseName', index)(event);
+                            }}
                             placeholder="Course Name"
                         />
                     </div>
@@ -91,10 +162,37 @@ function AddCourseModal({
 
             {currentPage === 2 && (
                 <div className="course-popup2">
-                    <h2>Please provide some details of the course.</h2>
+                    <h2>Drag and drop to order the priority of your courses.</h2>
+                    <DragDropContext onDragEnd={handleOnDragEnd}>
+                        <Droppable droppableId="droppable">
+                            {(provided) => (
+                                <ul {...provided.droppableProps} ref={provided.innerRef} style={{ listStyleType: 'none', padding: '0' }}>
+                                    {temporaryCourses.map((course, index) => (
+                                        <Draggable
+                                            key={course._id}
+                                            draggableId={course._id.toString()}
+                                            index={index}
+                                        >
+                                            {(provided, snapshot) => (
+                                                <li
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    className="course-draggable"
+                                                >
+                                                    {course.courseCode + " " + course.courseName}
+                                                </li>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </ul>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                     <button onClick={prevPage}>Previous</button>
-                    <button onClick={handleAddCourse}>Submit</button>
-                    <button onClick={() => closeModal("course")}>Close</button>
+                    <button onClick={() => {handleAddCourse(); prevPage();}}>Submit</button>
+                    <button onClick={() => {prevPage(); closeModal("course");}}>Close</button>
                 </div>
             )}
         </Modal>

@@ -27,6 +27,7 @@ function CourseContainer({
                 </button>
             </div>
             <AddCourseModal
+                courses={courses}
                 courseValues={courseValues}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}

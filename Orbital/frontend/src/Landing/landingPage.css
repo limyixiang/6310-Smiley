@@ -1,3 +1,4 @@
+
 .main-container {
     display: flex;
     justify-content: space-between;
@@ -193,6 +194,21 @@
 }
 
 .add-a-course-popup button:hover {
+    background-color: #c6e2ff;
+}
+
+.course-draggable {
+    user-select: none;
+    padding: 16px;
+    margin: 0 0 8px 0;
+    background-color: #fff;
+    border: 1px solid #6f90d0;
+    border-radius: 4px;
+    cursor: grab;
+    transition: background-color 0.2s ease;
+}
+
+.course-draggable:hover {
     background-color: #c6e2ff;
 }
 
