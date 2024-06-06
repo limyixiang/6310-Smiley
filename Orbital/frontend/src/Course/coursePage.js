@@ -1,8 +1,13 @@
 import { React, useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { getTasksForCourse } from "../Backend";
 import styles from "./coursePage.module.css";
-import { deleteTask, completeTask, reverseCompleteTask } from "../Backend";
+import {
+    getTasksByDateForCourse,
+    getTasksByPriorityForCourse,
+    deleteTask,
+    completeTask,
+    reverseCompleteTask,
+} from "../Backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
@@ -19,7 +24,10 @@ function CoursePage() {
 
     useEffect(() => {
         console.log("Fetching data for course page");
-        getTasksForCourse({ courseid: course._id })
+        (sortBy === "date"
+            ? getTasksByDateForCourse({ courseid: course._id })
+            : getTasksByPriorityForCourse({ courseid: course._id })
+        )
             .then((data) => setTasks(data))
             .then(() =>
                 setCoursePageValues((prevValues) => ({
@@ -93,8 +101,8 @@ function CoursePage() {
                             onChange={() => handleTaskCheckboxChange(task)}
                             checked={task.status === "Done"}
                         />
-                        <span
-                            className="task-item-description"
+                        <div
+                            className={styles.taskItemDescriptor}
                             style={{
                                 textDecoration:
                                     task.status === "Done"
@@ -102,12 +110,14 @@ function CoursePage() {
                                         : "none",
                             }}
                         >
-                            {task.taskName}
+                            <span>{task.taskName}</span>
                             <br />
-                            {deadlineDescription(task) +
-                                "Priority: " +
-                                task.priority}
-                        </span>
+                            <span className={styles.deadlineDescriptor}>
+                                {deadlineDescription(task) +
+                                    "Priority: " +
+                                    task.priority}
+                            </span>
+                        </div>
                         <FontAwesomeIcon
                             className="trashcan task-trashcan"
                             icon={faTrashCan}

@@ -32,8 +32,19 @@
     gap: 20px;
 }
 
-.courseTaskItem span {
+.courseTaskItem input {
+    flex: 1;
+    margin: 0px;
+}
+
+.taskItemDescriptor {
+    flex: 20;
     text-align: left;
+    font-size: 16px;
+}
+
+.deadlineDescriptor {
+    font-size: 12px;;
 }
 
 /*link back to course page*/

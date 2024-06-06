@@ -5,7 +5,8 @@ const {
     createTask,
     getTasksByDateForUser,
     getTasksByPriorityForUser,
-    getTasksForCourse,
+    getTasksByDateForCourse,
+    getTasksByPriorityForCourse,
     completeTask,
     reverseCompleteTask,
     deleteTask,
@@ -24,9 +25,10 @@ router.post(
 );
 router.post("/gettasksbydateforuser", getTasksByDateForUser);
 router.post("/gettasksbypriorityforuser", getTasksByPriorityForUser);
-router.post("/gettasksforcourse", getTasksForCourse);
+router.post("/gettasksbydateforcourse", getTasksByDateForCourse);
+router.post("/gettasksbypriorityforcourse", getTasksByPriorityForCourse);
 router.post("/completetask", completeTask);
 router.post("/reversecompletetask", reverseCompleteTask);
-router.delete("/deletetask/:id", deleteTask); // Route for deleting a task
+router.delete("/deletetask/:id", deleteTask);
 
 module.exports = router;
