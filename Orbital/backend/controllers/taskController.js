@@ -3,9 +3,12 @@ const User = require("../models/userModel");
 const Course = require("../models/courseModel");
 const { validationResult } = require("express-validator");
 
-const sortByDate = async (arr, newDeadline, task) => {
-    console.log(arr);
+const insertTaskByDate = async (arr, newDeadline, task) => {
     const numTasks = arr.length;
+    if (numTasks === 0) {
+        arr[0] = task;
+        return arr;
+    }
     for (let i = 0; i < numTasks; i++) {
         const iTask = await Task.findById(arr[i]);
         const iDeadline = new Date(iTask.dueDate).getTime();
@@ -32,8 +35,12 @@ const sortByDate = async (arr, newDeadline, task) => {
     return arr;
 };
 
-const sortByPriority = async (arr, newDeadline, task) => {
+const insertTaskByPriority = async (arr, newDeadline, task) => {
     const numTasks = arr.length;
+    if (numTasks === 0) {
+        arr[0] = task;
+        return arr;
+    }
     for (let i = 0; i < numTasks; i++) {
         const iTask = await Task.findById(arr[i]);
         if (task.priority === "High") {
@@ -73,7 +80,6 @@ const sortByPriority = async (arr, newDeadline, task) => {
             }
         }
         if (i === numTasks - 1) {
-            console.log("here");
             arr[numTasks] = task;
         }
     }
@@ -101,112 +107,42 @@ exports.createTask = async (req, res) => {
         });
         var userTasksByDate = user.tasksByDate;
         var userTasksByPriority = user.tasksByPriority;
-        const courseTasksByDate = course.tasksByDate;
+        var courseTasksByDate = course.tasksByDate;
+        var courseTasksByPriority = course.tasksByPriority;
 
         // Insert new Task into user's array of tasks
         // Note that this only takes into acount the dueDate of the task and not the priority of the course yet
         // as priorities of courses are not implemented yet.
-        if (userTasksByDate.length === 0) {
-            userTasksByDate[0] = task;
-            userTasksByPriority[0] = task;
-        } else {
-            const numTasks = userTasksByDate.length;
-            const newDeadline = new Date(task.dueDate).getTime();
-            // Insert new Task into user's array of tasks that is sorted by date
-            sortByDate(userTasksByDate, newDeadline, task)
-                .then((arr) => {
-                    userTasksByDate = arr;
-                })
-                .then(() => {
-                    sortByPriority(userTasksByPriority, newDeadline, task)
-                        .then((arr) => {
-                            userTasksByPriority = arr;
-                        })
-                        .then(() => {
-                            user.save();
-                            console.log("sorted by priority");
-                        });
-                });
-            // .then(() => user.save());
-            // for (let i = 0; i < numTasks; i++) {
-            //     const iTask = await Task.findById(userTasksByDate[i]);
-            //     const iDeadline = new Date(iTask.dueDate).getTime();
-            //     if (newDeadline < iDeadline) {
-            //         userTasksByDate.splice(i, 0, task);
-            //         break;
-            //     } else if (newDeadline == iDeadline) {
-            //         if (i === numTasks - 1) {
-            //             userTasksByDate.splice(i + 1, 0, task);
-            //             break;
-            //         } else {
-            //             const nextDeadline = new Date(
-            //                 (
-            //                     await Task.findById(userTasksByDate[i + 1])
-            //                 ).dueDate
-            //             ).getTime();
-            //             if (newDeadline < nextDeadline) {
-            //                 userTasksByDate.splice(i + 1, 0, task);
-            //                 break;
-            //             }
-            //         }
-            //     } else if (i === numTasks - 1) {
-            //         userTasksByDate[numTasks] = task;
-            //     }
-            // }
-            // Insert new Task into user's array of tasks that is sorted by priority
-            // for (let i = 0; i < numTasks; i++) {
-            //     const iTask = await Task.findById(userTasksByPriority[i]);
-            //     if (task.priority === "High") {
-            //         if (iTask.priority !== "High") {
-            //             userTasksByPriority.splice(i, 0, task);
-            //             break;
-            //         } else {
-            //             const iDeadline = new Date(iTask.dueDate).getTime();
-            //             if (newDeadline < iDeadline) {
-            //                 userTasksByPriority.splice(i, 0, task);
-            //                 break;
-            //             } else if (newDeadline == iDeadline) {
-            //                 if (i === numTasks - 1) {
-            //                     userTasksByPriority.splice(i + 1, 0, task);
-            //                     break;
-            //                 } else {
-            //                     const nextDeadline = new Date(
-            //                         (
-            //                             await Task.findById(
-            //                                 userTasksByPriority[i + 1]
-            //                             )
-            //                         ).dueDate
-            //                     ).getTime();
-            //                     if (newDeadline < nextDeadline) {
-            //                         userTasksByPriority.splice(i + 1, 0, task);
-            //                         break;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     } else {
-            //         if (iTask.priority === "Low") {
-            //             const iDeadline = new Date(iTask.dueDate).getTime();
-            //             if (newDeadline < iDeadline) {
-            //                 userTasksByPriority.splice(i, 0, task);
-            //                 break;
-            //             } else if (newDeadline == iDeadline) {
-            //                 userTasksByPriority.splice(i + 1, 0, task);
-            //                 break;
-            //             }
-            //         }
-            //     }
-            //     if (i === numTasks - 1) {
-            //         userTasksByPriority[numTasks] = task;
-            //     }
-            // }
-        }
-
-        courseTasksByDate[courseTasksByDate.length] = task;
-        console.log("reached here");
+        const newDeadline = new Date(task.dueDate).getTime();
+        insertTaskByDate(userTasksByDate, newDeadline, task)
+            .then((arr) => {
+                userTasksByDate = arr;
+            })
+            .then(() => {
+                insertTaskByPriority(userTasksByPriority, newDeadline, task)
+                    .then((arr) => {
+                        userTasksByPriority = arr;
+                    })
+                    .then(() => {
+                        user.save();
+                        // console.log("User saved.");
+                    });
+            });
+        insertTaskByDate(courseTasksByDate, newDeadline, task)
+            .then((arr) => {
+                courseTasksByDate = arr;
+            })
+            .then(() => {
+                insertTaskByPriority(courseTasksByPriority, newDeadline, task)
+                    .then((arr) => {
+                        courseTasksByPriority = arr;
+                    })
+                    .then(() => {
+                        course.save();
+                        // console.log("Course saved.");
+                    });
+            });
         await task.save();
-        // await user.save();
-        await course.save();
         return res
             .status(201)
             .json({ message: "Task created successfully", data: task });
@@ -221,11 +157,11 @@ exports.deleteTask = async (req, res) => {
         // Extract task ID from request parameters
         const taskId = req.params.id;
 
-        // Find course by ID and delete it
+        // Find task by ID and delete it
         const deletedTask = await Task.findByIdAndDelete(taskId);
 
         if (!deletedTask) {
-            // If course with given ID is not found, return error
+            // If task with given ID is not found, return error
             return res
                 .status(404)
                 .json({ success: false, error: "Task not found." });
@@ -240,6 +176,16 @@ exports.deleteTask = async (req, res) => {
             (task) => task._id != taskId
         );
         await user.save();
+
+        // Remove task from course's array of tasks
+        const course = await Course.findById(deletedTask.course);
+        course.tasksByDate = course.tasksByDate.filter(
+            (task) => task._id != taskId
+        );
+        course.tasksByPriority = course.tasksByPriority.filter(
+            (task) => task._id != taskId
+        );
+        await course.save();
 
         // Respond with success message
         res.status(200).json({
@@ -281,13 +227,25 @@ exports.getTasksByPriorityForUser = async (req, res) => {
     }
 };
 
-// Get all tasks for a particular course
-exports.getTasksForCourse = async (req, res) => {
+// Get all tasks for a particular course (sorted by date)
+exports.getTasksByDateForCourse = async (req, res) => {
     try {
         const course = await Course.findById(req.body.courseid).populate(
             "tasksByDate"
         );
         return res.json(course.tasksByDate);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+// Get all tasks for a particular course (sorted by priority)
+exports.getTasksByPriorityForCourse = async (req, res) => {
+    try {
+        const course = await Course.findById(req.body.courseid).populate(
+            "tasksByPriority"
+        );
+        return res.json(course.tasksByPriority);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
