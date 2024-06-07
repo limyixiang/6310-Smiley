@@ -145,6 +145,12 @@ function AddCourseModal({
                                             ))}
                                         </select>
                                     )}
+                                    <select defaultValue="">
+                                        <option value="" disabled hidden>Entry No.</option>
+                                        {Array.from({ length: 13 }, (_, index) => index + 1).map((entryNo) => (
+                                            <option key={entryNo} value={entryNo}>{entryNo}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         ))}
