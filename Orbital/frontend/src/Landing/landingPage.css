@@ -15,6 +15,13 @@
 
 .tasks-container {
     flex: 3;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.upcoming-tasks-container {
+    overflow-y: scroll;
 }
 
 .courses-container h2, .tasks-container h2 {
@@ -28,8 +35,9 @@
 }
 
 .add-a-task-button {
-    position: flex;
-    margin: 20px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /*popups for add a task*/

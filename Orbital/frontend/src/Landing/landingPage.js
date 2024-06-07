@@ -55,10 +55,10 @@ function LandingPage() {
             .then(() =>
                 sortBy === "date"
                     ? getTasksByDateForUser({ userid: user._id }).then((data) =>
-                          setTasks(data)
+                          setTasks(rearrangeTasks(data))
                       )
                     : getTasksByPriorityForUser({ userid: user._id }).then(
-                          (data) => setTasks(data)
+                          (data) => setTasks(rearrangeTasks(data))
                       )
             )
             .then(() =>
@@ -242,6 +242,21 @@ function LandingPage() {
         }
     };
 
+    // Rearranges tasks such that completed tasks are at the bottom
+    const rearrangeTasks = (tasks) => {
+        const completedTasks = [];
+        const incompleteTasks = [];
+        tasks.forEach((task) => {
+            if (task.status === "Done") {
+                completedTasks.push(task);
+            } else {
+                incompleteTasks.push(task);
+            }
+        });
+        const rearrangedTasks = [...incompleteTasks, ...completedTasks];
+        return rearrangedTasks;
+    };
+
     return (
         <div className="main-container">
             <CourseContainer
@@ -268,6 +283,13 @@ function LandingPage() {
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />
+            <center>
+                <p className="landing-to-dashboard">
+                    <b>
+                        <a href="/">Back to Dashboard</a>
+                    </b>
+                </p>
+            </center>
         </div>
     );
 }
