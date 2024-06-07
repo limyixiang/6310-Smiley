@@ -10,9 +10,13 @@ import {
 } from "../Backend";
 
 import CourseTasksList from "./courseTasksList";
+import CourseCompletedTasks from "./courseCompletedTasks";
 
 function CoursePage() {
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState({
+        completedTasks: [],
+        incompleteTasks: [],
+    });
     const [coursePageValues, setCoursePageValues] = useState({
         refresh: false,
         sortBy: "date",
@@ -20,6 +24,7 @@ function CoursePage() {
 
     const location = useLocation();
     const { user, course } = location.state;
+    const { completedTasks, incompleteTasks } = tasks;
     const { refresh, sortBy } = coursePageValues;
 
     useEffect(() => {
@@ -28,7 +33,21 @@ function CoursePage() {
             ? getTasksByDateForCourse({ courseid: course._id })
             : getTasksByPriorityForCourse({ courseid: course._id })
         )
-            .then((data) => setTasks(data))
+            .then((data) => {
+                const completedTasks = [];
+                const incompleteTasks = [];
+                data.forEach((task) => {
+                    if (task.status === "Done") {
+                        completedTasks.push(task);
+                    } else {
+                        incompleteTasks.push(task);
+                    }
+                });
+                setTasks({
+                    completedTasks: completedTasks,
+                    incompleteTasks: incompleteTasks,
+                });
+            })
             .then(() =>
                 setCoursePageValues((prevValues) => ({
                     ...prevValues,
@@ -79,14 +98,37 @@ function CoursePage() {
             <div className={styles.courseHeader}>
                 {course.courseCode + " " + course.courseName}
             </div>
-            <CourseTasksList
-                sortBy={sortBy}
-                tasks={tasks}
-                handleDeleteTask={handleDeleteTask}
-                handleTaskCheckboxChange={handleTaskCheckboxChange}
-                deadlineDescription={deadlineDescription}
-                handleSortByChange={handleSortByChange}
-            />
+            <div className={styles.courseTasksContainer}>
+                <div className={styles.sortByLabel}>
+                    Sort By:
+                    <select
+                        id="courseTasksSortBy"
+                        value={sortBy}
+                        onChange={handleSortByChange}
+                    >
+                        <option name="sortByOption" value="date">
+                            Nearest Deadline
+                        </option>
+                        <option name="sortByOption" value="priorityLevel">
+                            Priority Level
+                        </option>
+                    </select>
+                </div>
+                <div className={styles.upcomingCompletedContainer}>
+                    <CourseTasksList
+                        incompleteTasks={incompleteTasks}
+                        handleDeleteTask={handleDeleteTask}
+                        handleTaskCheckboxChange={handleTaskCheckboxChange}
+                        deadlineDescription={deadlineDescription}
+                    />
+                    <CourseCompletedTasks
+                        completedTasks={completedTasks}
+                        handleDeleteTask={handleDeleteTask}
+                        handleTaskCheckboxChange={handleTaskCheckboxChange}
+                        deadlineDescription={deadlineDescription}
+                    />
+                </div>
+            </div>
             <center>
                 <p className={styles.courseToLandingPage}>
                     <b>

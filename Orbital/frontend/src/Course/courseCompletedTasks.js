@@ -2,16 +2,16 @@ import styles from "./coursePage.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-function CourseTasksList({
-    incompleteTasks,
+function CourseCompletedTasks({
+    completedTasks,
     handleDeleteTask,
     handleTaskCheckboxChange,
     deadlineDescription,
 }) {
     return (
         <div className={styles.courseTasksList}>
-            Upcoming Deadlines
-            {incompleteTasks.map((task, index) => (
+            Completed Tasks
+            {completedTasks.map((task, index) => (
                 <div key={index} className={styles.courseTaskItem}>
                     <input
                         name="task-checkbox"
@@ -20,7 +20,12 @@ function CourseTasksList({
                         onChange={() => handleTaskCheckboxChange(task)}
                         checked={task.status === "Done"}
                     />
-                    <div className={styles.taskItemDescriptor}>
+                    <div
+                        className={styles.taskItemDescriptor}
+                        style={{
+                            textDecoration: "line-through",
+                        }}
+                    >
                         <span>{task.taskName}</span>
                         <br />
                         <span className={styles.deadlineDescriptor}>
@@ -40,4 +45,4 @@ function CourseTasksList({
     );
 }
 
-export default CourseTasksList;
+export default CourseCompletedTasks;
