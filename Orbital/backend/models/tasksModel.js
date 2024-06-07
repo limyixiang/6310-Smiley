@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 // Define the schema for the Task collection
 const taskSchema = new mongoose.Schema({
@@ -6,41 +6,42 @@ const taskSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    // temporarily false, remember to change to true (maybe we dont need this)
+    // temporarily false (maybe we dont need this)
     description: {
         type: String,
         required: false,
     },
-    // temporarily false, remember to change to true
     dueDate: {
         type: Date,
         required: true,
     },
-    // temporarily false, remember to change to true
     priority: {
         type: String,
-        enum: ['High', 'Low'],
+        enum: ["High", "Low"],
         required: true,
+    },
+    // temporarily false, remember to change to true
+    reminders: {
+        type: Boolean,
+        required: false,
     },
     status: {
         type: String,
-        enum: ['Todo', 'Done'],
-        default: 'Todo',
+        enum: ["Todo", "Done"],
+        default: "Todo",
     },
     course: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
+        ref: "Course",
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
     },
     createdAt: {
         type: Date,
         default: Date.now,
     },
-   
 });
-  
 
-module.exports = mongoose.model('Task', taskSchema);
+module.exports = mongoose.model("Task", taskSchema);
