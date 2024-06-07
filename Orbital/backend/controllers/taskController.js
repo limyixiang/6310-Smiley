@@ -28,7 +28,8 @@ const insertTaskByDate = async (arr, newDeadline, task) => {
                     break;
                 }
             }
-        } else if (i === numTasks - 1) {
+        }
+        if (i === numTasks - 1) {
             arr[numTasks] = task;
         }
     }
