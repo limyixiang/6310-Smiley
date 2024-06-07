@@ -25,20 +25,20 @@ function AddTaskModal({ courses, taskValues, handleInputChange, closeModal, hand
             </div>
             {/* Input task name text box */}
             <div className="input-task-name">
-                <label htmlFor='taskName'>Name of Task</label>
+                <label htmlFor='taskName'>Task Name</label>
                 <input 
                     id='taskName'
                     type='text'
                     value={taskValues.taskName}
                     onChange={handleInputChange('task', 'taskName')}
-                    placeholder='Task Name'
+                    placeholder='Please enter a Task Name'
                 />
             </div>
             {/* Select Priority Level dropdown */}
             <div className="select-priority-level">
-                <label htmlFor='priorityLevel'>Select Priority Level</label>
-                <select id='priorityLevel' value={taskValues.priorityLevel} onChange={handleInputChange('task', 'priorityLevel')}>
-                    <option value="" disabled hidden>Select Priority Level</option>
+                <label htmlFor='priorityLevel'>Select a Priority Level</label>
+                <select defaultValue='' id='priorityLevel' value={taskValues.priorityLevel} onChange={handleInputChange('task', 'priorityLevel')}>
+                    <option value="" disabled hidden>Select a Priority Level</option>
                     <option value='High'>High</option>
                     <option value='Low'>Low</option>
                 </select>

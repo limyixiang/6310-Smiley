@@ -22,7 +22,7 @@ function AddCourseModal({
     const nextPage = () => {
         setCurrentPage(currentPage + 1);
         if (!isClicked) {
-            handleClick();
+            handleAddToTemporaryCourseArray();
             setIsClicked(true);
         }
     };    
@@ -35,12 +35,6 @@ function AddCourseModal({
             setIsClicked(false);
         };
     }, [closeModal, courses]); // Run this effect when closeModal or courses updates
-    const handleClick = () => {
-        if (!isClicked) {
-          handleAddToTemporaryCourseArray();
-          setIsClicked(true);
-        }
-    };
     
     const handleAddToTemporaryCourseArray = () => {
         // Check if both course code and course name are provided
@@ -90,6 +84,7 @@ function AddCourseModal({
                     <h2>Please provide some details of the course.</h2>
                     {/* Input Course Code text box */}
                     <div className="form-group">
+                        <label htmlFor='addCourseCode'>Course Code</label>
                         <input
                             id="addCourseCode"
                             type="text"
@@ -99,11 +94,12 @@ function AddCourseModal({
                                 const index = temporaryCourses.findIndex(course => course.courseCode === courseValues.courseCode);
                                 handleTemporaryCourseArrayInputChange('courseCode', index)(event);
                             }}
-                            placeholder="Course Code"
+                            placeholder="Please enter a Course Code"
                         />
                     </div>
                     {/* Input Course Name text box */}
                     <div className="form-group">
+                        <label htmlFor='addCourseName'>Course Name</label>
                         <input
                             id="addCourseName"
                             type="text"
@@ -113,7 +109,7 @@ function AddCourseModal({
                                 const index = temporaryCourses.findIndex(course => course.courseName === courseValues.courseName);
                                 handleTemporaryCourseArrayInputChange('courseName', index)(event);
                             }}
-                            placeholder="Course Name"
+                            placeholder="Please enter a Course Name"
                         />
                     </div>
                     {/* Select repeated reminders dropdown */}
@@ -129,25 +125,24 @@ function AddCourseModal({
                                     {reminder === "Others" && (
                                         <input type="text" name="taskName" placeholder="Name of Task"/>
                                     )}
-                                    <select>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
+                                    <select defaultValue="">
+                                        <option value="" disabled hidden>Day</option>
+                                        {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                                            <option key={day} value={day}>{day}</option>
+                                        ))}
                                     </select>
-                                    <select>
-                                        <option value="Daily">Daily</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Bi-weekly">Bi-weekly</option>
-                                        <option value="Monthly">Monthly</option>
+                                    <select defaultValue="">
+                                        <option value="" disabled hidden>Frequency</option>
+                                        {["Daily", "Weekly", "Bi-Weekly", "Monthly"].map((frequency) => (
+                                            <option key={frequency} value={frequency}>{frequency}</option>
+                                        ))}
                                     </select>
                                     {reminder === "Others" && (
-                                        <select>
-                                            <option value="High">High</option>
-                                            <option value="Low">Low</option>
+                                        <select defaultValue="">
+                                            <option value="" disabled hidden>Priority</option>
+                                            {["Low", "High"].map((priority) => (
+                                                <option key={priority} value={priority}>{priority}</option>
+                                            ))}
                                         </select>
                                     )}
                                 </div>

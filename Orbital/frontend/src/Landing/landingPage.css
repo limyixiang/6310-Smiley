@@ -121,7 +121,7 @@
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
   
 .form-group input[type="text"] {
@@ -130,7 +130,7 @@
     margin-right: 10px;
     border-radius: 5px;
     border: 1px solid #6f90d0;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
   
 .select-reminder-frequency h3 {
