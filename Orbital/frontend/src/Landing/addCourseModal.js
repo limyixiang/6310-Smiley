@@ -5,8 +5,23 @@ import "./landingPage.css";
 
 Modal.setAppElement("#root");
 
-function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, handleAddCourse, errorMessage }) {
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+function AddCourseModal({
+    courses,
+    courseValues,
+    handleInputChange,
+    closeModal,
+    handleAddCourse,
+    errorMessage,
+}) {
+    const days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ];
     const frequencies = ["Daily", "Weekly", "Bi-Weekly", "Monthly"];
     /*for modal to have two pages*/
     const [currentPage, setCurrentPage] = useState(1);
@@ -103,9 +118,19 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
                             type="text"
                             value={courseValues.courseCode}
                             onChange={(event) => {
-                                handleInputChange("course", "courseCode")(event);
-                                const index = temporaryCourses.findIndex((course) => course.courseCode === courseValues.courseCode);
-                                handleTemporaryCourseArrayInputChange("courseCode", index)(event);
+                                handleInputChange(
+                                    "course",
+                                    "courseCode"
+                                )(event);
+                                const index = temporaryCourses.findIndex(
+                                    (course) =>
+                                        course.courseCode ===
+                                        courseValues.courseCode
+                                );
+                                handleTemporaryCourseArrayInputChange(
+                                    "courseCode",
+                                    index
+                                )(event);
                             }}
                             placeholder="Please enter a Course Code"
                         />
@@ -118,9 +143,19 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
                             type="text"
                             value={courseValues.courseName}
                             onChange={(event) => {
-                                handleInputChange("course", "courseName")(event);
-                                const index = temporaryCourses.findIndex((course) => course.courseName === courseValues.courseName);
-                                handleTemporaryCourseArrayInputChange("courseName", index)(event);
+                                handleInputChange(
+                                    "course",
+                                    "courseName"
+                                )(event);
+                                const index = temporaryCourses.findIndex(
+                                    (course) =>
+                                        course.courseName ===
+                                        courseValues.courseName
+                                );
+                                handleTemporaryCourseArrayInputChange(
+                                    "courseName",
+                                    index
+                                )(event);
                             }}
                             placeholder="Please enter a Course Name"
                         />
@@ -150,7 +185,10 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
                                             Frequency
                                         </option>
                                         {frequencies.map((frequency) => (
-                                            <option key={frequency} value={frequency}>
+                                            <option
+                                                key={frequency}
+                                                value={frequency}
+                                            >
                                                 {frequency}
                                             </option>
                                         ))}
@@ -159,8 +197,14 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
                                         <option value="" disabled hidden>
                                             Entry No.
                                         </option>
-                                        {Array.from({ length: 13 }, (_, index) => index + 1).map((entryNo) => (
-                                            <option key={entryNo} value={entryNo}>
+                                        {Array.from(
+                                            { length: 13 },
+                                            (_, index) => index + 1
+                                        ).map((entryNo) => (
+                                            <option
+                                                key={entryNo}
+                                                value={entryNo}
+                                            >
                                                 {entryNo}
                                             </option>
                                         ))}
@@ -174,7 +218,11 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
                                 <label>Others</label>
                             </div>
                             <div className="dropdown-container">
-                                <input type="text" name="taskName" placeholder="Name of Task" />
+                                <input
+                                    type="text"
+                                    name="taskName"
+                                    placeholder="Name of Task"
+                                />
                                 <select defaultValue="">
                                     <option value="" disabled hidden>
                                         Day
@@ -190,7 +238,10 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
                                         Frequency
                                     </option>
                                     {frequencies.map((frequency) => (
-                                        <option key={frequency} value={frequency}>
+                                        <option
+                                            key={frequency}
+                                            value={frequency}
+                                        >
                                             {frequency}
                                         </option>
                                     ))}
@@ -209,7 +260,10 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
                                     <option value="" disabled hidden>
                                         Entry No.
                                     </option>
-                                    {Array.from({ length: 13 }, (_, index) => index + 1).map((entryNo) => (
+                                    {Array.from(
+                                        { length: 13 },
+                                        (_, index) => index + 1
+                                    ).map((entryNo) => (
                                         <option key={entryNo} value={entryNo}>
                                             {entryNo}
                                         </option>
@@ -226,16 +280,36 @@ function AddCourseModal({ courses, courseValues, handleInputChange, closeModal, 
 
             {currentPage === 2 && (
                 <div className="course-popup2">
-                    <h2>Drag and drop to order the priority of your courses.</h2>
+                    <h2>
+                        Drag and drop to order the priority of your courses.
+                    </h2>
                     <DragDropContext onDragEnd={handleOnDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided) => (
-                                <ul {...provided.droppableProps} ref={provided.innerRef} style={{ listStyleType: "none", padding: "0" }}>
+                                <ul
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                    style={{
+                                        listStyleType: "none",
+                                        padding: "0",
+                                    }}
+                                >
                                     {temporaryCourses.map((course, index) => (
-                                        <Draggable key={course._id} draggableId={course._id.toString()} index={index}>
+                                        <Draggable
+                                            key={course._id}
+                                            draggableId={course._id.toString()}
+                                            index={index}
+                                        >
                                             {(provided, snapshot) => (
-                                                <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="course-draggable">
-                                                    {course.courseCode + " " + course.courseName}
+                                                <li
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    className="course-draggable"
+                                                >
+                                                    {course.courseCode +
+                                                        " " +
+                                                        course.courseName}
                                                 </li>
                                             )}
                                         </Draggable>
