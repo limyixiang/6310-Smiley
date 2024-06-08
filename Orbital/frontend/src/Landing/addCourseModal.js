@@ -1,17 +1,19 @@
 import Modal from "react-modal";
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./landingPage.css";
 
 Modal.setAppElement("#root");
 
 function AddCourseModal({
-    courses,
     courseValues,
+    temporaryCourses,
     handleInputChange,
     closeModal,
     handleAddCourse,
     errorMessage,
+    handleAddToTemporaryCourseArray,
+    handleOnDragEnd,
 }) {
     const days = [
         "Monday",
@@ -25,78 +27,12 @@ function AddCourseModal({
     const frequencies = ["Daily", "Weekly", "Bi-Weekly", "Monthly"];
     /*for modal to have two pages*/
     const [currentPage, setCurrentPage] = useState(1);
-    const [isClicked, setIsClicked] = useState(false);
-    const [temporaryCourses, setTemporaryCourses] = useState(
-        courses.map((course) => ({
-            _id: course._id,
-            courseCode: course.courseCode,
-            courseName: course.courseName,
-        }))
-    );
     const nextPage = () => {
         setCurrentPage(currentPage + 1);
-        if (!isClicked) {
-            handleAddToTemporaryCourseArray();
-            setIsClicked(true);
-        }
+        handleAddToTemporaryCourseArray();
     };
     const prevPage = () => {
         setCurrentPage(currentPage - 1);
-    };
-
-    useEffect(() => {
-        // Cleanup function to reset temporaryCourses when the modal is closed
-        return () => {
-            setTemporaryCourses(
-                courses.map((course) => ({
-                    _id: course._id,
-                    courseCode: course.courseCode,
-                    courseName: course.courseName,
-                }))
-            );
-            setIsClicked(false);
-        };
-    }, [closeModal, courses]); // Run this effect when closeModal or courses updates
-
-    const handleAddToTemporaryCourseArray = () => {
-        // Check if both course code and course name are provided
-        if (courseValues.courseCode && courseValues.courseName) {
-            // Add courseValues to temporaryCourses array
-            setTemporaryCourses([
-                ...temporaryCourses,
-                {
-                    _id: Math.random().toString(),
-                    courseCode: courseValues.courseCode,
-                    courseName: courseValues.courseName,
-                },
-            ]);
-        }
-    };
-
-    const handleTemporaryCourseArrayInputChange = (field, index) => (event) => {
-        const updatedCourses = [...temporaryCourses];
-        if (index !== -1) {
-            updatedCourses[index] = {
-                ...updatedCourses[index],
-                [field]: event.target.value,
-            };
-            setTemporaryCourses(updatedCourses);
-        }
-    };
-
-    const handleOnDragEnd = (result) => {
-        if (!result.destination) {
-            return;
-        }
-        const { source, destination } = result;
-        // If item dropped in the same position, do nothing
-        if (source.index === destination.index) {
-            return;
-        }
-        const updatedCourses = Array.from(temporaryCourses);
-        const [reorderedItem] = updatedCourses.splice(source.index, 1);
-        updatedCourses.splice(destination.index, 0, reorderedItem);
-        setTemporaryCourses(updatedCourses);
     };
 
     return (
@@ -122,15 +58,6 @@ function AddCourseModal({
                                     "course",
                                     "courseCode"
                                 )(event);
-                                const index = temporaryCourses.findIndex(
-                                    (course) =>
-                                        course.courseCode ===
-                                        courseValues.courseCode
-                                );
-                                handleTemporaryCourseArrayInputChange(
-                                    "courseCode",
-                                    index
-                                )(event);
                             }}
                             placeholder="Please enter a Course Code"
                         />
@@ -146,15 +73,6 @@ function AddCourseModal({
                                 handleInputChange(
                                     "course",
                                     "courseName"
-                                )(event);
-                                const index = temporaryCourses.findIndex(
-                                    (course) =>
-                                        course.courseName ===
-                                        courseValues.courseName
-                                );
-                                handleTemporaryCourseArrayInputChange(
-                                    "courseName",
-                                    index
                                 )(event);
                             }}
                             placeholder="Please enter a Course Name"

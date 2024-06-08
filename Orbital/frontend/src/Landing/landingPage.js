@@ -37,6 +37,8 @@ function LandingPage() {
         dueDate: "",
     });
 
+    const [temporaryCourses, setTemporaryCourses] = useState([]);
+
     // Destructuring values from the state
     const { refresh, sortBy } = landingPageValues;
     const { courseName, courseCode } = courseValues;
@@ -51,7 +53,9 @@ function LandingPage() {
     useEffect(() => {
         console.log("Fetching data");
         getCourses({ userid: user._id })
-            .then((data) => setCourses(data))
+            .then((data) => {
+                setCourses(data);
+            })
             .then(() =>
                 sortBy === "date"
                     ? getTasksByDateForUser({ userid: user._id }).then((data) =>
@@ -61,12 +65,13 @@ function LandingPage() {
                           (data) => setTasks(rearrangeTasks(data))
                       )
             )
-            .then(() =>
+            .then(() => {
                 setLandingPageValues((prevValues) => ({
                     ...prevValues,
                     refresh: false,
-                }))
-            )
+                }));
+                setTemporaryCourses([]);
+            })
             .catch((err) => console.error("Error fetching data:", err));
     }, [refresh, user._id, sortBy]);
 
@@ -257,18 +262,62 @@ function LandingPage() {
         return rearrangedTasks;
     };
 
+    const getTemporaryCourseArray = () => {
+        return courses.map((course) => ({
+            _id: course._id,
+            courseCode: course.courseCode,
+            courseName: course.courseName,
+        }));
+    };
+
+    const handleAddToTemporaryCourseArray = () => {
+        // Check if both course code and course name are provided
+        if (courseValues.courseCode && courseValues.courseName) {
+            // Add courseValues to temporaryCourses array
+            const tempArray = getTemporaryCourseArray();
+            tempArray[courses.length] = {
+                _id: "temp",
+                courseCode: courseValues.courseCode,
+                courseName: courseValues.courseName,
+            };
+            setTemporaryCourses(tempArray);
+        } else if (temporaryCourses.length !== courses.length) {
+            setTemporaryCourses(getTemporaryCourseArray());
+        }
+    };
+
+    const handleOnDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        const { source, destination } = result;
+        // If item dropped in the same position, do nothing
+        if (source.index === destination.index) {
+            return;
+        }
+        const updatedCourses = Array.from(temporaryCourses);
+        const [reorderedItem] = updatedCourses.splice(source.index, 1);
+        updatedCourses.splice(destination.index, 0, reorderedItem);
+        setTemporaryCourses(updatedCourses);
+    };
+
     return (
         <div className="main-container">
             <CourseContainer
                 user={user}
                 courses={courses}
                 courseValues={courseValues}
+                temporaryCourses={temporaryCourses}
                 openCourseModal={openCourseModal}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 handleDeleteCourse={handleDeleteCourse}
                 errorMessage={errorMessage}
+                handleAddToTemporaryCourseArray={
+                    handleAddToTemporaryCourseArray
+                }
+                handleOnDragEnd={handleOnDragEnd}
             />
             <TaskContainer
                 courses={courses}
