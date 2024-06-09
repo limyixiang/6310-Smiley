@@ -29,6 +29,25 @@ function LandingPage() {
         courseCode: "",
     });
 
+    const defaultTasks = [
+        { taskName: "Tutorial", taskPriority: "Low" },
+        { taskName: "Lecture", taskPriority: "Low" },
+        { taskName: "Quiz", taskPriority: "High" },
+    ];
+
+    const [courseModalTasks, setCourseModalTasks] = useState({
+        isSelected: [],
+        reminderDay: [],
+        reminderFrequency: [],
+        reminderNumberOfRepeats: [],
+        recurringTaskName: defaultTasks.map((task) => task.taskName),
+        recurringTaskPriorityLevel: defaultTasks.map(
+            (task) => task.taskPriority
+        ),
+    });
+
+    // console.log(courseModalTasks);
+
     const [taskValues, setTaskValues] = useState({
         openModalType: null,
         taskCourseId: "",
@@ -42,6 +61,14 @@ function LandingPage() {
     // Destructuring values from the state
     const { refresh, sortBy } = landingPageValues;
     const { courseName, courseCode } = courseValues;
+    const {
+        isSelected,
+        reminderDay,
+        reminderFrequency,
+        reminderNumberOfRepeats,
+        recurringTaskName,
+        recurringTaskPriorityLevel,
+    } = courseModalTasks;
     const { taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
@@ -107,6 +134,17 @@ function LandingPage() {
               });
     };
 
+    // Handles changes in the Add Course Modal
+    const handleCourseModalInputChange = (name, index) => (event) => {
+        const newCourseModalTasks = { ...courseModalTasks };
+        if (name === "isSelected") {
+            newCourseModalTasks[name][index] = event.target.checked;
+        } else {
+            newCourseModalTasks[name][index] = event.target.value;
+        }
+        setCourseModalTasks(newCourseModalTasks);
+    };
+
     // Handles open and closing of course popup
     const openCourseModal = () => {
         setCourseValues((courseValues) => ({
@@ -125,21 +163,33 @@ function LandingPage() {
 
     // Closes the popup and reset all values
     const closeModal = (modalType) => {
-        modalType === "course"
-            ? setCourseValues((courseValues) => ({
-                  ...courseValues,
-                  courseCode: "",
-                  courseName: "",
-                  openModalType: null,
-              }))
-            : setTaskValues((taskValues) => ({
-                  ...taskValues,
-                  taskCourseId: "",
-                  priorityLevel: "",
-                  taskName: "",
-                  dueDate: "",
-                  openModalType: null,
-              }));
+        if (modalType === "course") {
+            setCourseValues((courseValues) => ({
+                ...courseValues,
+                courseCode: "",
+                courseName: "",
+                openModalType: null,
+            }));
+            setCourseModalTasks({
+                isSelected: [],
+                reminderDay: [],
+                reminderFrequency: [],
+                reminderNumberOfRepeats: [],
+                recurringTaskName: defaultTasks.map((task) => task.taskName),
+                recurringTaskPriorityLevel: defaultTasks.map(
+                    (task) => task.taskPriority
+                ),
+            });
+        } else {
+            setTaskValues((taskValues) => ({
+                ...taskValues,
+                taskCourseId: "",
+                priorityLevel: "",
+                taskName: "",
+                dueDate: "",
+                openModalType: null,
+            }));
+        }
         setErr("");
         setLandingPageValues({ ...landingPageValues, refresh: true });
     };
@@ -153,6 +203,34 @@ function LandingPage() {
             setErr("Invalid course name.");
             return;
         } else {
+            const numberOfTypesOfTasks = isSelected.length;
+            const tasks = [];
+            for (let i = 0; i < numberOfTypesOfTasks; i++) {
+                if (isSelected[i]) {
+                    if (i < defaultTasks.length) {
+                        tasks.push({
+                            isSelected: isSelected[i],
+                            reminderDay: reminderDay[i],
+                            reminderFrequency: reminderFrequency[i],
+                            reminderNumberOfRepeats: reminderNumberOfRepeats[i],
+                            recurringTaskName: defaultTasks[i].taskName,
+                            recurringTaskPriorityLevel:
+                                defaultTasks[i].taskPriority,
+                        });
+                    } else {
+                        tasks.push({
+                            isSelected: isSelected[i],
+                            reminderDay: reminderDay[i],
+                            reminderFrequency: reminderFrequency[i],
+                            reminderNumberOfRepeats: reminderNumberOfRepeats[i],
+                            recurringTaskName: recurringTaskName[i],
+                            recurringTaskPriorityLevel:
+                                recurringTaskPriorityLevel[i],
+                        });
+                    }
+                }
+            }
+            console.log(tasks);
             createCourse({
                 courseName: courseName,
                 courseCode: courseCode,
@@ -307,9 +385,12 @@ function LandingPage() {
                 user={user}
                 courses={courses}
                 courseValues={courseValues}
+                courseModalTasks={courseModalTasks}
                 temporaryCourses={temporaryCourses}
+                defaultTasks={defaultTasks}
                 openCourseModal={openCourseModal}
                 handleInputChange={handleInputChange}
+                handleCourseModalInputChange={handleCourseModalInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 handleDeleteCourse={handleDeleteCourse}

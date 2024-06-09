@@ -8,9 +8,12 @@ function CourseContainer({
     user,
     courses,
     courseValues,
+    courseModalTasks,
     temporaryCourses,
+    defaultTasks,
     openCourseModal,
     handleInputChange,
+    handleCourseModalInputChange,
     closeModal,
     handleAddCourse,
     handleDeleteCourse,
@@ -31,8 +34,11 @@ function CourseContainer({
             </div>
             <AddCourseModal
                 courseValues={courseValues}
+                courseModalTasks={courseModalTasks}
                 temporaryCourses={temporaryCourses}
+                defaultTasks={defaultTasks}
                 handleInputChange={handleInputChange}
+                handleCourseModalInputChange={handleCourseModalInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 errorMessage={errorMessage}
