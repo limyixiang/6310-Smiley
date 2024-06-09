@@ -39,7 +39,7 @@ function UpcomingTasksContainer({
                                 task.priority}
                         </span>
                         <FontAwesomeIcon
-                            className={`${styles.trashcan}${styles.taskTrashcan}`}
+                            className={`${styles.trashcan} ${styles.taskTrashcan}`}
                             icon={faTrashCan}
                             onClick={() => handleDeleteTask(task._id)}
                         />

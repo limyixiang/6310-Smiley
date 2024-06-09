@@ -86,8 +86,11 @@ function AddCourseModal({
                     <div className={styles.selectReminderFrequency}>
                         <h3>Turn on Repeated Reminders:</h3>
                         {defaultTaskNames.map((reminder, index) => (
-                            <div key={reminder} className="reminder-group">
-                                <div className="checkbox-container">
+                            <div
+                                key={reminder}
+                                className={styles.reminderGroup}
+                            >
+                                <div className={styles.checkboxContainer}>
                                     <input
                                         type="checkbox"
                                         value={
@@ -107,7 +110,7 @@ function AddCourseModal({
                                     />
                                     <label>{reminder}</label>
                                 </div>
-                                <div className="dropdown-container">
+                                <div className={styles.dropdownContainer}>
                                     <select
                                         name="daySelect"
                                         value={
@@ -184,8 +187,8 @@ function AddCourseModal({
                                 </div>
                             </div>
                         ))}
-                        <div key="Others" className="reminder-group">
-                            <div className="checkbox-container">
+                        <div key="Others" className={styles.reminderGroup}>
+                            <div className={styles.checkboxContainer}>
                                 <input
                                     type="checkbox"
                                     value={

@@ -16,12 +16,12 @@ function AddTaskModal({
             isOpen={taskValues.openModalType === "task"}
             onRequestClose={closeModal}
             contentLabel="Add-a-task-modal"
-            className="add-a-task-popup"
-            overlayClassName="backdrop-task-popup"
+            className={styles.addATaskPopup}
+            overlayClassName={styles.backdropTaskPopup}
         >
             <h2>Add Your Task</h2>
             {/* Select a Course dropdown */}
-            <div className="select-course">
+            <div className={styles.dropdownContainer}>
                 <label htmlFor="courseSelect"> Select a Course</label>
                 <select
                     id="courseSelect"
@@ -43,7 +43,7 @@ function AddTaskModal({
                 </select>
             </div>
             {/* Input task name text box */}
-            <div className="input-task-name">
+            <div className={styles.formGroup}>
                 <label htmlFor="taskName">Task Name</label>
                 <input
                     id="taskName"
@@ -54,7 +54,7 @@ function AddTaskModal({
                 />
             </div>
             {/* Select Priority Level dropdown */}
-            <div className="select-priority-level">
+            <div className={styles.dropdownContainer}>
                 <label htmlFor="priorityLevel">Select a Priority Level</label>
                 <select
                     id="priorityLevel"
@@ -69,7 +69,7 @@ function AddTaskModal({
                 </select>
             </div>
             {/* Deadline date selector */}
-            <div className="select-due-date">
+            <div className={styles.formGroup}>
                 <label htmlFor="dueDate">Deadline</label>
                 <input
                     id="dueDate"
