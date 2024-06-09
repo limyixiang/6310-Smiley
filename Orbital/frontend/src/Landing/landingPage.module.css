@@ -19,7 +19,7 @@
 
 .tasksContainer {
     flex: 3;
-    height: 85vh;
+    height: 80vh;
     display: flex;
     flex-direction: column;
 }

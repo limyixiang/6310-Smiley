@@ -1,17 +1,22 @@
 import Modal from "react-modal";
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import styles from "./landingPage.module.css";
 
 Modal.setAppElement("#root");
 
 function AddCourseModal({
-    courses,
     courseValues,
+    courseModalTasks,
+    temporaryCourses,
+    defaultTasks,
     handleInputChange,
+    handleCourseModalInputChange,
     closeModal,
     handleAddCourse,
     errorMessage,
+    handleAddToTemporaryCourseArray,
+    handleOnDragEnd,
 }) {
     const days = [
         "Monday",
@@ -23,80 +28,15 @@ function AddCourseModal({
         "Sunday",
     ];
     const frequencies = ["Daily", "Weekly", "Bi-Weekly", "Monthly"];
+    const defaultTaskNames = defaultTasks.map((task) => task.taskName);
     /*for modal to have two pages*/
     const [currentPage, setCurrentPage] = useState(1);
-    const [isClicked, setIsClicked] = useState(false);
-    const [temporaryCourses, setTemporaryCourses] = useState(
-        courses.map((course) => ({
-            _id: course._id,
-            courseCode: course.courseCode,
-            courseName: course.courseName,
-        }))
-    );
     const nextPage = () => {
         setCurrentPage(currentPage + 1);
-        if (!isClicked) {
-            handleAddToTemporaryCourseArray();
-            setIsClicked(true);
-        }
+        handleAddToTemporaryCourseArray();
     };
     const prevPage = () => {
         setCurrentPage(currentPage - 1);
-    };
-
-    useEffect(() => {
-        // Cleanup function to reset temporaryCourses when the modal is closed
-        return () => {
-            setTemporaryCourses(
-                courses.map((course) => ({
-                    _id: course._id,
-                    courseCode: course.courseCode,
-                    courseName: course.courseName,
-                }))
-            );
-            setIsClicked(false);
-        };
-    }, [closeModal, courses]); // Run this effect when closeModal or courses updates
-
-    const handleAddToTemporaryCourseArray = () => {
-        // Check if both course code and course name are provided
-        if (courseValues.courseCode && courseValues.courseName) {
-            // Add courseValues to temporaryCourses array
-            setTemporaryCourses([
-                ...temporaryCourses,
-                {
-                    _id: Math.random().toString(),
-                    courseCode: courseValues.courseCode,
-                    courseName: courseValues.courseName,
-                },
-            ]);
-        }
-    };
-
-    const handleTemporaryCourseArrayInputChange = (field, index) => (event) => {
-        const updatedCourses = [...temporaryCourses];
-        if (index !== -1) {
-            updatedCourses[index] = {
-                ...updatedCourses[index],
-                [field]: event.target.value,
-            };
-            setTemporaryCourses(updatedCourses);
-        }
-    };
-
-    const handleOnDragEnd = (result) => {
-        if (!result.destination) {
-            return;
-        }
-        const { source, destination } = result;
-        // If item dropped in the same position, do nothing
-        if (source.index === destination.index) {
-            return;
-        }
-        const updatedCourses = Array.from(temporaryCourses);
-        const [reorderedItem] = updatedCourses.splice(source.index, 1);
-        updatedCourses.splice(destination.index, 0, reorderedItem);
-        setTemporaryCourses(updatedCourses);
     };
 
     return (
@@ -122,15 +62,6 @@ function AddCourseModal({
                                     "course",
                                     "courseCode"
                                 )(event);
-                                const index = temporaryCourses.findIndex(
-                                    (course) =>
-                                        course.courseCode ===
-                                        courseValues.courseCode
-                                );
-                                handleTemporaryCourseArrayInputChange(
-                                    "courseCode",
-                                    index
-                                )(event);
                             }}
                             placeholder="Please enter a Course Code"
                         />
@@ -147,15 +78,6 @@ function AddCourseModal({
                                     "course",
                                     "courseName"
                                 )(event);
-                                const index = temporaryCourses.findIndex(
-                                    (course) =>
-                                        course.courseName ===
-                                        courseValues.courseName
-                                );
-                                handleTemporaryCourseArrayInputChange(
-                                    "courseName",
-                                    index
-                                )(event);
                             }}
                             placeholder="Please enter a Course Name"
                         />
@@ -163,17 +85,41 @@ function AddCourseModal({
                     {/* Select repeated reminders dropdown */}
                     <div className={styles.selectReminderFrequency}>
                         <h3>Turn on Repeated Reminders:</h3>
-                        {["Tutorial", "Lecture", "Quiz"].map((reminder) => (
-                            <div
-                                key={reminder}
-                                className={styles.reminderGroup}
-                            >
-                                <div className={styles.checkboxContainer}>
-                                    <input type="checkbox" />
+                        {defaultTaskNames.map((reminder, index) => (
+                            <div key={reminder} className="reminder-group">
+                                <div className="checkbox-container">
+                                    <input
+                                        type="checkbox"
+                                        value={
+                                            courseModalTasks.isSelected[
+                                                index
+                                            ] || false
+                                        }
+                                        onChange={handleCourseModalInputChange(
+                                            "isSelected",
+                                            index
+                                        )}
+                                        checked={
+                                            courseModalTasks.isSelected[
+                                                index
+                                            ] || false
+                                        }
+                                    />
                                     <label>{reminder}</label>
                                 </div>
-                                <div className={styles.dropdownContainer}>
-                                    <select defaultValue="">
+                                <div className="dropdown-container">
+                                    <select
+                                        name="daySelect"
+                                        value={
+                                            courseModalTasks.reminderDay[
+                                                index
+                                            ] || ""
+                                        }
+                                        onChange={handleCourseModalInputChange(
+                                            "reminderDay",
+                                            index
+                                        )}
+                                    >
                                         <option value="" disabled hidden>
                                             Day
                                         </option>
@@ -183,7 +129,18 @@ function AddCourseModal({
                                             </option>
                                         ))}
                                     </select>
-                                    <select defaultValue="">
+                                    <select
+                                        name="frequencySelect"
+                                        value={
+                                            courseModalTasks.reminderFrequency[
+                                                index
+                                            ] || ""
+                                        }
+                                        onChange={handleCourseModalInputChange(
+                                            "reminderFrequency",
+                                            index
+                                        )}
+                                    >
                                         <option value="" disabled hidden>
                                             Frequency
                                         </option>
@@ -196,7 +153,19 @@ function AddCourseModal({
                                             </option>
                                         ))}
                                     </select>
-                                    <select defaultValue="">
+                                    <select
+                                        name="numberOfRepeatsSelect"
+                                        value={
+                                            courseModalTasks
+                                                .reminderNumberOfRepeats[
+                                                index
+                                            ] || ""
+                                        }
+                                        onChange={handleCourseModalInputChange(
+                                            "reminderNumberOfRepeats",
+                                            index
+                                        )}
+                                    >
                                         <option value="" disabled hidden>
                                             Entry No.
                                         </option>
@@ -215,9 +184,25 @@ function AddCourseModal({
                                 </div>
                             </div>
                         ))}
-                        <div key="Others" className={styles.reminderGroup}>
-                            <div className={styles.checkboxContainer}>
-                                <input type="checkbox" />
+                        <div key="Others" className="reminder-group">
+                            <div className="checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    value={
+                                        courseModalTasks.isSelected[
+                                            defaultTasks.length
+                                        ] || false
+                                    }
+                                    onChange={handleCourseModalInputChange(
+                                        "isSelected",
+                                        defaultTasks.length
+                                    )}
+                                    checked={
+                                        courseModalTasks.isSelected[
+                                            defaultTasks.length
+                                        ] || false
+                                    }
+                                />
                                 <label>Others</label>
                             </div>
                             <div className={styles.dropdownContainer}>
@@ -225,8 +210,28 @@ function AddCourseModal({
                                     type="text"
                                     name="taskName"
                                     placeholder="Name of Task"
+                                    value={
+                                        courseModalTasks.recurringTaskName[
+                                            defaultTasks.length
+                                        ] || ""
+                                    }
+                                    onChange={handleCourseModalInputChange(
+                                        "recurringTaskName",
+                                        defaultTasks.length
+                                    )}
                                 />
-                                <select defaultValue="">
+                                <select
+                                    name="daySelect"
+                                    value={
+                                        courseModalTasks.reminderDay[
+                                            defaultTasks.length
+                                        ] || ""
+                                    }
+                                    onChange={handleCourseModalInputChange(
+                                        "reminderDay",
+                                        defaultTasks.length
+                                    )}
+                                >
                                     <option value="" disabled hidden>
                                         Day
                                     </option>
@@ -236,7 +241,18 @@ function AddCourseModal({
                                         </option>
                                     ))}
                                 </select>
-                                <select defaultValue="">
+                                <select
+                                    name="frequencySelect"
+                                    value={
+                                        courseModalTasks.reminderFrequency[
+                                            defaultTasks.length
+                                        ] || ""
+                                    }
+                                    onChange={handleCourseModalInputChange(
+                                        "reminderFrequency",
+                                        defaultTasks.length
+                                    )}
+                                >
                                     <option value="" disabled hidden>
                                         Frequency
                                     </option>
@@ -249,7 +265,19 @@ function AddCourseModal({
                                         </option>
                                     ))}
                                 </select>
-                                <select defaultValue="">
+                                <select
+                                    name="customTaskPriorityLevel"
+                                    value={
+                                        courseModalTasks
+                                            .recurringTaskPriorityLevel[
+                                            defaultTasks.length
+                                        ] || ""
+                                    }
+                                    onChange={handleCourseModalInputChange(
+                                        "recurringTaskPriorityLevel",
+                                        defaultTasks.length
+                                    )}
+                                >
                                     <option value="" disabled hidden>
                                         Priority
                                     </option>
@@ -259,7 +287,19 @@ function AddCourseModal({
                                         </option>
                                     ))}
                                 </select>
-                                <select defaultValue="">
+                                <select
+                                    name="numberOfRepeatsSelect"
+                                    value={
+                                        courseModalTasks
+                                            .reminderNumberOfRepeats[
+                                            defaultTasks.length
+                                        ] || ""
+                                    }
+                                    onChange={handleCourseModalInputChange(
+                                        "reminderNumberOfRepeats",
+                                        defaultTasks.length
+                                    )}
+                                >
                                     <option value="" disabled hidden>
                                         Entry No.
                                     </option>

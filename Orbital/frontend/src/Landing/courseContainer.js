@@ -5,15 +5,21 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 function CourseContainer({
+    user,
     courses,
+    courseValues,
+    courseModalTasks,
+    temporaryCourses,
+    defaultTasks,
     openCourseModal,
     handleInputChange,
+    handleCourseModalInputChange,
     closeModal,
     handleAddCourse,
     handleDeleteCourse,
-    courseValues,
     errorMessage,
-    user,
+    handleAddToTemporaryCourseArray,
+    handleOnDragEnd,
 }) {
     return (
         <div className={styles.coursesContainer}>
@@ -27,12 +33,19 @@ function CourseContainer({
                 </button>
             </div>
             <AddCourseModal
-                courses={courses}
                 courseValues={courseValues}
+                courseModalTasks={courseModalTasks}
+                temporaryCourses={temporaryCourses}
+                defaultTasks={defaultTasks}
                 handleInputChange={handleInputChange}
+                handleCourseModalInputChange={handleCourseModalInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 errorMessage={errorMessage}
+                handleAddToTemporaryCourseArray={
+                    handleAddToTemporaryCourseArray
+                }
+                handleOnDragEnd={handleOnDragEnd}
             />
             {/* only display courseCode */}
             <div className={styles.coursesList}>

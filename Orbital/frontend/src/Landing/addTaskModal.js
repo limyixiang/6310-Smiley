@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import styles from "./landingPage.module.css";
+import "./landingPage.css";
 
 Modal.setAppElement("#root");
 
@@ -16,12 +16,12 @@ function AddTaskModal({
             isOpen={taskValues.openModalType === "task"}
             onRequestClose={closeModal}
             contentLabel="Add-a-task-modal"
-            className={styles.addATaskPopup}
-            overlayClassName={styles.backdropTaskPopup}
+            className="add-a-task-popup"
+            overlayClassName="backdrop-task-popup"
         >
             <h2>Add Your Task</h2>
             {/* Select a Course dropdown */}
-            <div className={styles.dropdownContainer}>
+            <div className="select-course">
                 <label htmlFor="courseSelect"> Select a Course</label>
                 <select
                     id="courseSelect"
@@ -43,7 +43,7 @@ function AddTaskModal({
                 </select>
             </div>
             {/* Input task name text box */}
-            <div className={styles.formGroup}>
+            <div className="input-task-name">
                 <label htmlFor="taskName">Task Name</label>
                 <input
                     id="taskName"
@@ -54,10 +54,9 @@ function AddTaskModal({
                 />
             </div>
             {/* Select Priority Level dropdown */}
-            <div className={styles.dropdownContainer}>
+            <div className="select-priority-level">
                 <label htmlFor="priorityLevel">Select a Priority Level</label>
                 <select
-                    defaultValue=""
                     id="priorityLevel"
                     value={taskValues.priorityLevel}
                     onChange={handleInputChange("task", "priorityLevel")}
@@ -70,7 +69,7 @@ function AddTaskModal({
                 </select>
             </div>
             {/* Deadline date selector */}
-            <div className={styles.formGroup}>
+            <div className="select-due-date">
                 <label htmlFor="dueDate">Deadline</label>
                 <input
                     id="dueDate"

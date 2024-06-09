@@ -29,6 +29,25 @@ function LandingPage() {
         courseCode: "",
     });
 
+    const defaultTasks = [
+        { taskName: "Tutorial", taskPriority: "Low" },
+        { taskName: "Lecture", taskPriority: "Low" },
+        { taskName: "Quiz", taskPriority: "High" },
+    ];
+
+    const [courseModalTasks, setCourseModalTasks] = useState({
+        isSelected: [],
+        reminderDay: [],
+        reminderFrequency: [],
+        reminderNumberOfRepeats: [],
+        recurringTaskName: defaultTasks.map((task) => task.taskName),
+        recurringTaskPriorityLevel: defaultTasks.map(
+            (task) => task.taskPriority
+        ),
+    });
+
+    // console.log(courseModalTasks);
+
     const [taskValues, setTaskValues] = useState({
         openModalType: null,
         taskCourseId: "",
@@ -37,9 +56,19 @@ function LandingPage() {
         dueDate: "",
     });
 
+    const [temporaryCourses, setTemporaryCourses] = useState([]);
+
     // Destructuring values from the state
     const { refresh, sortBy } = landingPageValues;
     const { courseName, courseCode } = courseValues;
+    const {
+        isSelected,
+        reminderDay,
+        reminderFrequency,
+        reminderNumberOfRepeats,
+        recurringTaskName,
+        recurringTaskPriorityLevel,
+    } = courseModalTasks;
     const { taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
@@ -51,7 +80,9 @@ function LandingPage() {
     useEffect(() => {
         console.log("Fetching data");
         getCourses({ userid: user._id })
-            .then((data) => setCourses(data))
+            .then((data) => {
+                setCourses(data);
+            })
             .then(() =>
                 sortBy === "date"
                     ? getTasksByDateForUser({ userid: user._id }).then((data) =>
@@ -61,12 +92,13 @@ function LandingPage() {
                           (data) => setTasks(rearrangeTasks(data))
                       )
             )
-            .then(() =>
+            .then(() => {
                 setLandingPageValues((prevValues) => ({
                     ...prevValues,
                     refresh: false,
-                }))
-            )
+                }));
+                setTemporaryCourses([]);
+            })
             .catch((err) => console.error("Error fetching data:", err));
     }, [refresh, user._id, sortBy]);
 
@@ -102,6 +134,17 @@ function LandingPage() {
               });
     };
 
+    // Handles changes in the Add Course Modal
+    const handleCourseModalInputChange = (name, index) => (event) => {
+        const newCourseModalTasks = { ...courseModalTasks };
+        if (name === "isSelected") {
+            newCourseModalTasks[name][index] = event.target.checked;
+        } else {
+            newCourseModalTasks[name][index] = event.target.value;
+        }
+        setCourseModalTasks(newCourseModalTasks);
+    };
+
     // Handles open and closing of course popup
     const openCourseModal = () => {
         setCourseValues((courseValues) => ({
@@ -120,21 +163,33 @@ function LandingPage() {
 
     // Closes the popup and reset all values
     const closeModal = (modalType) => {
-        modalType === "course"
-            ? setCourseValues((courseValues) => ({
-                  ...courseValues,
-                  courseCode: "",
-                  courseName: "",
-                  openModalType: null,
-              }))
-            : setTaskValues((taskValues) => ({
-                  ...taskValues,
-                  taskCourseId: "",
-                  priorityLevel: "",
-                  taskName: "",
-                  dueDate: "",
-                  openModalType: null,
-              }));
+        if (modalType === "course") {
+            setCourseValues((courseValues) => ({
+                ...courseValues,
+                courseCode: "",
+                courseName: "",
+                openModalType: null,
+            }));
+            setCourseModalTasks({
+                isSelected: [],
+                reminderDay: [],
+                reminderFrequency: [],
+                reminderNumberOfRepeats: [],
+                recurringTaskName: defaultTasks.map((task) => task.taskName),
+                recurringTaskPriorityLevel: defaultTasks.map(
+                    (task) => task.taskPriority
+                ),
+            });
+        } else {
+            setTaskValues((taskValues) => ({
+                ...taskValues,
+                taskCourseId: "",
+                priorityLevel: "",
+                taskName: "",
+                dueDate: "",
+                openModalType: null,
+            }));
+        }
         setErr("");
         setLandingPageValues({ ...landingPageValues, refresh: true });
     };
@@ -148,6 +203,34 @@ function LandingPage() {
             setErr("Invalid course name.");
             return;
         } else {
+            const numberOfTypesOfTasks = isSelected.length;
+            const tasks = [];
+            for (let i = 0; i < numberOfTypesOfTasks; i++) {
+                if (isSelected[i]) {
+                    if (i < defaultTasks.length) {
+                        tasks.push({
+                            isSelected: isSelected[i],
+                            reminderDay: reminderDay[i],
+                            reminderFrequency: reminderFrequency[i],
+                            reminderNumberOfRepeats: reminderNumberOfRepeats[i],
+                            recurringTaskName: defaultTasks[i].taskName,
+                            recurringTaskPriorityLevel:
+                                defaultTasks[i].taskPriority,
+                        });
+                    } else {
+                        tasks.push({
+                            isSelected: isSelected[i],
+                            reminderDay: reminderDay[i],
+                            reminderFrequency: reminderFrequency[i],
+                            reminderNumberOfRepeats: reminderNumberOfRepeats[i],
+                            recurringTaskName: recurringTaskName[i],
+                            recurringTaskPriorityLevel:
+                                recurringTaskPriorityLevel[i],
+                        });
+                    }
+                }
+            }
+            console.log(tasks);
             createCourse({
                 courseName: courseName,
                 courseCode: courseCode,
@@ -257,18 +340,65 @@ function LandingPage() {
         return rearrangedTasks;
     };
 
+    const getTemporaryCourseArray = () => {
+        return courses.map((course) => ({
+            _id: course._id,
+            courseCode: course.courseCode,
+            courseName: course.courseName,
+        }));
+    };
+
+    const handleAddToTemporaryCourseArray = () => {
+        // Check if both course code and course name are provided
+        if (courseValues.courseCode && courseValues.courseName) {
+            // Add courseValues to temporaryCourses array
+            const tempArray = getTemporaryCourseArray();
+            tempArray[courses.length] = {
+                _id: "temp",
+                courseCode: courseValues.courseCode,
+                courseName: courseValues.courseName,
+            };
+            setTemporaryCourses(tempArray);
+        } else if (temporaryCourses.length !== courses.length) {
+            setTemporaryCourses(getTemporaryCourseArray());
+        }
+    };
+
+    const handleOnDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        const { source, destination } = result;
+        // If item dropped in the same position, do nothing
+        if (source.index === destination.index) {
+            return;
+        }
+        const updatedCourses = Array.from(temporaryCourses);
+        const [reorderedItem] = updatedCourses.splice(source.index, 1);
+        updatedCourses.splice(destination.index, 0, reorderedItem);
+        setTemporaryCourses(updatedCourses);
+    };
+
     return (
         <div className={styles.mainContainer}>
             <CourseContainer
                 user={user}
                 courses={courses}
                 courseValues={courseValues}
+                courseModalTasks={courseModalTasks}
+                temporaryCourses={temporaryCourses}
+                defaultTasks={defaultTasks}
                 openCourseModal={openCourseModal}
                 handleInputChange={handleInputChange}
+                handleCourseModalInputChange={handleCourseModalInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 handleDeleteCourse={handleDeleteCourse}
                 errorMessage={errorMessage}
+                handleAddToTemporaryCourseArray={
+                    handleAddToTemporaryCourseArray
+                }
+                handleOnDragEnd={handleOnDragEnd}
             />
             <TaskContainer
                 courses={courses}
