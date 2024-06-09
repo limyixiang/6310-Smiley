@@ -1,7 +1,7 @@
-import React from 'react';
-import { isAuthenticated, signout } from '../Backend';
-import { useNavigate, Link } from 'react-router-dom';
-import './dashboard.css'
+import React from "react";
+import { isAuthenticated, signout } from "../Backend";
+import { useNavigate, Link } from "react-router-dom";
+import styles from "./loginPage.module.css";
 
 const Dashboard = () => {
     const navigate = useNavigate(); // Initialize navigation
@@ -11,15 +11,17 @@ const Dashboard = () => {
     const onSignout = () => {
         signout(); // Perform signout action
         console.log("Signed out");
-        navigate('/signin'); // Redirect to login page after sign out
+        navigate("/signin"); // Redirect to login page after sign out
     };
 
-    return (
-        !authenticatedUser ? 
-        <h1 className='dashboard-prelogin'>
-            Welcome to Smiley :D, please login <a href='/signin'>here</a>!
-        </h1> :
-        <div className='dashboard-postlogin'>
+    return !authenticatedUser ? (
+        <h1 className={styles.dashboardPrelogin}>
+            <div className={styles.linkGroup}>
+                Welcome to Smiley :D, please login <a href="/signin">here</a>!
+            </div>
+        </h1>
+    ) : (
+        <div className={styles.dashboardPostlogin}>
             <h1>Hello, {authenticatedUser.user.name}</h1>
             <button onClick={onSignout}>Sign Out</button>
             <Link to="/landingpage" state={{ user: authenticatedUser.user }}>
@@ -27,7 +29,6 @@ const Dashboard = () => {
             </Link>
         </div>
     );
-    
 };
 
 export default Dashboard;

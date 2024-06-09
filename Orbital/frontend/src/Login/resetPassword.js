@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { forgetPasswordReset } from "../Backend";
-import "./resetPassword.css";
+import styles from "./loginPage.module.css";
 
 // ResetPassword component for the forget password page
 export function ForgetPassword() {
@@ -70,7 +70,7 @@ export function ForgetPassword() {
     const errorMessage = () => {
         return (
             <div
-                className="error-message"
+                className={styles.errorMessage}
                 style={{ display: error ? "" : "none", color: "red" }}
             >
                 {error}
@@ -82,23 +82,24 @@ export function ForgetPassword() {
     const successMessage = () => {
         return (
             <div
-                className="success-message"
+                className={styles.successMessage}
                 style={{ display: success ? "" : "none", color: "green" }}
             >
-                <p>
-                    Password has been reset successfully. Please proceed to{" "}
+                <div className={styles.linkGroup}>
+                    Password has been reset successfully. Please proceed to
+                    {"  "}
                     <a href="/signin">login</a>.
-                </p>
+                </div>
             </div>
         );
     };
 
     return (
-        <div className="form-container">
-            <div className="form-box">
+        <div className={styles.mainContainer}>
+            <div className={styles.formContainer}>
                 <h2>Reset Password</h2>
                 {successMessage()}
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="password">Enter your new password:</label>
                     <input
                         id="password"
@@ -109,7 +110,7 @@ export function ForgetPassword() {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="password">
                         Re-enter your new password:
                     </label>
@@ -122,37 +123,31 @@ export function ForgetPassword() {
                         required
                     />
                 </div>
-                <p className="password-requirements">
+                <p className={styles.passwordRequirements}>
                     Password should contain at least 8 characters, with at least
                     1 uppercase, 1 lowercase and 1 number.
                 </p>
                 {errorMessage()}
-                <div className="form-button">
+                <div>
                     <button
                         id="button"
-                        className="button"
+                        className={styles.buttonGroup}
                         onClick={handleOnSubmit}
                         style={{ display: loading ? "none" : "block" }}
                     >
                         Reset Password
                     </button>
                     <div
-                        className="spinner"
+                        className={styles.spinner}
                         id="spinner"
                         style={{ display: loading ? "block" : "none" }}
                     >
-                        <div className="loading-spinner"></div>
+                        <div className={styles.loadingSpinner}></div>
                         <p>Loading...</p>
                     </div>
                 </div>
-                <div className="link">
-                    <center>
-                        <p className="resetpassword-to-login">
-                            <b>
-                                <a href="/signin">Back to Login</a>
-                            </b>
-                        </p>
-                    </center>
+                <div className={styles.linkGroup}>
+                    <a href="/signin">Back to Login</a>
                 </div>
             </div>
         </div>

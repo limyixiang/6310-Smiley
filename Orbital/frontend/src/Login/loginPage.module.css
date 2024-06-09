@@ -1,0 +1,240 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Calibri", sans-serif;
+}
+
+/* Login Page CSS */
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: radial-gradient(hsl(239, 100%, 82%), #c6ecff);
+    /*background: url("https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
+        no-repeat;*/
+    background-size: cover;
+    background-position: center;
+} /*acts as the body{}*/
+
+.formContainer {
+    width: 420px;
+    /*background: transparent;*/
+    background: rgb(241, 250, 255);
+    border: 2px solid rgba(21, 14, 172, 0.2);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #000055;
+    border-radius: 10px;
+    padding: 30px 30px;
+} /*box in the middle*/
+
+.formTitle {
+    font-size: 36px;
+    text-align: center;
+} /*heading 2*/
+
+.formGroup {
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+    align-items: center;
+} /*input box and label*/
+
+.formGroup input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(8, 5, 76, 0.2);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #000055;
+    padding: 20px;
+} /*input box content*/
+
+.formGroup input::placeholder {
+    color: #000055;
+} /*input box placeholder*/
+
+.formGroup i {
+    position: relative;
+    top: -65%;
+    left: 42%;
+    color: #000000;
+}
+
+.linkGroup {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin: 0.5rem 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.linkGroup a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.linkGroup a:hover {
+    text-decoration: underline;
+}
+
+.buttonGroup {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Pre-Login Dashboard Page CSS, welcome to Smiley */
+.dashboardPrelogin {
+    background-color: rgb(235, 249, 253);
+    padding: 50px;
+    border-radius: 50px;
+    width: 1000px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.dashboardPrelogin h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.dashboardPrelogin a {
+    color: rgb(55, 0, 128);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.dashboardPrelogin a:hover {
+    text-decoration: underline;
+}
+
+/* Post-Login Dashboard Page CSS, hello user, redirect to landing page */
+.dashboardPostlogin {
+    background-color: rgb(235, 249, 253);
+    padding: 50px;
+    border-radius: 50px;
+    width: 1000px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.dashboardPostlogin h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.dashboardPostlogin button {
+    margin-right: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dashboardPostlogin button:last-child {
+    margin-right: 0;
+}
+
+.dashboardPostlogin button:hover {
+    background-color: #0056b3;
+}
+
+/* Error, success and Loading Spinner */
+.errorMessage {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.successMessage {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.spinner {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 12px;
+    color: black;
+}
+
+.loadingSpinner {
+    width: 32px;
+    height: 32px;
+    background-color: blue;
+    border-radius: 50%;
+    position: relative;
+    background: conic-gradient(
+        rgb(98, 125, 213),
+        rgb(0, 238, 255),
+        #0eebac,
+        rgb(98, 125, 213)
+    );
+    animation: spin 1.4s linear infinite;
+    box-shadow: 0px 0px 10px -8px black;
+    border: 1px solid white;
+}
+
+.loadingSpinner::before {
+    content: "";
+    background-color: white;
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0px 0px 10px -8px black;
+    border: 1px solid white;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.passwordRequirements {
+    font-size: 10px;
+    color: rgb(57, 57, 57);
+}
