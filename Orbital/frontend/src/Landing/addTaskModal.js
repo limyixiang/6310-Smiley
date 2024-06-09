@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 
 Modal.setAppElement("#root");
 
