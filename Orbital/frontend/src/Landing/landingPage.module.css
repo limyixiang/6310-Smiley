@@ -1,5 +1,9 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
 
-.main-container {
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+.mainContainer {
     display: flex;
     justify-content: space-between;
     padding: 20px;
@@ -9,51 +13,58 @@
 }
 
 /*left courses and right upcoming ddls*/
-.courses-container {
+.coursesContainer {
     flex: 6;
 }
 
-.tasks-container {
+.tasksContainer {
     flex: 3;
     height: 85vh;
     display: flex;
     flex-direction: column;
 }
 
-.upcoming-tasks-container {
+.upcomingTasksContainer {
+    height: 40%;
     overflow-y: scroll;
 }
 
-.courses-container h2, .tasks-container h2 {
+.coursesContainer h2,
+.tasksContainer h2 {
     margin-bottom: 20px;
 }
 
-.courses-header {
+.coursesHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.add-a-task-button {
+.buttonGroup {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
 }
 
 /*popups for add a task*/
-.backdrop-task-popup {
+.backdropTaskPopup {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent backdrop when popup open*/
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.75
+    ); /* Semi-transparent backdrop when popup open*/
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.add-a-task-popup {
+.addATaskPopup {
     flex-direction: column;
     position: absolute;
     top: 50%;
@@ -68,7 +79,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*popup boxes styling*/
 }
 
-.add-a-task-popup input, .add-a-task-popup select {
+.addATaskPopup input,
+.addATaskPopup select {
     width: 100%;
     padding: 10px;
     margin-right: 10px;
@@ -77,7 +89,7 @@
     margin-bottom: 20px;
 }
 
-.add-a-task-popup button {
+.addATaskPopup button {
     padding: 10px 20px;
     border: 1px solid #6f90d0;
     border-radius: 5px;
@@ -86,12 +98,12 @@
     cursor: pointer;
 }
 
-.add-a-task-popup button:hover {
+.addATaskPopup button:hover {
     background-color: #c6e2ff;
 }
 
 /*course popout*/
-.add-a-course-popup {
+.addACoursePopup {
     flex-direction: column;
     position: absolute;
     top: 50%;
@@ -105,47 +117,61 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*popup boxes styling*/
 }
-  
-.backdrop-course-popup {
+
+.backdropCoursePopup {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent backdrop when popup open*/
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.75
+    ); /* Semi-transparent backdrop when popup open*/
     display: flex;
     justify-content: center;
     align-items: center;
 }
-  
-.form-group {
+
+.formGroup {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
-  
-.form-group input[type="text"] {
+
+.formGroup input {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     margin-right: 10px;
-    border-radius: 5px;
     border: 1px solid #6f90d0;
-    margin-bottom: 5px;
+    border-radius: 5px;
 }
-  
-.select-reminder-frequency h3 {
+
+.selectReminderFrequency h3 {
     margin-bottom: 10px;
 }
 
 /*remindergroup contains dropdowncontainer and checkboxcontainer*/
-.reminder-group {
+.reminderGroup {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
-  
-.dropdown-container input[type="text"] {
+
+.reminderGroup label {
+    margin-right: 10px;
+}
+
+.dropdownContainer {
+    display: block;
+    margin-bottom: 10px;
+    align-items: baseline;
+}
+
+.dropdownContainer input {
     width: max-content;
     padding: 8px;
     margin-right: 10px;
@@ -153,18 +179,7 @@
     border-radius: 5px;
 }
 
-.reminder-group label {
-    margin-right: 10px;
-}
-
-.dropdown-container {
-    display: block;
-    align-items: center;
-    margin-bottom: 10px;
-    align-items: baseline;
-}
-
-.dropdown-container select {
+.dropdownContainer select {
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #6f90d0;
@@ -174,25 +189,25 @@
     cursor: pointer;
 }
 
-.dropdown-container select:focus {
+.dropdownContainer select:focus {
     outline: none;
-    border-color: #007BFF;
+    border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.checkbox-container {
+.checkboxContainer {
     display: flex;
     align-items: top;
     margin-bottom: 10px;
 }
 
-.checkbox-container input[type="checkbox"] {
+.checkboxContainer input[type="checkbox"] {
     margin-right: 15px;
     width: 15px;
     height: 15px;
 }
 
-.add-a-course-popup button {
+.addACoursePopup button {
     padding: 10px 20px;
     border: 1px solid #6f90d0;
     border-radius: 5px;
@@ -201,11 +216,11 @@
     cursor: pointer;
 }
 
-.add-a-course-popup button:hover {
+.addACoursePopup button:hover {
     background-color: #c6e2ff;
 }
 
-.course-draggable {
+.courseDraggable {
     user-select: none;
     padding: 16px;
     margin: 0 0 8px 0;
@@ -218,27 +233,25 @@
     left: auto !important;
 }
 
-.course-draggable:hover {
+.courseDraggable:hover {
     background-color: #c6e2ff;
 }
 
-
-
 /*courses and tasks shown in the page after adding*/
 
-.courses-list {
+.coursesList {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 }
 
-.tasks-list {
+.tasksList {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
 }
 
-.course-item {
+.courseItem {
     padding: 10px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
@@ -251,7 +264,7 @@
     position: relative;
 }
 
-.course-item-text {
+.courseItemText {
     top: 50%;
     left: 50%;
     position: absolute;
@@ -260,12 +273,12 @@
     color: black;
 }
 
-.course-item:hover {
+.courseItem:hover {
     cursor: pointer;
     background-color: #e6e6e6;
 }
 
-.task-row {
+.taskRow {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -278,12 +291,12 @@
     word-wrap: break-word;
 }
 
-.task-checkbox {
+.taskCheckbox {
     flex: 1;
     margin: 0px;
 }
 
-.task-item {
+.taskItem {
     flex: 9;
     padding: 10px;
     text-align: left;
@@ -300,17 +313,17 @@
     cursor: pointer;
 }
 
-.task-trashcan {
+.taskTrashcan {
     flex: 0.5;
 }
-.course-trashcan {
+.courseTrashcan {
     position: absolute;
     top: 5%;
     right: 5%;
 }
 
 /*link back to dashboard*/
-.landing-to-dashboard {
+.linkGroup {
     position: fixed;
     bottom: 50px;
     right: 100px;
@@ -318,11 +331,32 @@
     font-size: 14px;
 }
 
-.landing-to-dashboard a {
+.linkGroup a {
     color: rgb(55, 0, 128);
     text-decoration: none;
 }
 
-.landing-to-dashboard a:hover {
+.linkGroup a:hover {
     text-decoration: underline;
+}
+
+/*buttons*/
+.buttonGroup {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.buttonGroup:hover {
+    background-color: #0056b3;
 }

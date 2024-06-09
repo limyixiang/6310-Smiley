@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import { React, useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 
 Modal.setAppElement("#root");
 
@@ -104,14 +104,14 @@ function AddCourseModal({
             isOpen={courseValues.openModalType === "course"}
             onRequestClose={closeModal}
             contentLabel="Add-a-course-modal"
-            className="add-a-course-popup"
-            overlayClassName="backdrop-course-popup"
+            className={styles.addACoursePopup}
+            overlayClassName={styles.backdropCoursePopup}
         >
             {currentPage === 1 && (
-                <div className="course-popup1">
+                <div>
                     <h2>Please provide some details of the course.</h2>
                     {/* Input Course Code text box */}
-                    <div className="form-group">
+                    <div className={styles.formGroup}>
                         <label htmlFor="addCourseCode">Course Code</label>
                         <input
                             id="addCourseCode"
@@ -136,7 +136,7 @@ function AddCourseModal({
                         />
                     </div>
                     {/* Input Course Name text box */}
-                    <div className="form-group">
+                    <div className={styles.formGroup}>
                         <label htmlFor="addCourseName">Course Name</label>
                         <input
                             id="addCourseName"
@@ -161,15 +161,18 @@ function AddCourseModal({
                         />
                     </div>
                     {/* Select repeated reminders dropdown */}
-                    <div className="select-reminder-frequency">
+                    <div className={styles.selectReminderFrequency}>
                         <h3>Turn on Repeated Reminders:</h3>
                         {["Tutorial", "Lecture", "Quiz"].map((reminder) => (
-                            <div key={reminder} className="reminder-group">
-                                <div className="checkbox-container">
+                            <div
+                                key={reminder}
+                                className={styles.reminderGroup}
+                            >
+                                <div className={styles.checkboxContainer}>
                                     <input type="checkbox" />
                                     <label>{reminder}</label>
                                 </div>
-                                <div className="dropdown-container">
+                                <div className={styles.dropdownContainer}>
                                     <select defaultValue="">
                                         <option value="" disabled hidden>
                                             Day
@@ -212,12 +215,12 @@ function AddCourseModal({
                                 </div>
                             </div>
                         ))}
-                        <div key="Others" className="reminder-group">
-                            <div className="checkbox-container">
+                        <div key="Others" className={styles.reminderGroup}>
+                            <div className={styles.checkboxContainer}>
                                 <input type="checkbox" />
                                 <label>Others</label>
                             </div>
-                            <div className="dropdown-container">
+                            <div className={styles.dropdownContainer}>
                                 <input
                                     type="text"
                                     name="taskName"
@@ -279,7 +282,7 @@ function AddCourseModal({
             )}
 
             {currentPage === 2 && (
-                <div className="course-popup2">
+                <div>
                     <h2>
                         Drag and drop to order the priority of your courses.
                     </h2>
@@ -305,7 +308,9 @@ function AddCourseModal({
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
-                                                    className="course-draggable"
+                                                    className={
+                                                        styles.courseDraggable
+                                                    }
                                                 >
                                                     {course.courseCode +
                                                         " " +

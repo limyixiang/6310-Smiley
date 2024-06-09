@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 import {
     createCourse,
     createTask,
@@ -74,7 +74,7 @@ function LandingPage() {
     const errorMessage = () => {
         return (
             <div
-                className="error-message"
+                className={styles.errorMessage}
                 style={{ display: err ? "" : "none", color: "red" }}
             >
                 {err}
@@ -258,7 +258,7 @@ function LandingPage() {
     };
 
     return (
-        <div className="main-container">
+        <div className={styles.mainContainer}>
             <CourseContainer
                 user={user}
                 courses={courses}
@@ -284,7 +284,7 @@ function LandingPage() {
                 errorMessage={errorMessage}
             />
             <center>
-                <p className="landing-to-dashboard">
+                <p className={styles.linkGroup}>
                     <b>
                         <a href="/">Back to Dashboard</a>
                     </b>

@@ -1,4 +1,4 @@
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 import UpcomingTasksContainer from "./upcomingTasksContainer";
 import AddTaskModal from "./addTaskModal";
 
@@ -27,7 +27,7 @@ function TaskContainer({
     }
 
     return (
-        <div className="tasks-container">
+        <div className={styles.TaskContainer}>
             <h2>Upcoming Deadlines</h2>
             <select
                 id="sortBy"
@@ -48,7 +48,7 @@ function TaskContainer({
                 courseDescription={courseDescription}
                 deadlineDescription={deadlineDescription}
             />
-            <button className="add-a-task-button" onClick={openTaskModal}>
+            <button className={styles.buttonGroup} onClick={openTaskModal}>
                 Add a task
             </button>
             <AddTaskModal

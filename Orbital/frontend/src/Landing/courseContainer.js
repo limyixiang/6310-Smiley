@@ -1,4 +1,4 @@
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 import AddCourseModal from "./addCourseModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -16,11 +16,11 @@ function CourseContainer({
     user,
 }) {
     return (
-        <div className="courses-container">
-            <div className="courses-header">
+        <div className={styles.coursesContainer}>
+            <div className={styles.coursesHeader}>
                 <h2>Your Courses</h2>
                 <button
-                    className="add-a-course-button"
+                    className={styles.buttonGroup}
                     onClick={openCourseModal}
                 >
                     Add a course
@@ -35,7 +35,7 @@ function CourseContainer({
                 errorMessage={errorMessage}
             />
             {/* only display courseCode */}
-            <div className="courses-list">
+            <div className={styles.coursesList}>
                 {courses.map((course, index) => (
                     <Link
                         key={index}
@@ -45,13 +45,13 @@ function CourseContainer({
                             user: user,
                         }}
                     >
-                        <div className="course-item">
-                            <div className="course-item-text">
+                        <div className={styles.courseItem}>
+                            <div className={styles.courseItemText}>
                                 {course.courseCode}
                             </div>
                             <div>
                                 <FontAwesomeIcon
-                                    className="trashcan course-trashcan"
+                                    className={`${styles.trashcan} ${styles.courseTrashcan}`}
                                     icon={faTrashCan}
                                     onClick={(event) =>
                                         handleDeleteCourse(event, course._id)

@@ -1,4 +1,4 @@
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,19 +10,19 @@ function UpcomingTasksContainer({
     deadlineDescription,
 }) {
     return (
-        <div className="upcoming-tasks-container">
-            <div className="tasks-list">
+        <div className={styles.upcomingTasksContainer}>
+            <div className={styles.taskList}>
                 {tasks.map((task, index) => (
-                    <div className="task-row" key={index}>
+                    <div className={styles.taskRow} key={index}>
                         <input
                             name="task-checkbox"
-                            className="task-checkbox"
+                            className={styles.taskCheckbox}
                             type="checkbox"
                             onChange={() => handleTaskCheckboxChange(task)}
                             checked={task.status === "Done"}
                         />
                         <span
-                            className="task-item"
+                            className={styles.taskItem}
                             style={{
                                 textDecoration:
                                     task.status === "Done"
@@ -39,7 +39,7 @@ function UpcomingTasksContainer({
                                 task.priority}
                         </span>
                         <FontAwesomeIcon
-                            className="trashcan task-trashcan"
+                            className={`${styles.trashcan}${styles.taskTrashcan}`}
                             icon={faTrashCan}
                             onClick={() => handleDeleteTask(task._id)}
                         />
