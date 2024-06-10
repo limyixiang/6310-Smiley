@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, React } from "react";
 import { isAuthenticated, signout } from "../Backend";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./dashboardPage.module.css";
@@ -7,7 +7,7 @@ import logo from "./smileytransparent.jpg";
 const Dashboard = () => {
     const navigate = useNavigate(); // Initialize navigation
     const authenticatedUser = isAuthenticated(); // Check if the user is authenticated
-
+    const [isShaking, setShaking] = useState(false); // State for shaking animation
     // Function to handle signout action
     const onSignout = () => {
         signout(); // Perform signout action
@@ -45,6 +45,13 @@ const Dashboard = () => {
         }
     };
 
+    const handleSmileyClick = () => {
+        setShaking(true);
+        setTimeout(() => {
+            setShaking(false);
+        }, 3000); // Adjust this value to match the animation duration
+    };
+
     return !authenticatedUser ? (
         <div className={styles.mainContainer1}>
             <div className={styles.rippleContainer} onClick={handleClick}>
@@ -60,7 +67,12 @@ const Dashboard = () => {
                 <a href="/signin">LOGIN</a>
             </div>
             <div className={styles.logoContainer}>
-                <img src={logo} alt="SmileyLogo" className={styles.logo} />
+                <img
+                    src={logo}
+                    alt="SmileyLogo"
+                    className={isShaking ? styles.logoShake : styles.logo}
+                    onClick={handleSmileyClick}
+                />
                 <h1>SMILEY</h1>
             </div>
 
