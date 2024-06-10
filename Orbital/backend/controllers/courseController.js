@@ -13,6 +13,12 @@ const days = [
     "Friday",
     "Saturday",
 ];
+const freqs = {
+    Daily: 1,
+    Weekly: 7,
+    "Bi-Weekly": 14,
+    Monthly: 28,
+};
 // Create a new course
 exports.createCourse = async (req, res) => {
     try {
@@ -44,7 +50,7 @@ exports.createCourse = async (req, res) => {
                 refDate.getDate() + ((dayOfWeek + 7 - refDate.getDay()) % 7)
             );
             for (let i = 0; i < task.reminderNumberOfRepeats; i++) {
-                console.log("Creating task...");
+                // console.log("Creating task...");
                 await createTask({
                     body: {
                         taskName: task.recurringTaskName,
@@ -54,9 +60,10 @@ exports.createCourse = async (req, res) => {
                         courseid: course._id,
                     },
                 });
-                console.log("Task created...");
-                // hardcoding 7 days for now
-                refDate.setDate(refDate.getDate() + 7);
+                // console.log("Task created...");
+                refDate.setDate(
+                    refDate.getDate() + freqs[task.reminderFrequency]
+                );
             }
         }
         console.log("Tasks created successfully");
