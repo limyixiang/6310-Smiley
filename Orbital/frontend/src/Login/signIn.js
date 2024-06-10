@@ -82,7 +82,7 @@ export function Signin() {
                             placeholder="Email"
                             required
                         />
-                        {/*<i class="bx bxs-user"></i>*/}
+                        <i class="bx bxs-user"></i>
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="password">Password</label>
@@ -95,7 +95,7 @@ export function Signin() {
                             placeholder="Password"
                             required
                         />
-                        {/*<i class="bx bxs-lock-alt"></i>*/}
+                        <i class="bx bxs-lock-alt"></i>
                     </div>
                     {errorMessage()}
                     <div className={styles.linkGroup}>

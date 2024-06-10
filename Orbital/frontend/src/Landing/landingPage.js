@@ -207,27 +207,14 @@ function LandingPage() {
             const tasks = [];
             for (let i = 0; i < numberOfTypesOfTasks; i++) {
                 if (isSelected[i]) {
-                    if (i < defaultTasks.length) {
-                        tasks.push({
-                            isSelected: isSelected[i],
-                            reminderDay: reminderDay[i],
-                            reminderFrequency: reminderFrequency[i],
-                            reminderNumberOfRepeats: reminderNumberOfRepeats[i],
-                            recurringTaskName: defaultTasks[i].taskName,
-                            recurringTaskPriorityLevel:
-                                defaultTasks[i].taskPriority,
-                        });
-                    } else {
-                        tasks.push({
-                            isSelected: isSelected[i],
-                            reminderDay: reminderDay[i],
-                            reminderFrequency: reminderFrequency[i],
-                            reminderNumberOfRepeats: reminderNumberOfRepeats[i],
-                            recurringTaskName: recurringTaskName[i],
-                            recurringTaskPriorityLevel:
-                                recurringTaskPriorityLevel[i],
-                        });
-                    }
+                    tasks.push({
+                        reminderDay: reminderDay[i],
+                        reminderFrequency: reminderFrequency[i],
+                        reminderNumberOfRepeats: reminderNumberOfRepeats[i],
+                        recurringTaskName: recurringTaskName[i],
+                        recurringTaskPriorityLevel:
+                            recurringTaskPriorityLevel[i],
+                    });
                 }
             }
             console.log(tasks);
@@ -235,6 +222,7 @@ function LandingPage() {
                 courseName: courseName,
                 courseCode: courseCode,
                 userid: user._id,
+                tasks: tasks,
             })
                 .then((data) => {
                     if (data.error) {

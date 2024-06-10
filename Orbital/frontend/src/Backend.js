@@ -295,7 +295,7 @@ export const createCourse = async (course) => {
         );
         return response.data;
     } catch (err) {
-        return err.response.data;
+        return err.response.error;
     }
 };
 
