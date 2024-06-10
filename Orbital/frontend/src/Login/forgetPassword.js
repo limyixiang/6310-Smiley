@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 // import { Navigate } from 'react-router-dom';
 import { forgetPasswordAuthentication } from "../Backend";
 import styles from "./loginPage.module.css";
@@ -72,8 +73,14 @@ export function ForgetPassword() {
 
     return (
         <div className={styles.mainContainer}>
+            <Helmet>
+                <link
+                    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+                    rel="stylesheet"
+                />
+            </Helmet>
             <div className={styles.formContainer}>
-                <h2>Forget Password</h2>
+                <h2 className={styles.formTitle}>Forget Password</h2>
                 {successMessage()}
                 <div className={styles.formGroup}>
                     <label htmlFor="email">Email</label>
@@ -85,6 +92,7 @@ export function ForgetPassword() {
                         placeholder="Email"
                         required
                     />
+                    <i class="bx bxs-envelope"></i>
                 </div>
                 {errorMessage()}
                 <div>

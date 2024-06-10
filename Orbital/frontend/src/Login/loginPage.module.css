@@ -6,19 +6,21 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /*ensures that padding and border are included in total width and height*/
     font-family: "Calibri", sans-serif;
-}
+} /*applies to all CSS files*/
 
-/* Login Page CSS */
+/*/////////////////////////////////////////////////////////////////*/
+/* APPLIES TO SIGNIN, SIGNUP, FORGETPASSWORD, RESETPASSWORD PAGES */
+/*/////////////////////////////////////////////////////////////////*/
+
 .mainContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: radial-gradient(hsl(239, 100%, 82%), #c6ecff);
-    /*background: url("https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
-        no-repeat;*/
+    background: linear-gradient(hsl(239, 100%, 82%), #c6ecff 40%);
+    background: url("./mountain2.jpg") no-repeat;
     background-size: cover;
     background-position: center;
 } /*acts as the body{}*/
@@ -26,7 +28,7 @@
 .formContainer {
     width: 420px;
     /*background: transparent;*/
-    background: rgb(241, 250, 255);
+    background: rgb(241, 250, 255, 0.7);
     border: 2px solid rgba(21, 14, 172, 0.2);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -36,7 +38,10 @@
 } /*box in the middle*/
 
 .formTitle {
-    font-size: 36px;
+    font-size: 30px;
+    font-weight: 600;
+    color: #000055;
+    margin-bottom: 30px;
     text-align: center;
 } /*heading 2*/
 
@@ -68,8 +73,8 @@
     position: relative;
     top: -65%;
     left: 42%;
-    color: #000000;
-}
+    color: #000055;
+} /*icon in input box*/
 
 .linkGroup {
     display: flex;
@@ -78,17 +83,17 @@
     margin: 0.5rem 15px;
     margin-bottom: 10px;
     margin-top: 10px;
-}
+} /*hyperlink to other pages*/
 
 .linkGroup a {
     color: #000000;
     text-decoration: none;
     font-weight: bold;
-}
+} /*hyperlink text*/
 
 .linkGroup a:hover {
     text-decoration: underline;
-}
+} /*hyperlink hover*/
 
 .buttonGroup {
     width: 100%;
@@ -104,98 +109,28 @@
     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
     margin-top: 20px;
     margin-bottom: 20px;
-}
+} /*button*/
 
-/* Pre-Login Dashboard Page CSS, welcome to Smiley */
-.dashboardPrelogin {
-    background-color: rgb(235, 249, 253);
-    padding: 50px;
-    border-radius: 50px;
-    width: 1000px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.dashboardPrelogin h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: black;
-}
-
-.dashboardPrelogin a {
-    color: rgb(55, 0, 128);
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.dashboardPrelogin a:hover {
-    text-decoration: underline;
-}
-
-/* Post-Login Dashboard Page CSS, hello user, redirect to landing page */
-.dashboardPostlogin {
-    background-color: rgb(235, 249, 253);
-    padding: 50px;
-    border-radius: 50px;
-    width: 1000px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.dashboardPostlogin h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: black;
-}
-
-.dashboardPostlogin button {
-    margin-right: 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.dashboardPostlogin button:last-child {
-    margin-right: 0;
-}
-
-.dashboardPostlogin button:hover {
-    background-color: #0056b3;
-}
-
-/* Error, success and Loading Spinner */
 .errorMessage {
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
     font-size: 12px;
-}
+} /*error message*/
 
 .successMessage {
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
     font-size: 12px;
-}
+} /*success message*/
 
 .spinner {
     margin-bottom: 1.5rem;
     text-align: center;
     font-size: 12px;
     color: black;
-}
+} /*spinner container*/
 
 .loadingSpinner {
     width: 32px;
@@ -212,7 +147,7 @@
     animation: spin 1.4s linear infinite;
     box-shadow: 0px 0px 10px -8px black;
     border: 1px solid white;
-}
+} /*spinner animation*/
 
 .loadingSpinner::before {
     content: "";
@@ -226,15 +161,15 @@
     transform: translate(-50%, -50%);
     box-shadow: inset 0px 0px 10px -8px black;
     border: 1px solid white;
-}
+} /*filler inside the spinner*/
 
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
-}
+} /*spinner animation*/
 
 .passwordRequirements {
     font-size: 10px;
     color: rgb(57, 57, 57);
-}
+} /*password requirements font*/

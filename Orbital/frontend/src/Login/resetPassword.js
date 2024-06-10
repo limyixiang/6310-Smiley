@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { forgetPasswordReset } from "../Backend";
 import styles from "./loginPage.module.css";
 
@@ -96,8 +97,14 @@ export function ForgetPassword() {
 
     return (
         <div className={styles.mainContainer}>
+            <Helmet>
+                <link
+                    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+                    rel="stylesheet"
+                />
+            </Helmet>
             <div className={styles.formContainer}>
-                <h2>Reset Password</h2>
+                <h2 className={styles.formTitle}>Reset Password</h2>
                 {successMessage()}
                 <div className={styles.formGroup}>
                     <label htmlFor="password">Enter your new password:</label>
@@ -109,6 +116,7 @@ export function ForgetPassword() {
                         placeholder="Password"
                         required
                     />
+                    <i class="bx bxs-lock-alt"></i>
                 </div>
                 <div className={styles.formGroup}>
                     <label htmlFor="password">
@@ -122,6 +130,7 @@ export function ForgetPassword() {
                         placeholder="Re-enter password"
                         required
                     />
+                    <i class="bx bxs-lock-alt"></i>
                 </div>
                 <p className={styles.passwordRequirements}>
                     Password should contain at least 8 characters, with at least

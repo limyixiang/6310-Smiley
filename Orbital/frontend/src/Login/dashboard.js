@@ -1,7 +1,7 @@
 import React from "react";
 import { isAuthenticated, signout } from "../Backend";
 import { useNavigate, Link } from "react-router-dom";
-import styles from "./loginPage.module.css";
+import styles from "./dashboardPage.module.css";
 
 const Dashboard = () => {
     const navigate = useNavigate(); // Initialize navigation
@@ -15,13 +15,22 @@ const Dashboard = () => {
     };
 
     return !authenticatedUser ? (
-        <h1 className={styles.dashboardPrelogin}>
-            <div className={styles.linkGroup}>
-                Welcome to Smiley :D, please login <a href="/signin">here</a>!
+        <div className={styles.mainContainer1}>
+            <div className={styles.dashboardPrelogin}>
+                <h1 className={styles.linkGroup}>
+                    Welcome to Smiley :D, please login{" "}
+                    <a href="/signin">here</a>!
+                </h1>
+                <a
+                    className={styles.attributionGroup}
+                    href="https://www.vecteezy.com/free-vector/mountain"
+                >
+                    Mountain Vectors by Vecteezy
+                </a>
             </div>
-        </h1>
+        </div>
     ) : (
-        <div className={styles.dashboardPostlogin}>
+        <div className={styles.mainContainer2}>
             <h1>Hello, {authenticatedUser.user.name}</h1>
             <button onClick={onSignout}>Sign Out</button>
             <Link to="/landingpage" state={{ user: authenticatedUser.user }}>

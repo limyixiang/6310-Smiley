@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { signup } from "../Backend";
 import styles from "./loginPage.module.css";
 
@@ -95,8 +96,14 @@ function Signup() {
 
     return (
         <div className={styles.mainContainer}>
+            <Helmet>
+                <link
+                    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+                    rel="stylesheet"
+                />
+            </Helmet>
             <div className={styles.formContainer}>
-                <h2>Create an account</h2>
+                <h2 className={styles.formTitle}>Create an account</h2>
                 {successMessage()}
                 <div className={styles.formGroup}>
                     <label htmlFor="name">Username</label>
@@ -108,6 +115,7 @@ function Signup() {
                         placeholder="Name"
                         required
                     />
+                    <i class="bx bxs-user"></i>
                 </div>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">Email</label>
@@ -119,6 +127,7 @@ function Signup() {
                         placeholder="Email"
                         required
                     />
+                    <i class="bx bxs-envelope"></i>
                 </div>
                 <div className={styles.formGroup}>
                     <label htmlFor="password">Password</label>
@@ -130,6 +139,7 @@ function Signup() {
                         placeholder="Password"
                         required
                     />
+                    <i class="bx bxs-lock-alt"></i>
                 </div>
                 <div className={styles.formGroup}>
                     <label htmlFor="confirmPassword">
@@ -143,6 +153,7 @@ function Signup() {
                         placeholder="Re-enter password"
                         required
                     />
+                    <i class="bx bxs-lock-alt"></i>
                 </div>
                 <p className={styles.passwordRequirements}>
                     Password should contain at least 8 characters, with at least

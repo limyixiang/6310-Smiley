@@ -1,0 +1,69 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /*ensures that padding and border are included in total width and height*/
+    font-family: "Calibri", sans-serif;
+} /*applies to all CSS files*/
+
+/*////////////////////////////////////////*/
+/* APPLIES TO DASHBOARD BEFORE LOGIN PAGE */
+/*////////////////////////////////////////*/
+
+.mainContainer1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(hsl(239, 100%, 82%), #c6ecff 50%);
+    background: url("./mountain1.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+} /*acts as the body{}*/
+
+.attributionGroup {
+    display: flex;
+    align-items: baseline;
+    bottom: 1%;
+    right: 1%;
+    position: fixed;
+    color: rgb(255, 255, 255);
+    font-size: 8px;
+    text-decoration: none;
+}
+
+/*///////////////////////////////////////*/
+/* APPLIES TO DASHBOARD AFTER LOGIN PAGE */
+/*///////////////////////////////////////*/
+
+.mainContainer2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(hsl(239, 100%, 82%), #c6ecff 50%);
+    /*background: url("https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
+        no-repeat;*/
+    background-size: cover;
+    background-position: center;
+} /*acts as the body{}*/
+
+.buttonGroup {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    margin-top: 20px;
+    margin-bottom: 20px;
+} /*button*/
