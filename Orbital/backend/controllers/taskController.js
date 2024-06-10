@@ -96,7 +96,7 @@ exports.createTask = async (req, res) => {
                 error: errors.array()[0].msg,
             });
         }
-
+        // console.log(req);
         const user = await User.findById(req.body.userid);
         const course = await Course.findById(req.body.courseid);
         const task = new Task({
@@ -106,6 +106,7 @@ exports.createTask = async (req, res) => {
             user: user,
             course: course,
         });
+        // console.log("reached here");
         var userTasksByDate = user.tasksByDate;
         var userTasksByPriority = user.tasksByPriority;
         var courseTasksByDate = course.tasksByDate;
@@ -115,40 +116,61 @@ exports.createTask = async (req, res) => {
         // Note that this only takes into acount the dueDate of the task and not the priority of the course yet
         // as priorities of courses are not implemented yet.
         const newDeadline = new Date(task.dueDate).getTime();
-        insertTaskByDate(userTasksByDate, newDeadline, task)
-            .then((arr) => {
-                userTasksByDate = arr;
-            })
-            .then(() => {
-                insertTaskByPriority(userTasksByPriority, newDeadline, task)
-                    .then((arr) => {
-                        userTasksByPriority = arr;
-                    })
-                    .then(() => {
-                        user.save();
-                        // console.log("User saved.");
-                    });
-            });
-        insertTaskByDate(courseTasksByDate, newDeadline, task)
-            .then((arr) => {
-                courseTasksByDate = arr;
-            })
-            .then(() => {
-                insertTaskByPriority(courseTasksByPriority, newDeadline, task)
-                    .then((arr) => {
-                        courseTasksByPriority = arr;
-                    })
-                    .then(() => {
-                        course.save();
-                        // console.log("Course saved.");
-                    });
-            });
-        await task.save();
-        return res
-            .status(201)
-            .json({ message: "Task created successfully", data: task });
+        let userTasksByDatePromise = insertTaskByDate(
+            userTasksByDate,
+            newDeadline,
+            task
+        );
+        let userTasksByPriorityPromise = insertTaskByPriority(
+            userTasksByPriority,
+            newDeadline,
+            task
+        );
+        let courseTasksByDatePromise = insertTaskByDate(
+            courseTasksByDate,
+            newDeadline,
+            task
+        );
+        let courseTasksByPriorityPromise = insertTaskByPriority(
+            courseTasksByPriority,
+            newDeadline,
+            task
+        );
+
+        try {
+            userTasksByDate = await userTasksByDatePromise;
+            userTasksByPriority = await userTasksByPriorityPromise;
+            courseTasksByDate = await courseTasksByDatePromise;
+            courseTasksByPriority = await courseTasksByPriorityPromise;
+
+            user.set("tasksByDate", userTasksByDate);
+            user.set("tasksByPriority", userTasksByPriority);
+            await user.save({ $inc: { __v: 1 } });
+            console.log("User saved.");
+
+            course.set("tasksByDate", courseTasksByDate);
+            course.set("tasksByPriority", courseTasksByPriority);
+            await course.save({ $inc: { __v: 1 } });
+            console.log("Course saved.");
+
+            await task.save();
+            console.log("Task created and saved.");
+        } catch (err) {
+            console.log(err);
+        }
+        if (res) {
+            return res
+                .status(201)
+                .json({ message: "Task created successfully", data: task });
+        } else {
+            return { message: "Task created successfully", data: task };
+        }
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        if (res) {
+            return res.status(500).json({ error: error.message });
+        } else {
+            throw error;
+        }
     }
 };
 
