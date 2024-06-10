@@ -80,43 +80,51 @@ export function ForgetPassword() {
                 />
             </Helmet>
             <div className={styles.formContainer}>
-                <h2 className={styles.formTitle}>Forget Password</h2>
-                {successMessage()}
-                <div className={styles.formGroup}>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        id="email"
-                        type="text"
-                        value={email}
-                        onChange={handleInputChange("email")}
-                        placeholder="Email"
-                        required
-                    />
-                    <i class="bx bxs-envelope"></i>
-                </div>
-                {errorMessage()}
-                <div>
-                    <button
-                        id="button"
-                        className={styles.buttonGroup}
-                        onClick={handleOnSubmit}
-                        style={{ display: loading ? "none" : "block" }}
-                    >
-                        Submit
-                    </button>
-                    <div
-                        className={styles.spinner}
-                        id="spinner"
-                        style={{ display: loading ? "block" : "none" }}
-                    >
-                        <div className={styles.loadingSpinner}></div>
-                        <p>Loading...</p>
+                <form>
+                    <h2 className={styles.formTitle}>Forget Password</h2>
+                    {successMessage()}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            id="email"
+                            type="text"
+                            value={email}
+                            onChange={handleInputChange("email")}
+                            placeholder="Email"
+                            required
+                        />
+                        <i class="bx bxs-envelope"></i>
                     </div>
-                </div>
-                <div className={styles.linkGroup}>
-                    <a href="/signin">Back to Login</a>
-                </div>
+                    {errorMessage()}
+                    <div>
+                        <button
+                            id="button"
+                            className={styles.buttonGroup}
+                            onClick={handleOnSubmit}
+                            style={{ display: loading ? "none" : "block" }}
+                        >
+                            Submit
+                        </button>
+                        <div
+                            className={styles.spinner}
+                            id="spinner"
+                            style={{ display: loading ? "block" : "none" }}
+                        >
+                            <div className={styles.loadingSpinner}></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                    <div className={styles.linkGroup}>
+                        <a href="/signin">Back to Login</a>
+                    </div>
+                </form>
             </div>
+            <a
+                className={styles.attributionGroup}
+                href="https://www.vecteezy.com/free-vector/mountain"
+            >
+                Mountain Vectors by Vecteezy
+            </a>
         </div>
     );
 }

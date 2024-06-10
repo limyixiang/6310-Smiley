@@ -16,21 +16,25 @@
 
 .mainContainer {
     display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(hsl(239, 100%, 82%), #c6ecff 40%);
+    /*background: linear-gradient(hsl(239, 100%, 82%), #c6ecff 40%);*/
     background: url("./mountain2.jpg") no-repeat;
     background-size: cover;
     background-position: center;
+    user-select: none;
 } /*acts as the body{}*/
 
 .formContainer {
-    width: 420px;
+    width: 35%;
     /*background: transparent;*/
     background: rgb(241, 250, 255, 0.7);
-    border: 2px solid rgba(21, 14, 172, 0.2);
-    backdrop-filter: blur(10px);
+    border: 2px solid rgba(8, 5, 76, 0.2);
+    backdrop-filter: blur(5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: #000055;
     border-radius: 10px;
@@ -56,7 +60,6 @@
     width: 100%;
     height: 100%;
     background: transparent;
-    border: none;
     outline: none;
     border: 2px solid rgba(8, 5, 76, 0.2);
     border-radius: 40px;
@@ -100,13 +103,12 @@
     height: 45px;
     border: none;
     outline: none;
-    border-radius: 40px;
+    border-radius: 30px;
     color: #fff;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     background: linear-gradient(to right, #3227b0, #408bfb);
-    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
     margin-top: 20px;
     margin-bottom: 20px;
 } /*button*/
@@ -173,3 +175,13 @@
     font-size: 10px;
     color: rgb(57, 57, 57);
 } /*password requirements font*/
+
+.attributionGroup {
+    display: flex;
+    bottom: 1%;
+    right: 1%;
+    position: fixed;
+    color: rgb(0, 0, 0);
+    font-size: 8px;
+    text-decoration: none;
+}

@@ -103,85 +103,93 @@ function Signup() {
                 />
             </Helmet>
             <div className={styles.formContainer}>
-                <h2 className={styles.formTitle}>Create an account</h2>
-                {successMessage()}
-                <div className={styles.formGroup}>
-                    <label htmlFor="name">Username</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        onChange={handleInputChange("name")}
-                        placeholder="Name"
-                        required
-                    />
-                    <i class="bx bxs-user"></i>
-                </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        type="text"
-                        id="email"
-                        name="email"
-                        onChange={handleInputChange("email")}
-                        placeholder="Email"
-                        required
-                    />
-                    <i class="bx bxs-envelope"></i>
-                </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        onChange={handleInputChange("password")}
-                        placeholder="Password"
-                        required
-                    />
-                    <i class="bx bxs-lock-alt"></i>
-                </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="confirmPassword">
-                        Re-enter your password
-                    </label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        onChange={handleInputChange("confirmPassword")}
-                        placeholder="Re-enter password"
-                        required
-                    />
-                    <i class="bx bxs-lock-alt"></i>
-                </div>
-                <p className={styles.passwordRequirements}>
-                    Password should contain at least 8 characters, with at least
-                    1 uppercase, 1 lowercase and 1 number.
-                </p>
-                {errorMessage()}
-                <div>
-                    <button
-                        id="button"
-                        className={styles.buttonGroup}
-                        onClick={onSubmit}
-                        style={{ display: loading ? "none" : "block" }}
-                    >
-                        Sign Up
-                    </button>
-                    <div
-                        className={styles.spinner}
-                        id="spinner"
-                        style={{ display: loading ? "block" : "none" }}
-                    >
-                        <div className={styles.loadingSpinner}></div>
-                        <p>Loading...</p>
+                <form>
+                    <h2 className={styles.formTitle}>Create an account</h2>
+                    {successMessage()}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="name">Username</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            onChange={handleInputChange("name")}
+                            placeholder="Name"
+                            required
+                        />
+                        <i class="bx bxs-user"></i>
                     </div>
-                </div>
-                <div className={styles.linkGroup}>
-                    <a href="/signin"> Back to Login</a>
-                </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="text"
+                            id="email"
+                            name="email"
+                            onChange={handleInputChange("email")}
+                            placeholder="Email"
+                            required
+                        />
+                        <i class="bx bxs-envelope"></i>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            onChange={handleInputChange("password")}
+                            placeholder="Password"
+                            required
+                        />
+                        <i class="bx bxs-lock-alt"></i>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="confirmPassword">
+                            Re-enter your password
+                        </label>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            onChange={handleInputChange("confirmPassword")}
+                            placeholder="Re-enter password"
+                            required
+                        />
+                        <i class="bx bxs-lock-alt"></i>
+                    </div>
+                    <p className={styles.passwordRequirements}>
+                        Password should contain at least 8 characters, with at
+                        least 1 uppercase, 1 lowercase and 1 number.
+                    </p>
+                    {errorMessage()}
+                    <div>
+                        <button
+                            id="button"
+                            className={styles.buttonGroup}
+                            onClick={onSubmit}
+                            style={{ display: loading ? "none" : "block" }}
+                        >
+                            Sign Up
+                        </button>
+                        <div
+                            className={styles.spinner}
+                            id="spinner"
+                            style={{ display: loading ? "block" : "none" }}
+                        >
+                            <div className={styles.loadingSpinner}></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                    <div className={styles.linkGroup}>
+                        <a href="/signin"> Back to Login</a>
+                    </div>
+                </form>
             </div>
+            <a
+                className={styles.attributionGroup}
+                href="https://www.vecteezy.com/free-vector/mountain"
+            >
+                Mountain Vectors by Vecteezy
+            </a>
         </div>
     );
 }

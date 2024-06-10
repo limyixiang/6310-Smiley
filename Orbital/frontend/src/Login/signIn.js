@@ -69,7 +69,7 @@ export function Signin() {
                 />
             </Helmet>
             <div className={styles.formContainer}>
-                <form action="">
+                <form>
                     <h2 className={styles.formTitle}>Login</h2>
                     <div className={styles.formGroup}>
                         <label htmlFor="email">Email</label>
@@ -124,6 +124,12 @@ export function Signin() {
                     </div>
                 </form>
             </div>
+            <a
+                className={styles.attributionGroup}
+                href="https://www.vecteezy.com/free-vector/mountain"
+            >
+                Mountain Vectors by Vecteezy
+            </a>
         </div>
     );
 }

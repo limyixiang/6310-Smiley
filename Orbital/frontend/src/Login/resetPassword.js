@@ -104,61 +104,71 @@ export function ForgetPassword() {
                 />
             </Helmet>
             <div className={styles.formContainer}>
-                <h2 className={styles.formTitle}>Reset Password</h2>
-                {successMessage()}
-                <div className={styles.formGroup}>
-                    <label htmlFor="password">Enter your new password:</label>
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={handleInputChange("password")}
-                        placeholder="Password"
-                        required
-                    />
-                    <i class="bx bxs-lock-alt"></i>
-                </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="password">
-                        Re-enter your new password:
-                    </label>
-                    <input
-                        id="password2"
-                        type="password"
-                        value={password2}
-                        onChange={handleInputChange("password2")}
-                        placeholder="Re-enter password"
-                        required
-                    />
-                    <i class="bx bxs-lock-alt"></i>
-                </div>
-                <p className={styles.passwordRequirements}>
-                    Password should contain at least 8 characters, with at least
-                    1 uppercase, 1 lowercase and 1 number.
-                </p>
-                {errorMessage()}
-                <div>
-                    <button
-                        id="button"
-                        className={styles.buttonGroup}
-                        onClick={handleOnSubmit}
-                        style={{ display: loading ? "none" : "block" }}
-                    >
-                        Reset Password
-                    </button>
-                    <div
-                        className={styles.spinner}
-                        id="spinner"
-                        style={{ display: loading ? "block" : "none" }}
-                    >
-                        <div className={styles.loadingSpinner}></div>
-                        <p>Loading...</p>
+                <form>
+                    <h2 className={styles.formTitle}>Reset Password</h2>
+                    {successMessage()}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="password">
+                            Enter your new password:
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={handleInputChange("password")}
+                            placeholder="Password"
+                            required
+                        />
+                        <i class="bx bxs-lock-alt"></i>
                     </div>
-                </div>
-                <div className={styles.linkGroup}>
-                    <a href="/signin">Back to Login</a>
-                </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="password">
+                            Re-enter your new password:
+                        </label>
+                        <input
+                            id="password2"
+                            type="password"
+                            value={password2}
+                            onChange={handleInputChange("password2")}
+                            placeholder="Re-enter password"
+                            required
+                        />
+                        <i class="bx bxs-lock-alt"></i>
+                    </div>
+                    <p className={styles.passwordRequirements}>
+                        Password should contain at least 8 characters, with at
+                        least 1 uppercase, 1 lowercase and 1 number.
+                    </p>
+                    {errorMessage()}
+                    <div>
+                        <button
+                            id="button"
+                            className={styles.buttonGroup}
+                            onClick={handleOnSubmit}
+                            style={{ display: loading ? "none" : "block" }}
+                        >
+                            Reset Password
+                        </button>
+                        <div
+                            className={styles.spinner}
+                            id="spinner"
+                            style={{ display: loading ? "block" : "none" }}
+                        >
+                            <div className={styles.loadingSpinner}></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                    <div className={styles.linkGroup}>
+                        <a href="/signin">Back to Login</a>
+                    </div>
+                </form>
             </div>
+            <a
+                className={styles.attributionGroup}
+                href="https://www.vecteezy.com/free-vector/mountain"
+            >
+                Mountain Vectors by Vecteezy
+            </a>
         </div>
     );
 }
