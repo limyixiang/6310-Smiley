@@ -207,6 +207,17 @@ function LandingPage() {
             const tasks = [];
             for (let i = 0; i < numberOfTypesOfTasks; i++) {
                 if (isSelected[i]) {
+                    if (
+                        !reminderDay[i] ||
+                        !reminderFrequency[i] ||
+                        !reminderNumberOfRepeats[i] ||
+                        !recurringTaskName[i] ||
+                        recurringTaskName[i] === "" ||
+                        !recurringTaskPriorityLevel[i]
+                    ) {
+                        setErr("One or more task fields are empty.");
+                        return;
+                    }
                     tasks.push({
                         reminderDay: reminderDay[i],
                         reminderFrequency: reminderFrequency[i],

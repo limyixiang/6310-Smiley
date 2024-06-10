@@ -172,7 +172,7 @@ exports.createTask = async (req, res) => {
             // console.log("Course saved.");
 
             await task.save();
-            console.log("Task created and saved.");
+            // console.log("Task created and saved.");
         } catch (err) {
             console.log(err);
         }
