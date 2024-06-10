@@ -9,8 +9,17 @@ const insertTaskByDate = async (arr, newDeadline, task) => {
         arr[0] = task;
         return arr;
     }
+    // Fetch tasks from the database
+    const iTasksUnordered = await Task.find({ _id: { $in: arr } });
+    // Create a map where the key is the task's id and the value is the task itself
+    const iTasksMap = new Map(
+        iTasksUnordered.map((iTask) => [iTask._id.toString(), iTask])
+    );
+    // Create a new array of tasks ordered according to the arr array
+    const iTasks = arr.map((id) => iTasksMap.get(id.toString()));
     for (let i = 0; i < numTasks; i++) {
-        const iTask = await Task.findById(arr[i]);
+        // const iTask = await Task.findById(arr[i]);
+        const iTask = iTasks[i];
         const iDeadline = new Date(iTask.dueDate).getTime();
         if (newDeadline < iDeadline) {
             arr.splice(i, 0, task);
@@ -42,8 +51,17 @@ const insertTaskByPriority = async (arr, newDeadline, task) => {
         arr[0] = task;
         return arr;
     }
+    // Fetch tasks from the database
+    const iTasksUnordered = await Task.find({ _id: { $in: arr } });
+    // Create a map where the key is the task's id and the value is the task itself
+    const iTasksMap = new Map(
+        iTasksUnordered.map((iTask) => [iTask._id.toString(), iTask])
+    );
+    // Create a new array of tasks ordered according to the arr array
+    const iTasks = arr.map((id) => iTasksMap.get(id.toString()));
     for (let i = 0; i < numTasks; i++) {
-        const iTask = await Task.findById(arr[i]);
+        // const iTask = await Task.findById(arr[i]);
+        const iTask = iTasks[i];
         if (task.priority === "High") {
             if (iTask.priority !== "High") {
                 arr.splice(i, 0, task);
@@ -146,15 +164,15 @@ exports.createTask = async (req, res) => {
             user.set("tasksByDate", userTasksByDate);
             user.set("tasksByPriority", userTasksByPriority);
             await user.save({ $inc: { __v: 1 } });
-            console.log("User saved.");
+            // console.log("User saved.");
 
             course.set("tasksByDate", courseTasksByDate);
             course.set("tasksByPriority", courseTasksByPriority);
             await course.save({ $inc: { __v: 1 } });
-            console.log("Course saved.");
+            // console.log("Course saved.");
 
             await task.save();
-            console.log("Task created and saved.");
+            // console.log("Task created and saved.");
         } catch (err) {
             console.log(err);
         }
