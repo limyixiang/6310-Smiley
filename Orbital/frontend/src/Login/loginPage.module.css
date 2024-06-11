@@ -74,8 +74,9 @@
 
 .formGroup i {
     position: relative;
-    top: -4.25vh;
-    left: 10vw;
+    top: -50%;
+    left: 40%;
+    transform: translateY(-50%);
     color: #000055;
 } /*icon in input box*/
 
@@ -83,7 +84,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 13px;
-    margin: 0.5rem 15px;
+    margin: 15px;
     margin-bottom: 10px;
     margin-top: 10px;
 } /*hyperlink to other pages*/
