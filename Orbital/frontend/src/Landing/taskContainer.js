@@ -3,6 +3,7 @@ import UpcomingTasksContainer from "./upcomingTasksContainer";
 import AddTaskModal from "./addTaskModal";
 
 function TaskContainer({
+    viewTasks,
     courses,
     tasks,
     openTaskModal,
@@ -41,7 +42,20 @@ function TaskContainer({
                     Priority Level
                 </option>
             </select>
+            <select
+                id="viewTasks"
+                value={landingPageValues.viewTasks}
+                onChange={handleInputChange("landingPageValues", "viewTasks")}
+            >
+                <option name="viewTasksOption" value="thisWeek">
+                    This Week
+                </option>
+                <option name="viewTasksOption" value="nextWeek">
+                    Next Week
+                </option>
+            </select>
             <UpcomingTasksContainer
+                viewTasks={viewTasks}
                 tasks={tasks}
                 handleDeleteTask={handleDeleteTask}
                 handleTaskCheckboxChange={handleTaskCheckboxChange}

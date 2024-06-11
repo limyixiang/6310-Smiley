@@ -19,6 +19,7 @@ function LandingPage() {
     const [landingPageValues, setLandingPageValues] = useState({
         refresh: false,
         sortBy: "date",
+        viewTasks: "thisWeek",
     });
 
     const [err, setErr] = useState("");
@@ -59,7 +60,7 @@ function LandingPage() {
     const [temporaryCourses, setTemporaryCourses] = useState([]);
 
     // Destructuring values from the state
-    const { refresh, sortBy } = landingPageValues;
+    const { refresh, sortBy, viewTasks } = landingPageValues;
     const { courseName, courseCode } = courseValues;
     const {
         isSelected,
@@ -403,6 +404,7 @@ function LandingPage() {
                 handleOnDragEnd={handleOnDragEnd}
             />
             <TaskContainer
+                viewTasks={viewTasks}
                 courses={courses}
                 tasks={tasks}
                 taskValues={taskValues}
