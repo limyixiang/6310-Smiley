@@ -30,7 +30,7 @@
 } /*acts as the body{}*/
 
 .formContainer {
-    width: 35%;
+    width: 55vh;
     /*background: transparent;*/
     background: rgb(241, 250, 255, 0.7);
     border: 2px solid rgba(8, 5, 76, 0.2);
@@ -74,8 +74,8 @@
 
 .formGroup i {
     position: relative;
-    top: -65%;
-    left: 42%;
+    top: -4.25vh;
+    left: 19vh;
     color: #000055;
 } /*icon in input box*/
 
@@ -176,12 +176,77 @@
     color: rgb(57, 57, 57);
 } /*password requirements font*/
 
+/*login attribution*/
 .attributionGroup {
     display: flex;
-    bottom: 1%;
-    right: 1%;
+    bottom: 1vh;
+    right: 1vw;
     position: fixed;
     color: rgb(0, 0, 0);
     font-size: 8px;
     text-decoration: none;
+}
+
+/*on click ripple effect*/
+.rippleContainer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
+.ripple {
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleEffect 1s ease-out;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/*smiley logo*/
+.logoContainer {
+    position: fixed;
+    top: 7vh;
+    left: 13vh;
+    display: block;
+} /*smiley logo*/
+
+.logoContainer h1 {
+    color: #000055;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin: 0;
+} /*smiley logo text*/
+
+.logo {
+    width: 50%;
+    height: 50%;
+} /*smiley logo image*/
+
+.logoShake {
+    width: 50%;
+    height: 50%;
+    animation: spin 3s ease;
+} /*smiley logo image on click*/
+
+/* Shake animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-30deg);
+    }
+    50% {
+        transform: rotate(30deg);
+    }
+    100% {
+        transform: rotate(-360deg);
+    }
 }

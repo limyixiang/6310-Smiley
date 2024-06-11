@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { signup } from "../Backend";
 import styles from "./loginPage.module.css";
+import logo from "./smileytransparent.jpg";
 
 // Signup component for the signup form
 function Signup() {
@@ -18,6 +19,8 @@ function Signup() {
     // Destructuring values from the state
     const { name, email, password, confirmPassword, error, loading, success } =
         formValues;
+
+    const [isShaking, setShaking] = useState(false); // State for shaking animation
 
     // Handles changes in the input fields
     const handleInputChange = (name) => (event) => {
@@ -93,7 +96,41 @@ function Signup() {
             )
         );
     };
+    const handleClick = (e) => {
+        const rippleContainer = e.currentTarget;
+        const rippleSize = 30; // Adjust the size of the ripple
+        const numRipples = 2; // Number of ripples
+        const delay = 250; // Delay between each ripple
 
+        for (let i = 0; i < numRipples; i++) {
+            setTimeout(() => {
+                const ripple = document.createElement("div");
+                ripple.classList.add(styles.ripple);
+                ripple.style.width = ripple.style.height = `${rippleSize}px`;
+                ripple.style.left = `${
+                    e.clientX -
+                    rippleContainer.getBoundingClientRect().left -
+                    rippleSize / 2
+                }px`;
+                ripple.style.top = `${
+                    e.clientY -
+                    rippleContainer.getBoundingClientRect().top -
+                    rippleSize / 2
+                }px`;
+                rippleContainer.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000); // Adjust this value to match the animation duration
+            }, i * delay);
+        }
+    };
+    const handleSmileyClick = () => {
+        setShaking(true);
+        setTimeout(() => {
+            setShaking(false);
+        }, 3000); // Adjust this value to match the animation duration
+    };
     return (
         <div className={styles.mainContainer}>
             <Helmet>
@@ -102,6 +139,9 @@ function Signup() {
                     rel="stylesheet"
                 />
             </Helmet>
+            <div className={styles.rippleContainer} onClick={handleClick}>
+                <div className={styles.ripple}></div>
+            </div>
             <div className={styles.formContainer}>
                 <form>
                     <h2 className={styles.formTitle}>Create an account</h2>
@@ -183,6 +223,15 @@ function Signup() {
                         <a href="/signin"> Back to Login</a>
                     </div>
                 </form>
+            </div>
+            <div className={styles.logoContainer}>
+                <img
+                    src={logo}
+                    alt="SmileyLogo"
+                    className={isShaking ? styles.logoShake : styles.logo}
+                    onClick={handleSmileyClick}
+                />
+                <h1>SMILEY</h1>
             </div>
             <a
                 className={styles.attributionGroup}

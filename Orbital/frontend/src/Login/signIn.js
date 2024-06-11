@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { signin, authenticate } from "../Backend";
 import { Navigate } from "react-router-dom";
 import styles from "./loginPage.module.css";
+import logo from "./smileytransparent.jpg";
 
 // Signin component for the login form
 export function Signin() {
@@ -17,6 +18,8 @@ export function Signin() {
 
     // Destructuring values from the state
     const { email, password, error, loading, success } = values;
+
+    const [isShaking, setShaking] = useState(false); // State for shaking animation
 
     // Handles changes in the input fields
     const handleInputChange = (name) => (event) => {
@@ -57,6 +60,41 @@ export function Signin() {
         );
     };
 
+    const handleClick = (e) => {
+        const rippleContainer = e.currentTarget;
+        const rippleSize = 30; // Adjust the size of the ripple
+        const numRipples = 2; // Number of ripples
+        const delay = 250; // Delay between each ripple
+
+        for (let i = 0; i < numRipples; i++) {
+            setTimeout(() => {
+                const ripple = document.createElement("div");
+                ripple.classList.add(styles.ripple);
+                ripple.style.width = ripple.style.height = `${rippleSize}px`;
+                ripple.style.left = `${
+                    e.clientX -
+                    rippleContainer.getBoundingClientRect().left -
+                    rippleSize / 2
+                }px`;
+                ripple.style.top = `${
+                    e.clientY -
+                    rippleContainer.getBoundingClientRect().top -
+                    rippleSize / 2
+                }px`;
+                rippleContainer.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000); // Adjust this value to match the animation duration
+            }, i * delay);
+        }
+    };
+    const handleSmileyClick = () => {
+        setShaking(true);
+        setTimeout(() => {
+            setShaking(false);
+        }, 3000); // Adjust this value to match the animation duration
+    };
     // Configures the sign-in page
     return success ? (
         <Navigate to="/" />
@@ -68,6 +106,9 @@ export function Signin() {
                     rel="stylesheet"
                 />
             </Helmet>
+            <div className={styles.rippleContainer} onClick={handleClick}>
+                <div className={styles.ripple}></div>
+            </div>
             <div className={styles.formContainer}>
                 <form>
                     <h2 className={styles.formTitle}>Login</h2>
@@ -123,6 +164,15 @@ export function Signin() {
                         </div>
                     </div>
                 </form>
+            </div>
+            <div className={styles.logoContainer}>
+                <img
+                    src={logo}
+                    alt="SmileyLogo"
+                    className={isShaking ? styles.logoShake : styles.logo}
+                    onClick={handleSmileyClick}
+                />
+                <h1>SMILEY</h1>
             </div>
             <a
                 className={styles.attributionGroup}

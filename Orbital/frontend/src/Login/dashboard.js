@@ -63,7 +63,7 @@ const Dashboard = () => {
                     Welcome to Smiley!
                 </h1>
             </div>
-            <div className={styles.linkGroup}>
+            <div className={styles.linkGroup1}>
                 <a href="/signin">LOGIN</a>
             </div>
             <div className={styles.logoContainer}>
@@ -75,7 +75,6 @@ const Dashboard = () => {
                 />
                 <h1>SMILEY</h1>
             </div>
-
             <a
                 className={styles.attributionGroup}
                 href="https://www.vecteezy.com/free-vector/mountain"
@@ -85,11 +84,39 @@ const Dashboard = () => {
         </div>
     ) : (
         <div className={styles.mainContainer2}>
-            <h1>Hello, {authenticatedUser.user.name}</h1>
-            <button onClick={onSignout}>Sign Out</button>
-            <Link to="/landingpage" state={{ user: authenticatedUser.user }}>
-                <button>Landing Page</button>
-            </Link>
+            <div className={styles.rippleContainer} onClick={handleClick}>
+                <div className={styles.ripple}></div>
+            </div>
+            <div className={styles.welcomeMessage}>
+                <h1>Hello, {authenticatedUser.user.name}!</h1>
+                <h1 className={styles.reflectionWelcomeMessage}>
+                    Hello, {authenticatedUser.user.name}!
+                </h1>
+            </div>
+            <div className={styles.linkGroup2}>
+                <Link
+                    to="/landingpage"
+                    state={{ user: authenticatedUser.user }}
+                >
+                    <button>LANDING</button>
+                </Link>
+                <button onClick={onSignout}>SIGN OUT</button>
+            </div>
+            <div className={styles.logoContainer}>
+                <img
+                    src={logo}
+                    alt="SmileyLogo"
+                    className={isShaking ? styles.logoShake : styles.logo}
+                    onClick={handleSmileyClick}
+                />
+                <h1>SMILEY</h1>
+            </div>
+            <a
+                className={styles.attributionGroup}
+                href="https://www.vecteezy.com/free-vector/mountain"
+            >
+                Mountain Vectors by Vecteezy
+            </a>
         </div>
     );
 };

@@ -29,14 +29,14 @@
     user-select: none;
 } /*acts as the body{}*/
 
-.linkGroup {
+.linkGroup1 {
     display: flex;
     position: fixed;
-    top: 7%;
-    right: 10%;
+    top: 7vh;
+    right: 15vh;
 } /*hyperlink to other pages*/
 
-.linkGroup a {
+.linkGroup1 a {
     border: 2px solid rgba(0, 83, 124, 0.3);
     border-radius: 30px;
     padding: 10px 30px;
@@ -47,66 +47,25 @@
     font-size: 16px;
 } /*hyperlink text*/
 
-.linkGroup a:hover {
+.linkGroup1 a:hover {
     background-color: rgba(0, 124, 185, 0.3);
 } /*hyperlink hover*/
 
 .welcomeMessage {
     position: fixed;
-    top: 61%;
-    left: 35%;
+    top: 61vh;
+    left: 60vh;
     color: #000055;
 } /*welcome to smiley*/
 
 .reflectionWelcomeMessage {
     position: fixed;
-    top: 60%;
-    left: 35%;
+    top: 60vh;
+    left: 60vh;
     color: rgba(0, 0, 85, 0.1);
     transform: scaleY(-1); /* Flip vertically */
     transform-origin: bottom; /* Set transform origin to bottom */
 } /*welcome to smiley reflection*/
-
-.logoContainer {
-    position: fixed;
-    top: 7%;
-    left: 7%;
-    display: block;
-} /*smiley logo*/
-
-.logoContainer h1 {
-    color: #000055;
-    font-size: 22px;
-    letter-spacing: 1px;
-    margin: 0;
-} /*smiley logo text*/
-
-.logo {
-    width: 50%;
-    height: 50%;
-} /*smiley logo image*/
-
-.logoShake {
-    width: 50%;
-    height: 50%;
-    animation: spin 3s ease;
-}
-
-/* Shake animation */
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(-30deg);
-    }
-    50% {
-        transform: rotate(30deg);
-    }
-    100% {
-        transform: rotate(-360deg);
-    }
-}
 
 /*///////////////////////////////////////*/
 /* APPLIES TO DASHBOARD AFTER LOGIN PAGE */
@@ -121,32 +80,44 @@
     align-items: center;
     min-height: 100vh;
     /*background: linear-gradient(hsl(239, 100%, 82%), #c6ecff 50%);*/
-    background: url("https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
-        no-repeat;
+    background: url("./avocados.png") no-repeat;
     background-size: cover;
     background-position: center;
+    user-select: none;
 } /*acts as the body{}*/
 
-.buttonGroup {
-    width: 100%;
-    height: 45px;
-    border: none;
-    outline: none;
-    border-radius: 30px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    background: linear-gradient(to right, #3227b0, #408bfb);
-    margin-top: 20px;
-    margin-bottom: 20px;
-} /*button*/
+.linkGroup2 {
+    display: flex;
+    position: fixed;
+    top: 7vh;
+    right: 15vh;
+} /*hyperlink to other pages*/
 
+.linkGroup2 button {
+    /*border: 2px solid rgba(0, 83, 124, 0.3);*/
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin: 10px;
+    /*color: #000055;*/
+    color: aliceblue;
+    background: none;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+} /*hyperlink text*/
+
+.linkGroup2 button:hover {
+    background-color: rgba(0, 124, 185, 0.3);
+} /*hyperlink hover*/
+
+/*Applies to all dashboard pages*/
 /*Dashboard attribution*/
 .attributionGroup {
     display: flex;
-    bottom: 1%;
-    right: 1%;
+    bottom: 1vh;
+    right: 1vw;
     position: fixed;
     color: rgb(255, 255, 255);
     font-size: 8px;
@@ -172,5 +143,47 @@
     to {
         transform: scale(2);
         opacity: 0;
+    }
+}
+
+/*smiley logo*/
+.logoContainer {
+    position: fixed;
+    top: 7vh;
+    left: 13vh;
+    display: block;
+} /*smiley logo*/
+
+.logoContainer h1 {
+    color: #000055;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin: 0;
+} /*smiley logo text*/
+
+.logo {
+    width: 50%;
+    height: 50%;
+} /*smiley logo image*/
+
+.logoShake {
+    width: 50%;
+    height: 50%;
+    animation: spin 3s ease;
+} /*smiley logo image on click*/
+
+/* Shake animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-30deg);
+    }
+    50% {
+        transform: rotate(30deg);
+    }
+    100% {
+        transform: rotate(-360deg);
     }
 }
