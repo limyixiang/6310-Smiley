@@ -36,11 +36,13 @@ exports.createCourse = async (req, res) => {
             courseCode: req.body.courseCode,
             user: user,
         });
-        const userCourses = user.courses;
-        userCourses[userCourses.length] = course;
-        const tasks = req.body.tasks;
+        const courseOrder = req.body.courseOrder;
+        const index = courseOrder.indexOf("temp");
+        courseOrder[index] = course._id;
+        user.courses = courseOrder;
         await course.save();
         await user.save();
+        const tasks = req.body.tasks;
         for (const task of tasks) {
             const refDate = new Date();
             refDate.setHours(0, 0, 0, 0);
@@ -67,6 +69,11 @@ exports.createCourse = async (req, res) => {
             }
         }
         console.log("Tasks created successfully");
+        for (const courseid of req.body.courseOrder) {
+            const course = await Course.findById(courseid);
+            course.priority = req.body.courseOrder.indexOf(courseid);
+            await course.save();
+        }
         return res
             .status(201)
             .json({ message: "Course created successfully", data: course });

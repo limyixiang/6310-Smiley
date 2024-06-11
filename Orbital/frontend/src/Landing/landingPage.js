@@ -228,12 +228,15 @@ function LandingPage() {
                     });
                 }
             }
-            console.log(tasks);
+            // console.log(tasks);
+            console.log(temporaryCourses);
+            const courseOrder = temporaryCourses.map((course) => course._id);
             createCourse({
                 courseName: courseName,
                 courseCode: courseCode,
                 userid: user._id,
                 tasks: tasks,
+                courseOrder: courseOrder,
             })
                 .then((data) => {
                     if (data.error) {
