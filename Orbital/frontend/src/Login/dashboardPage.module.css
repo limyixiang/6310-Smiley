@@ -33,7 +33,7 @@
     display: flex;
     position: fixed;
     top: 7vh;
-    right: 15vh;
+    right: 10vw;
 } /*hyperlink to other pages*/
 
 .linkGroup1 a {
@@ -54,14 +54,14 @@
 .welcomeMessage {
     position: fixed;
     top: 61vh;
-    left: 60vh;
+    left: 35vw;
     color: #000055;
 } /*welcome to smiley*/
 
 .reflectionWelcomeMessage {
     position: fixed;
     top: 60vh;
-    left: 60vh;
+    left: 35vw;
     color: rgba(0, 0, 85, 0.1);
     transform: scaleY(-1); /* Flip vertically */
     transform-origin: bottom; /* Set transform origin to bottom */
@@ -90,7 +90,7 @@
     display: flex;
     position: fixed;
     top: 7vh;
-    right: 15vh;
+    right: 10vw;
 } /*hyperlink to other pages*/
 
 .linkGroup2 button {
@@ -150,7 +150,7 @@
 .logoContainer {
     position: fixed;
     top: 7vh;
-    left: 13vh;
+    left: 7vw;
     display: block;
 } /*smiley logo*/
 

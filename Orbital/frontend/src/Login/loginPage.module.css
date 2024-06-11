@@ -30,7 +30,7 @@
 } /*acts as the body{}*/
 
 .formContainer {
-    width: 55vh;
+    width: 30vw;
     /*background: transparent;*/
     background: rgb(241, 250, 255, 0.7);
     border: 2px solid rgba(8, 5, 76, 0.2);
@@ -75,7 +75,7 @@
 .formGroup i {
     position: relative;
     top: -4.25vh;
-    left: 19vh;
+    left: 10vw;
     color: #000055;
 } /*icon in input box*/
 
@@ -213,7 +213,7 @@
 .logoContainer {
     position: fixed;
     top: 7vh;
-    left: 13vh;
+    left: 7vw;
     display: block;
 } /*smiley logo*/
 
