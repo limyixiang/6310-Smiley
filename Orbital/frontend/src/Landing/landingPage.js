@@ -264,7 +264,9 @@ function LandingPage() {
     // Task inputted shown below
     const handleAddTask = async (event) => {
         event.preventDefault();
-        // console.log(dueDate);
+        // console.log(new Date(dueDate).toLocaleString());
+        // const test = new Date(Date.now()).setHours(0, 0, 0, 0);
+        // console.log(new Date(test).toLocaleString());
         if (taskCourseId === "") {
             setErr("Please select a course.");
             return;

@@ -17,24 +17,65 @@ const insertTaskByDate = async (arr, newDeadline, task) => {
     );
     // Create a new array of tasks ordered according to the arr array
     const iTasks = arr.map((id) => iTasksMap.get(id.toString()));
+    const newCourse = await Course.findById(task.course);
     for (let i = 0; i < numTasks; i++) {
-        // const iTask = await Task.findById(arr[i]);
         const iTask = iTasks[i];
         const iDeadline = new Date(iTask.dueDate).getTime();
+        // If the new task's deadline is earlier than the current task's deadline, insert the new task before the current task
+        // If the new task's deadline is later than the current task's deadline, insert the new task after the current task
+        // If the new task's deadline is the same as the current task's deadline, insert by order of task priority
         if (newDeadline < iDeadline) {
             arr.splice(i, 0, task);
             break;
         } else if (newDeadline == iDeadline) {
-            if (i === numTasks - 1) {
-                arr.splice(i + 1, 0, task);
+            // If the new task's priority is higher than the current task's priority, insert the new task before the current task
+            // If the new task's priority is lower than the current task's priority, insert the new task after the current task
+            // If the new task's priority is the same as the current task's priority, insert by order of course priority
+            if (task.priority === "High" && iTask.priority !== "High") {
+                arr.splice(i, 0, task);
                 break;
-            } else {
-                const nextDeadline = new Date(
-                    (await Task.findById(arr[i + 1])).dueDate
-                ).getTime();
-                if (newDeadline < nextDeadline) {
-                    arr.splice(i + 1, 0, task);
+            } else if (task.priority === iTask.priority) {
+                const iCourse = await Course.findById(iTask.course);
+                // highest priority is 0, followed by 1, 2, 3, ...
+                if (newCourse.priority < iCourse.priority) {
+                    arr.splice(i, 0, task);
                     break;
+                } else if (newCourse.priority === iCourse.priority) {
+                    // If the new task's course priority is the same as the current task's course priority, insert by order of task name
+                    if (task.taskName < iTask.taskName) {
+                        arr.splice(i, 0, task);
+                        break;
+                    } else if (task.taskName === iTask.taskName) {
+                        // If the current task position is the last in the array, insert the new task after the current task
+                        if (i === numTasks - 1) {
+                            arr.splice(i + 1, 0, task);
+                            break;
+                        } else {
+                            const nextDeadline = new Date(
+                                iTasks[i + 1].dueDate
+                            ).getTime();
+                            if (newDeadline < nextDeadline) {
+                                arr.splice(i + 1, 0, task);
+                                break;
+                            } else if (newDeadline === nextDeadline) {
+                                const nextTask = iTasks[i + 1];
+                                const nextCourse = await Course.findById(
+                                    nextTask.course
+                                );
+                                if (newCourse.priority < nextCourse.priority) {
+                                    arr.splice(i + 1, 0, task);
+                                    break;
+                                } else if (
+                                    newCourse.priority === nextCourse.priority
+                                ) {
+                                    if (task.taskName < nextTask.taskName) {
+                                        arr.splice(i + 1, 0, task);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -59,42 +100,128 @@ const insertTaskByPriority = async (arr, newDeadline, task) => {
     );
     // Create a new array of tasks ordered according to the arr array
     const iTasks = arr.map((id) => iTasksMap.get(id.toString()));
+    const newCourse = await Course.findById(task.course);
     for (let i = 0; i < numTasks; i++) {
-        // const iTask = await Task.findById(arr[i]);
         const iTask = iTasks[i];
+        // If the new task's priority is higher than the current task's priority, insert the new task before the current task
         if (task.priority === "High") {
             if (iTask.priority !== "High") {
                 arr.splice(i, 0, task);
                 break;
             } else {
+                // If both the new task's priority and the current task's priority are high, insert by order of deadline
                 const iDeadline = new Date(iTask.dueDate).getTime();
                 if (newDeadline < iDeadline) {
                     arr.splice(i, 0, task);
                     break;
                 } else if (newDeadline === iDeadline) {
-                    if (i === numTasks - 1) {
-                        arr.splice(i + 1, 0, task);
+                    // If the new task's deadline is the same as the current task's deadline, insert by order of course priority
+                    const iCourse = await Course.findById(iTask.course);
+                    if (newCourse.priority < iCourse.priority) {
+                        arr.splice(i, 0, task);
                         break;
-                    } else {
-                        const nextDeadline = new Date(
-                            (await Task.findById(arr[i + 1])).dueDate
-                        ).getTime();
-                        if (newDeadline < nextDeadline) {
-                            arr.splice(i + 1, 0, task);
+                    } else if (newCourse.priority === iCourse.priority) {
+                        // If the new task's course priority is the same as the current task's course priority, insert by order of task name
+                        if (task.taskName < iTask.taskName) {
+                            arr.splice(i, 0, task);
                             break;
+                        } else if (task.taskName === iTask.taskName) {
+                            // If the current task position is the last in the array or the next task is not High priority, insert the new task after the current task
+                            if (
+                                i === numTasks - 1 ||
+                                iTasks[i + 1].priority !== "High"
+                            ) {
+                                arr.splice(i + 1, 0, task);
+                                break;
+                            } else {
+                                // If the new task's deadline is earlier than the next task's deadline, insert the new task before the next task
+                                const nextDeadline = new Date(
+                                    iTasks[i + 1].dueDate
+                                ).getTime();
+                                if (newDeadline < nextDeadline) {
+                                    arr.splice(i + 1, 0, task);
+                                    break;
+                                } else if (newDeadline === nextDeadline) {
+                                    // If the new task's deadline is the same as the next task's deadline, insert by order of course priority
+                                    const nextTask = iTasks[i + 1];
+                                    const nextCourse = await Course.findById(
+                                        nextTask.course
+                                    );
+                                    if (
+                                        newCourse.priority < nextCourse.priority
+                                    ) {
+                                        arr.splice(i + 1, 0, task);
+                                        break;
+                                    } else if (
+                                        newCourse.priority ===
+                                        nextCourse.priority
+                                    ) {
+                                        // If the new task's course priority is the same as the next task's course priority, insert by order of task name
+                                        if (task.taskName < nextTask.taskName) {
+                                            arr.splice(i + 1, 0, task);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         } else {
+            // New Task is Low Priority
             if (iTask.priority === "Low") {
                 const iDeadline = new Date(iTask.dueDate).getTime();
+                // If the new task's deadline is earlier than the current task's deadline, insert the new task before the current task
                 if (newDeadline < iDeadline) {
                     arr.splice(i, 0, task);
                     break;
                 } else if (newDeadline === iDeadline) {
-                    arr.splice(i + 1, 0, task);
-                    break;
+                    // If the new task's deadline is the same as the current task's deadline, insert by order of course priority
+                    const iCourse = await Course.findById(iTask.course);
+                    if (newCourse.priority < iCourse.priority) {
+                        arr.splice(i, 0, task);
+                        break;
+                    } else if (newCourse.priority === iCourse.priority) {
+                        // If the new task's course priority is the same as the current task's course priority, insert by order of task name
+                        if (task.taskName < iTask.taskName) {
+                            arr.splice(i, 0, task);
+                            break;
+                        } else if (task.taskName === iTask.taskName) {
+                            // If the current task position is the last in the array, insert the new task after the current task
+                            if (i === numTasks - 1) {
+                                arr.splice(i + 1, 0, task);
+                                break;
+                            } else {
+                                const nextDeadline = new Date(
+                                    iTasks[i + 1].dueDate
+                                ).getTime();
+                                if (newDeadline < nextDeadline) {
+                                    arr.splice(i + 1, 0, task);
+                                    break;
+                                } else if (newDeadline === nextDeadline) {
+                                    const nextTask = iTasks[i + 1];
+                                    const nextCourse = await Course.findById(
+                                        nextTask.course
+                                    );
+                                    if (
+                                        newCourse.priority < nextCourse.priority
+                                    ) {
+                                        arr.splice(i + 1, 0, task);
+                                        break;
+                                    } else if (
+                                        newCourse.priority ===
+                                        nextCourse.priority
+                                    ) {
+                                        if (task.taskName < nextTask.taskName) {
+                                            arr.splice(i + 1, 0, task);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -117,9 +244,11 @@ exports.createTask = async (req, res) => {
         // console.log(req);
         const user = await User.findById(req.body.userid);
         const course = await Course.findById(req.body.courseid);
+        const dueDate = new Date(req.body.dueDate);
+        dueDate.setHours(0, 0, 0, 0);
         const task = new Task({
             taskName: req.body.taskName,
-            dueDate: req.body.dueDate,
+            dueDate: dueDate,
             priority: req.body.priority,
             user: user,
             course: course,
