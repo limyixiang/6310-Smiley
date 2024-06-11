@@ -3,8 +3,10 @@ const router = express.Router();
 const { check } = require("express-validator");
 const {
     createTask,
-    getTasksForUser,
-    getTasksForCourse,
+    getTasksByDateForUser,
+    getTasksByPriorityForUser,
+    getTasksByDateForCourse,
+    getTasksByPriorityForCourse,
     completeTask,
     reverseCompleteTask,
     deleteTask,
@@ -21,10 +23,12 @@ router.post(
     ],
     createTask
 );
-router.post("/gettasksforuser", getTasksForUser);
-router.post("/gettasksforcourse", getTasksForCourse);
+router.post("/gettasksbydateforuser", getTasksByDateForUser);
+router.post("/gettasksbypriorityforuser", getTasksByPriorityForUser);
+router.post("/gettasksbydateforcourse", getTasksByDateForCourse);
+router.post("/gettasksbypriorityforcourse", getTasksByPriorityForCourse);
 router.post("/completetask", completeTask);
 router.post("/reversecompletetask", reverseCompleteTask);
-router.delete("/deletetask/:id", deleteTask); // Route for deleting a task
+router.delete("/deletetask/:id", deleteTask);
 
 module.exports = router;

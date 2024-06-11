@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { forgetPasswordReset } from "../Backend";
-import "./resetPassword.css";
+import styles from "./loginPage.module.css";
+import logo from "./smileytransparent.jpg";
 
 // ResetPassword component for the forget password page
 export function ForgetPassword() {
@@ -14,6 +16,8 @@ export function ForgetPassword() {
 
     // Destructuring values from the state
     const { password, password2, error, loading, success } = inputValue;
+
+    const [isShaking, setShaking] = useState(false); // State for shaking animation
 
     // Handles changes in the input fields
     const handleInputChange = (name) => (event) => {
@@ -70,7 +74,7 @@ export function ForgetPassword() {
     const errorMessage = () => {
         return (
             <div
-                className="error-message"
+                className={styles.errorMessage}
                 style={{ display: error ? "" : "none", color: "red" }}
             >
                 {error}
@@ -82,79 +86,139 @@ export function ForgetPassword() {
     const successMessage = () => {
         return (
             <div
-                className="success-message"
+                className={styles.successMessage}
                 style={{ display: success ? "" : "none", color: "green" }}
             >
-                <p>
-                    Password has been reset successfully. Please proceed to{" "}
+                <div className={styles.linkGroup}>
+                    Password has been reset successfully. Please proceed to
+                    {"  "}
                     <a href="/signin">login</a>.
-                </p>
+                </div>
             </div>
         );
     };
+    const handleClick = (e) => {
+        const rippleContainer = e.currentTarget;
+        const rippleSize = 30; // Adjust the size of the ripple
+        const numRipples = 2; // Number of ripples
+        const delay = 250; // Delay between each ripple
+
+        for (let i = 0; i < numRipples; i++) {
+            setTimeout(() => {
+                const ripple = document.createElement("div");
+                ripple.classList.add(styles.ripple);
+                ripple.style.width = ripple.style.height = `${rippleSize}px`;
+                ripple.style.left = `${
+                    e.clientX -
+                    rippleContainer.getBoundingClientRect().left -
+                    rippleSize / 2
+                }px`;
+                ripple.style.top = `${
+                    e.clientY -
+                    rippleContainer.getBoundingClientRect().top -
+                    rippleSize / 2
+                }px`;
+                rippleContainer.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000); // Adjust this value to match the animation duration
+            }, i * delay);
+        }
+    };
+    const handleSmileyClick = () => {
+        setShaking(true);
+        setTimeout(() => {
+            setShaking(false);
+        }, 3000); // Adjust this value to match the animation duration
+    };
 
     return (
-        <div className="form-container">
-            <div className="form-box">
-                <h2>Reset Password</h2>
-                {successMessage()}
-                <div className="form-group">
-                    <label htmlFor="password">Enter your new password:</label>
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={handleInputChange("password")}
-                        placeholder="Password"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">
-                        Re-enter your new password:
-                    </label>
-                    <input
-                        id="password2"
-                        type="password"
-                        value={password2}
-                        onChange={handleInputChange("password2")}
-                        placeholder="Re-enter password"
-                        required
-                    />
-                </div>
-                <p className="password-requirements">
-                    Password should contain at least 8 characters, with at least
-                    1 uppercase, 1 lowercase and 1 number.
-                </p>
-                {errorMessage()}
-                <div className="form-button">
-                    <button
-                        id="button"
-                        className="button"
-                        onClick={handleOnSubmit}
-                        style={{ display: loading ? "none" : "block" }}
-                    >
-                        Reset Password
-                    </button>
-                    <div
-                        className="spinner"
-                        id="spinner"
-                        style={{ display: loading ? "block" : "none" }}
-                    >
-                        <div className="loading-spinner"></div>
-                        <p>Loading...</p>
-                    </div>
-                </div>
-                <div className="link">
-                    <center>
-                        <p className="resetpassword-to-login">
-                            <b>
-                                <a href="/signin">Back to Login</a>
-                            </b>
-                        </p>
-                    </center>
-                </div>
+        <div className={styles.mainContainer}>
+            <Helmet>
+                <link
+                    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+                    rel="stylesheet"
+                />
+            </Helmet>
+            <div className={styles.rippleContainer} onClick={handleClick}>
+                <div className={styles.ripple}></div>
             </div>
+            <div className={styles.formContainer}>
+                <form>
+                    <h2 className={styles.formTitle}>Reset Password</h2>
+                    {successMessage()}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="password">
+                            Enter your new password:
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={handleInputChange("password")}
+                            placeholder="Password"
+                            required
+                        />
+                        <i class="bx bxs-lock-alt"></i>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="password">
+                            Re-enter your new password:
+                        </label>
+                        <input
+                            id="password2"
+                            type="password"
+                            value={password2}
+                            onChange={handleInputChange("password2")}
+                            placeholder="Re-enter password"
+                            required
+                        />
+                        <i class="bx bxs-lock-alt"></i>
+                    </div>
+                    <p className={styles.passwordRequirements}>
+                        Password should contain at least 8 characters, with at
+                        least 1 uppercase, 1 lowercase and 1 number.
+                    </p>
+                    {errorMessage()}
+                    <div>
+                        <button
+                            id="button"
+                            className={styles.buttonGroup}
+                            onClick={handleOnSubmit}
+                            style={{ display: loading ? "none" : "block" }}
+                        >
+                            Reset Password
+                        </button>
+                        <div
+                            className={styles.spinner}
+                            id="spinner"
+                            style={{ display: loading ? "block" : "none" }}
+                        >
+                            <div className={styles.loadingSpinner}></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                    <div className={styles.linkGroup}>
+                        <a href="/signin">Back to Login</a>
+                    </div>
+                </form>
+            </div>
+            <div className={styles.logoContainer}>
+                <img
+                    src={logo}
+                    alt="SmileyLogo"
+                    className={isShaking ? styles.logoShake : styles.logo}
+                    onClick={handleSmileyClick}
+                />
+                <h1>SMILEY</h1>
+            </div>
+            <a
+                className={styles.attributionGroup}
+                href="https://www.vecteezy.com/free-vector/mountain"
+            >
+                Mountain Vectors by Vecteezy
+            </a>
         </div>
     );
 }

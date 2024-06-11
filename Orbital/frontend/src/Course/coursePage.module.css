@@ -1,0 +1,88 @@
+.mainContainer {
+    display: block;
+    justify-content: space-between;
+    padding: 20px;
+    margin: 30px 10px;
+}
+
+.courseHeader {
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    font-size: xx-large;
+}
+
+.courseTasksContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    justify-content: left;
+    float: left;
+}
+
+.sortByLabel {
+    font-size: 16px;
+    padding-left: 7%;
+    text-align: left;
+}
+
+.upcomingCompletedContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: left;
+    font-size: 20px;
+}
+
+.courseTasksList {
+    display: flex;
+    flex-direction: column;
+    float: left;
+    padding: 20px;
+    gap: 20px;
+}
+
+.courseTaskItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.courseTaskItem input {
+    flex: 1;
+    margin: 0px;
+}
+
+.taskItemDescriptor {
+    flex: 20;
+    text-align: left;
+    font-size: 16px;
+}
+
+.deadlineDescriptor {
+    font-size: 12px;
+}
+
+/*link back to course page*/
+.courseToLandingPage {
+    position: fixed;
+    bottom: 50px;
+    right: 100px;
+    margin: 20px;
+    font-size: 14px;
+}
+
+.courseToLandingPage a {
+    color: rgb(55, 0, 128);
+    text-decoration: none;
+}
+
+.courseToLandingPage a:hover {
+    text-decoration: underline;
+}

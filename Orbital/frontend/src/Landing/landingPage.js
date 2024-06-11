@@ -1,12 +1,13 @@
 import { React, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 import {
     createCourse,
     createTask,
     getCourses,
     completeTask,
-    getTasksForUser,
+    getTasksByDateForUser,
+    getTasksByPriorityForUser,
     reverseCompleteTask,
     deleteCourse,
     deleteTask,
@@ -15,7 +16,12 @@ import CourseContainer from "./courseContainer";
 import TaskContainer from "./taskContainer";
 
 function LandingPage() {
-    const [refresh, setRefresh] = useState(false);
+    const [landingPageValues, setLandingPageValues] = useState({
+        refresh: false,
+        sortBy: "date",
+        viewTasks: "thisWeek",
+    });
+
     const [err, setErr] = useState("");
 
     const [courseValues, setCourseValues] = useState({
@@ -23,6 +29,25 @@ function LandingPage() {
         courseName: "",
         courseCode: "",
     });
+
+    const defaultTasks = [
+        { taskName: "Tutorial", taskPriority: "Low" },
+        { taskName: "Lecture", taskPriority: "Low" },
+        { taskName: "Quiz", taskPriority: "High" },
+    ];
+
+    const [courseModalTasks, setCourseModalTasks] = useState({
+        isSelected: [],
+        reminderDay: [],
+        reminderFrequency: [],
+        reminderNumberOfRepeats: [],
+        recurringTaskName: defaultTasks.map((task) => task.taskName),
+        recurringTaskPriorityLevel: defaultTasks.map(
+            (task) => task.taskPriority
+        ),
+    });
+
+    // console.log(courseModalTasks);
 
     const [taskValues, setTaskValues] = useState({
         openModalType: null,
@@ -32,8 +57,19 @@ function LandingPage() {
         dueDate: "",
     });
 
+    const [temporaryCourses, setTemporaryCourses] = useState([]);
+
     // Destructuring values from the state
+    const { refresh, sortBy, viewTasks } = landingPageValues;
     const { courseName, courseCode } = courseValues;
+    const {
+        isSelected,
+        reminderDay,
+        reminderFrequency,
+        reminderNumberOfRepeats,
+        recurringTaskName,
+        recurringTaskPriorityLevel,
+    } = courseModalTasks;
     const { taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
@@ -45,21 +81,33 @@ function LandingPage() {
     useEffect(() => {
         console.log("Fetching data");
         getCourses({ userid: user._id })
-            .then((data) => setCourses(data))
+            .then((data) => {
+                setCourses(data);
+            })
             .then(() =>
-                getTasksForUser({ userid: user._id }).then((data) =>
-                    setTasks(data)
-                )
+                sortBy === "date"
+                    ? getTasksByDateForUser({ userid: user._id }).then((data) =>
+                          setTasks(rearrangeTasks(data))
+                      )
+                    : getTasksByPriorityForUser({ userid: user._id }).then(
+                          (data) => setTasks(rearrangeTasks(data))
+                      )
             )
-            .then(() => setRefresh(false))
+            .then(() => {
+                setLandingPageValues((prevValues) => ({
+                    ...prevValues,
+                    refresh: false,
+                }));
+                setTemporaryCourses([]);
+            })
             .catch((err) => console.error("Error fetching data:", err));
-    }, [refresh, user._id]);
+    }, [refresh, user._id, sortBy]);
 
     // Displays error message if there's any
     const errorMessage = () => {
         return (
             <div
-                className="error-message"
+                className={styles.errorMessage}
                 style={{ display: err ? "" : "none", color: "red" }}
             >
                 {err}
@@ -75,11 +123,27 @@ function LandingPage() {
                   error: false,
                   [name]: event.target.value,
               })
-            : setTaskValues({
+            : type === "task"
+            ? setTaskValues({
                   ...taskValues,
                   error: false,
                   [name]: event.target.value,
+              })
+            : setLandingPageValues({
+                  ...landingPageValues,
+                  [name]: event.target.value,
               });
+    };
+
+    // Handles changes in the Add Course Modal
+    const handleCourseModalInputChange = (name, index) => (event) => {
+        const newCourseModalTasks = { ...courseModalTasks };
+        if (name === "isSelected") {
+            newCourseModalTasks[name][index] = event.target.checked;
+        } else {
+            newCourseModalTasks[name][index] = event.target.value;
+        }
+        setCourseModalTasks(newCourseModalTasks);
     };
 
     // Handles open and closing of course popup
@@ -100,23 +164,35 @@ function LandingPage() {
 
     // Closes the popup and reset all values
     const closeModal = (modalType) => {
-        modalType === "course"
-            ? setCourseValues((courseValues) => ({
-                  ...courseValues,
-                  courseCode: "",
-                  courseName: "",
-                  openModalType: null,
-              }))
-            : setTaskValues((taskValues) => ({
-                  ...taskValues,
-                  taskCourseId: "",
-                  priorityLevel: "",
-                  taskName: "",
-                  dueDate: "",
-                  openModalType: null,
-              }));
+        if (modalType === "course") {
+            setCourseValues((courseValues) => ({
+                ...courseValues,
+                courseCode: "",
+                courseName: "",
+                openModalType: null,
+            }));
+            setCourseModalTasks({
+                isSelected: [],
+                reminderDay: [],
+                reminderFrequency: [],
+                reminderNumberOfRepeats: [],
+                recurringTaskName: defaultTasks.map((task) => task.taskName),
+                recurringTaskPriorityLevel: defaultTasks.map(
+                    (task) => task.taskPriority
+                ),
+            });
+        } else {
+            setTaskValues((taskValues) => ({
+                ...taskValues,
+                taskCourseId: "",
+                priorityLevel: "",
+                taskName: "",
+                dueDate: "",
+                openModalType: null,
+            }));
+        }
         setErr("");
-        setRefresh(true);
+        setLandingPageValues({ ...landingPageValues, refresh: true });
     };
 
     // Course inputted shown below
@@ -128,10 +204,40 @@ function LandingPage() {
             setErr("Invalid course name.");
             return;
         } else {
+            const numberOfTypesOfTasks = isSelected.length;
+            const tasks = [];
+            for (let i = 0; i < numberOfTypesOfTasks; i++) {
+                if (isSelected[i]) {
+                    if (
+                        !reminderDay[i] ||
+                        !reminderFrequency[i] ||
+                        !reminderNumberOfRepeats[i] ||
+                        !recurringTaskName[i] ||
+                        recurringTaskName[i] === "" ||
+                        !recurringTaskPriorityLevel[i]
+                    ) {
+                        setErr("One or more task fields are empty.");
+                        return;
+                    }
+                    tasks.push({
+                        reminderDay: reminderDay[i],
+                        reminderFrequency: reminderFrequency[i],
+                        reminderNumberOfRepeats: reminderNumberOfRepeats[i],
+                        recurringTaskName: recurringTaskName[i],
+                        recurringTaskPriorityLevel:
+                            recurringTaskPriorityLevel[i],
+                    });
+                }
+            }
+            // console.log(tasks);
+            console.log(temporaryCourses);
+            const courseOrder = temporaryCourses.map((course) => course._id);
             createCourse({
                 courseName: courseName,
                 courseCode: courseCode,
                 userid: user._id,
+                tasks: tasks,
+                courseOrder: courseOrder,
             })
                 .then((data) => {
                     if (data.error) {
@@ -149,14 +255,18 @@ function LandingPage() {
     const handleDeleteCourse = async (event, courseId) => {
         event.preventDefault();
         deleteCourse(courseId)
-            .then(() => setRefresh(true))
+            .then(() =>
+                setLandingPageValues({ ...landingPageValues, refresh: true })
+            )
             .catch();
     };
 
     // Task inputted shown below
     const handleAddTask = async (event) => {
         event.preventDefault();
-        // console.log(dueDate);
+        // console.log(new Date(dueDate).toLocaleString());
+        // const test = new Date(Date.now()).setHours(0, 0, 0, 0);
+        // console.log(new Date(test).toLocaleString());
         if (taskCourseId === "") {
             setErr("Please select a course.");
             return;
@@ -200,7 +310,9 @@ function LandingPage() {
     // Task deleted shown below
     const handleDeleteTask = async (taskId) => {
         deleteTask(taskId)
-            .then(() => setRefresh(true))
+            .then(() =>
+                setLandingPageValues({ ...landingPageValues, refresh: true })
+            )
             .catch();
     };
 
@@ -209,37 +321,111 @@ function LandingPage() {
         console.log(task);
         if (task.status === "Done") {
             reverseCompleteTask({ taskid: task._id }).then(() =>
-                setRefresh(true)
+                setLandingPageValues({ ...landingPageValues, refresh: true })
             );
         } else {
-            completeTask({ taskid: task._id }).then(() => setRefresh(true));
+            completeTask({ taskid: task._id }).then(() =>
+                setLandingPageValues({ ...landingPageValues, refresh: true })
+            );
         }
     };
 
+    // Rearranges tasks such that completed tasks are at the bottom
+    const rearrangeTasks = (tasks) => {
+        const completedTasks = [];
+        const incompleteTasks = [];
+        tasks.forEach((task) => {
+            if (task.status === "Done") {
+                completedTasks.push(task);
+            } else {
+                incompleteTasks.push(task);
+            }
+        });
+        const rearrangedTasks = [...incompleteTasks, ...completedTasks];
+        return rearrangedTasks;
+    };
+
+    const getTemporaryCourseArray = () => {
+        return courses.map((course) => ({
+            _id: course._id,
+            courseCode: course.courseCode,
+            courseName: course.courseName,
+        }));
+    };
+
+    const handleAddToTemporaryCourseArray = () => {
+        // Check if both course code and course name are provided
+        if (courseValues.courseCode && courseValues.courseName) {
+            // Add courseValues to temporaryCourses array
+            const tempArray = getTemporaryCourseArray();
+            tempArray[courses.length] = {
+                _id: "temp",
+                courseCode: courseValues.courseCode,
+                courseName: courseValues.courseName,
+            };
+            setTemporaryCourses(tempArray);
+        } else if (temporaryCourses.length !== courses.length) {
+            setTemporaryCourses(getTemporaryCourseArray());
+        }
+    };
+
+    const handleOnDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        const { source, destination } = result;
+        // If item dropped in the same position, do nothing
+        if (source.index === destination.index) {
+            return;
+        }
+        const updatedCourses = Array.from(temporaryCourses);
+        const [reorderedItem] = updatedCourses.splice(source.index, 1);
+        updatedCourses.splice(destination.index, 0, reorderedItem);
+        setTemporaryCourses(updatedCourses);
+    };
+
     return (
-        <div className="main-container">
+        <div className={styles.mainContainer}>
             <CourseContainer
-                openCourseModal={openCourseModal}
+                user={user}
+                courses={courses}
                 courseValues={courseValues}
+                courseModalTasks={courseModalTasks}
+                temporaryCourses={temporaryCourses}
+                defaultTasks={defaultTasks}
+                openCourseModal={openCourseModal}
                 handleInputChange={handleInputChange}
+                handleCourseModalInputChange={handleCourseModalInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
-                courses={courses}
                 handleDeleteCourse={handleDeleteCourse}
                 errorMessage={errorMessage}
+                handleAddToTemporaryCourseArray={
+                    handleAddToTemporaryCourseArray
+                }
+                handleOnDragEnd={handleOnDragEnd}
             />
             <TaskContainer
+                viewTasks={viewTasks}
                 courses={courses}
                 tasks={tasks}
+                taskValues={taskValues}
+                landingPageValues={landingPageValues}
                 openTaskModal={openTaskModal}
                 handleInputChange={handleInputChange}
                 closeModal={closeModal}
                 handleAddTask={handleAddTask}
                 handleDeleteTask={handleDeleteTask}
-                taskValues={taskValues}
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />
+            <center>
+                <p className={styles.linkGroup}>
+                    <b>
+                        <a href="/">Back to Dashboard</a>
+                    </b>
+                </p>
+            </center>
         </div>
     );
 }

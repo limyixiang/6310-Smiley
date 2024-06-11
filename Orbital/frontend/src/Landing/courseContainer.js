@@ -1,25 +1,32 @@
-import "./landingPage.css";
+import styles from "./landingPage.module.css";
 import AddCourseModal from "./addCourseModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 function CourseContainer({
+    user,
     courses,
+    courseValues,
+    courseModalTasks,
+    temporaryCourses,
+    defaultTasks,
     openCourseModal,
     handleInputChange,
+    handleCourseModalInputChange,
     closeModal,
     handleAddCourse,
     handleDeleteCourse,
-    courseValues,
     errorMessage,
+    handleAddToTemporaryCourseArray,
+    handleOnDragEnd,
 }) {
     return (
-        <div className="courses-container">
-            <div className="courses-header">
+        <div className={styles.coursesContainer}>
+            <div className={styles.coursesHeader}>
                 <h2>Your Courses</h2>
                 <button
-                    className="add-a-course-button"
+                    className={styles.buttonGroup}
                     onClick={openCourseModal}
                 >
                     Add a course
@@ -27,26 +34,37 @@ function CourseContainer({
             </div>
             <AddCourseModal
                 courseValues={courseValues}
+                courseModalTasks={courseModalTasks}
+                temporaryCourses={temporaryCourses}
+                defaultTasks={defaultTasks}
                 handleInputChange={handleInputChange}
+                handleCourseModalInputChange={handleCourseModalInputChange}
                 closeModal={closeModal}
                 handleAddCourse={handleAddCourse}
                 errorMessage={errorMessage}
+                handleAddToTemporaryCourseArray={
+                    handleAddToTemporaryCourseArray
+                }
+                handleOnDragEnd={handleOnDragEnd}
             />
             {/* only display courseCode */}
-            <div className="courses-list">
+            <div className={styles.coursesList}>
                 {courses.map((course, index) => (
                     <Link
                         key={index}
                         to={"/coursepage"}
-                        state={{ course: course }}
+                        state={{
+                            course: course,
+                            user: user,
+                        }}
                     >
-                        <div className="course-item">
-                            <div className="course-item-text">
+                        <div className={styles.courseItem}>
+                            <div className={styles.courseItemText}>
                                 {course.courseCode}
                             </div>
                             <div>
                                 <FontAwesomeIcon
-                                    className="trashcan course-trashcan"
+                                    className={`${styles.trashcan} ${styles.courseTrashcan}`}
                                     icon={faTrashCan}
                                     onClick={(event) =>
                                         handleDeleteCourse(event, course._id)

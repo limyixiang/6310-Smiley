@@ -1,0 +1,253 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /*ensures that padding and border are included in total width and height*/
+    font-family: "Calibri", sans-serif;
+} /*applies to all CSS files*/
+
+/*/////////////////////////////////////////////////////////////////*/
+/* APPLIES TO SIGNIN, SIGNUP, FORGETPASSWORD, RESETPASSWORD PAGES */
+/*/////////////////////////////////////////////////////////////////*/
+
+.mainContainer {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /*background: linear-gradient(hsl(239, 100%, 82%), #c6ecff 40%);*/
+    background: url("./mountain2.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+    user-select: none;
+} /*acts as the body{}*/
+
+.formContainer {
+    width: 30vw;
+    /*background: transparent;*/
+    background: rgb(241, 250, 255, 0.7);
+    border: 2px solid rgba(8, 5, 76, 0.2);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #000055;
+    border-radius: 10px;
+    padding: 30px 30px;
+} /*box in the middle*/
+
+.formTitle {
+    font-size: 30px;
+    font-weight: 600;
+    color: #000055;
+    margin-bottom: 30px;
+    text-align: center;
+} /*heading 2*/
+
+.formGroup {
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+    align-items: center;
+} /*input box and label*/
+
+.formGroup input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    outline: none;
+    border: 2px solid rgba(8, 5, 76, 0.2);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #000055;
+    padding: 20px;
+} /*input box content*/
+
+.formGroup input::placeholder {
+    color: #000055;
+} /*input box placeholder*/
+
+.formGroup i {
+    position: relative;
+    top: -50%;
+    left: 40%;
+    transform: translateY(-50%);
+    color: #000055;
+} /*icon in input box*/
+
+.linkGroup {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin: 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+} /*hyperlink to other pages*/
+
+.linkGroup a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+} /*hyperlink text*/
+
+.linkGroup a:hover {
+    text-decoration: underline;
+} /*hyperlink hover*/
+
+.buttonGroup {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+    margin-top: 20px;
+    margin-bottom: 20px;
+} /*button*/
+
+.errorMessage {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+} /*error message*/
+
+.successMessage {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+} /*success message*/
+
+.spinner {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 12px;
+    color: black;
+} /*spinner container*/
+
+.loadingSpinner {
+    width: 32px;
+    height: 32px;
+    background-color: blue;
+    border-radius: 50%;
+    position: relative;
+    background: conic-gradient(
+        rgb(98, 125, 213),
+        rgb(0, 238, 255),
+        #0eebac,
+        rgb(98, 125, 213)
+    );
+    animation: spin 1.4s linear infinite;
+    box-shadow: 0px 0px 10px -8px black;
+    border: 1px solid white;
+} /*spinner animation*/
+
+.loadingSpinner::before {
+    content: "";
+    background-color: white;
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0px 0px 10px -8px black;
+    border: 1px solid white;
+} /*filler inside the spinner*/
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+} /*spinner animation*/
+
+.passwordRequirements {
+    font-size: 10px;
+    color: rgb(57, 57, 57);
+} /*password requirements font*/
+
+/*login attribution*/
+.attributionGroup {
+    display: flex;
+    bottom: 1vh;
+    right: 1vw;
+    position: fixed;
+    color: rgb(0, 0, 0);
+    font-size: 8px;
+    text-decoration: none;
+}
+
+/*on click ripple effect*/
+.rippleContainer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
+.ripple {
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleEffect 1s ease-out;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/*smiley logo*/
+.logoContainer {
+    position: fixed;
+    top: 7vh;
+    left: 7vw;
+    display: block;
+} /*smiley logo*/
+
+.logoContainer h1 {
+    color: #000055;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin: 0;
+} /*smiley logo text*/
+
+.logo {
+    width: 50%;
+    height: 50%;
+} /*smiley logo image*/
+
+.logoShake {
+    width: 50%;
+    height: 50%;
+    animation: spin 3s ease;
+} /*smiley logo image on click*/
+
+/* Shake animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-30deg);
+    }
+    50% {
+        transform: rotate(30deg);
+    }
+    100% {
+        transform: rotate(-360deg);
+    }
+}

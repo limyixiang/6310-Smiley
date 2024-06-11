@@ -15,7 +15,8 @@ const courseSchema = new mongoose.Schema({
         type: Number,
         required: false,
     },
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+    tasksByDate: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+    tasksByPriority: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

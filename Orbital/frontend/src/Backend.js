@@ -1,81 +1,89 @@
 import axios from "axios";
 
-const VERCEL_URL = "https://6310-smiley-server.vercel.app";
+/*const VERCEL_URL = "https://6310-smiley-server.vercel.app";*/
 const LOCAL_URL = "http://localhost:8000";
-const URL = VERCEL_URL;
+const URL = LOCAL_URL;
 
 //USER AND AUTH ROUTES
 
 //SIGNIN
-export const signin = (user) => {
+export const signin = async (user) => {
     // API call to sign in a user
-    return axios
-        .post(`${URL}/api/signin`, JSON.stringify(user), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/api/signin`,
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 //SIGNUP
-export const signup = (user) => {
+export const signup = async (user) => {
     // API call to sign up a user
-    return axios
-        .post(`${URL}/api/signup`, JSON.stringify(user), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            console.log(response.data);
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/api/signup`,
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        console.log(response.data);
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 //FORGETPASSWORD
-export const forgetPasswordAuthentication = (user) => {
+export const forgetPasswordAuthentication = async (user) => {
     // API call to check if user is in database
-    return axios
-        .post(`${URL}/api/forgetpassword`, JSON.stringify(user), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/api/forgetpassword`,
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
-export const forgetPasswordReset = (user, token) => {
+export const forgetPasswordReset = async (user, token) => {
     // API call to check if user is in database
-    return axios
-        .post(`${URL}/api/resetpassword/${token}`, JSON.stringify(user), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/api/resetpassword/${token}`,
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 //SETTING THE JWT TOKEN IN USER'S BROWSER
@@ -117,21 +125,23 @@ export const isAuthenticated = () => {
 // TASK ROUTES
 
 // Create Task
-export const createTask = (task) => {
+export const createTask = async (task) => {
     // API call to create a task
-    return axios
-        .post(`${URL}/tasks/createtask`, JSON.stringify(task), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/tasks/createtask`,
+            JSON.stringify(task),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 // Delete Tasks
@@ -147,96 +157,146 @@ export const deleteTask = async (taskId) => {
     }
 };
 
-// Get Tasks for User
-export const getTasksForUser = (user) => {
+// Get Tasks for User (Sorted By Date)
+export const getTasksByDateForUser = async (user) => {
     // API call to get courses
-    return axios
-        .post(`${URL}/tasks/gettasksforuser`, JSON.stringify(user), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/tasks/gettasksbydateforuser`,
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+// Get Tasks for User (Sorted by Priority)
+export const getTasksByPriorityForUser = async (user) => {
+    // API call to get courses
+    try {
+        const response = await axios.post(
+            `${URL}/tasks/gettasksbypriorityforuser`,
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 // Get Tasks for Course
-export const getTasksForCourse = (course) => {
+export const getTasksByDateForCourse = async (course) => {
     // API call to get courses
-    return axios
-        .post(`${URL}/tasks/gettasksforcourse`, JSON.stringify(course), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/tasks/gettasksbydateforcourse`,
+            JSON.stringify(course),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+// Get Tasks for Course
+export const getTasksByPriorityForCourse = async (course) => {
+    // API call to get courses
+    try {
+        const response = await axios.post(
+            `${URL}/tasks/gettasksbypriorityforcourse`,
+            JSON.stringify(course),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 // Complete Task
-export const completeTask = (task) => {
+export const completeTask = async (task) => {
     // API call to complete a task
-    return axios
-        .post(`${URL}/tasks/completetask`, JSON.stringify(task), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/tasks/completetask`,
+            JSON.stringify(task),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 // Reverse Complete Task
-export const reverseCompleteTask = (task) => {
+export const reverseCompleteTask = async (task) => {
     // API call to reverse complete a task
-    return axios
-        .post(`${URL}/tasks/reversecompletetask`, JSON.stringify(task), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/tasks/reversecompletetask`,
+            JSON.stringify(task),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 // COURSE ROUTES
 
 // Create Course
-export const createCourse = (course) => {
+export const createCourse = async (course) => {
     // API call to create a course
-    return axios
-        .post(`${URL}/courses/createcourse`, JSON.stringify(course), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/courses/createcourse`,
+            JSON.stringify(course),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.error;
+    }
 };
 
 // Delete Courses
@@ -253,19 +313,21 @@ export const deleteCourse = async (courseId) => {
 };
 
 // Get Courses
-export const getCourses = (user) => {
+export const getCourses = async (user) => {
     // API call to get courses
-    return axios
-        .post(`${URL}/courses/getcourses`, JSON.stringify(user), {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            return response.data; // Return response data
-        })
-        .catch((err) => {
-            return err.response.data; // Return error response data
-        });
+    try {
+        const response = await axios.post(
+            `${URL}/courses/getcourses`,
+            JSON.stringify(user),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
