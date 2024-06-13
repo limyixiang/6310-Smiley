@@ -29,6 +29,15 @@ function AddCourseModal({
     ];
     const frequencies = ["Daily", "Weekly", "Bi-Weekly", "Monthly"];
     const defaultTaskNames = defaultTasks.map((task) => task.taskName);
+    const getEntryNos = (freqArray, index) => {
+        return freqArray[index] === "Weekly"
+            ? Array.from({ length: 13 }, (_, index) => index + 1)
+            : freqArray[index] === "Bi-Weekly"
+            ? Array.from({ length: 7 }, (_, index) => index + 1)
+            : freqArray[index] === "Monthly"
+            ? Array.from({ length: 4 }, (_, index) => index + 1)
+            : [];
+    };
     /*for modal to have two pages*/
     const [currentPage, setCurrentPage] = useState(1);
     const nextPage = () => {
@@ -172,9 +181,9 @@ function AddCourseModal({
                                         <option value="" disabled hidden>
                                             Entry No.
                                         </option>
-                                        {Array.from(
-                                            { length: 13 },
-                                            (_, index) => index + 1
+                                        {getEntryNos(
+                                            courseModalTasks.reminderFrequency,
+                                            index
                                         ).map((entryNo) => (
                                             <option
                                                 key={entryNo}
