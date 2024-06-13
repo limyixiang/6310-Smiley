@@ -39,7 +39,7 @@ function Signup() {
         if (password !== confirmPassword) {
             setFormValues({
                 ...formValues,
-                error: "Passwords do not match",
+                error: "Passwords do not match!",
                 success: false,
                 loading: false,
             });
@@ -83,15 +83,10 @@ function Signup() {
             success && (
                 <div
                     className={styles.successMessage}
-                    style={{ display: success ? "" : "none", color: "black" }}
+                    style={{ display: success ? "" : "none", color: "green" }}
                 >
-                    <p className={styles.linkGroup}>
-                        Account created successfully, login{" "}
-                        <b>
-                            <a href="/signin">here</a>
-                        </b>
-                        .
-                    </p>
+                    Account created successfully, login{" "}
+                    <a href="/signin">here</a>.
                 </div>
             )
         );
@@ -201,21 +196,20 @@ function Signup() {
                         least 1 uppercase, 1 lowercase and 1 number.
                     </p>
                     {errorMessage()}
-                    <div>
+                    <div className={styles.buttonGroup}>
                         <button
                             id="button"
-                            className={styles.buttonGroup}
                             onClick={onSubmit}
                             style={{ display: loading ? "none" : "block" }}
                         >
                             Sign Up
                         </button>
                         <div
-                            className={styles.spinner}
+                            className={styles.spinnerGroup}
                             id="spinner"
                             style={{ display: loading ? "block" : "none" }}
                         >
-                            <div className={styles.loadingSpinner}></div>
+                            <div className={styles.spinner}></div>
                             <p>Loading...</p>
                         </div>
                     </div>

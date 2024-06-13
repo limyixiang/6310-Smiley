@@ -49,23 +49,7 @@
 
 .linkGroup1 a:hover {
     background-color: rgba(0, 124, 185, 0.3);
-} /*hyperlink hover*/
-
-.welcomeMessage {
-    position: fixed;
-    top: 61vh;
-    left: 35vw;
-    color: #000055;
-} /*welcome to smiley*/
-
-.reflectionWelcomeMessage {
-    position: fixed;
-    top: 60vh;
-    left: 35vw;
-    color: rgba(0, 0, 85, 0.1);
-    transform: scaleY(-1); /* Flip vertically */
-    transform-origin: bottom; /* Set transform origin to bottom */
-} /*welcome to smiley reflection*/
+} /*hyperlink on hover*/
 
 /*///////////////////////////////////////*/
 /* APPLIES TO DASHBOARD AFTER LOGIN PAGE */
@@ -94,13 +78,11 @@
 } /*hyperlink to other pages*/
 
 .linkGroup2 button {
-    /*border: 2px solid rgba(0, 83, 124, 0.3);*/
-    border: 2px solid rgb(255, 255, 255);
+    border: 2px solid rgba(0, 83, 124, 0.3);
     border-radius: 30px;
     padding: 10px 30px;
     margin: 10px;
-    /*color: #000055;*/
-    color: aliceblue;
+    color: #000055;
     background: none;
     text-decoration: none;
     font-weight: bold;
@@ -110,9 +92,25 @@
 
 .linkGroup2 button:hover {
     background-color: rgba(0, 124, 185, 0.3);
-} /*hyperlink hover*/
+} /*hyperlink on hover*/
 
 /*Applies to all dashboard pages*/
+.welcomeMessage {
+    position: fixed;
+    top: 61vh;
+    left: 35vw;
+    color: #000055;
+} /*welcome to smiley*/
+
+.reflectionWelcomeMessage {
+    position: fixed;
+    top: 60vh;
+    left: 35vw;
+    color: rgba(0, 0, 85, 0.1);
+    transform: scaleY(-1); /* Flip vertically */
+    transform-origin: bottom; /* Set transform origin to bottom */
+} /*welcome to smiley reflection*/
+
 /*Dashboard attribution*/
 .attributionGroup {
     display: flex;

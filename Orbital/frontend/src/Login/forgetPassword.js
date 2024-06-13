@@ -136,21 +136,20 @@ export function ForgetPassword() {
                         <i class="bx bxs-envelope"></i>
                     </div>
                     {errorMessage()}
-                    <div>
+                    <div className={styles.buttonGroup}>
                         <button
                             id="button"
-                            className={styles.buttonGroup}
                             onClick={handleOnSubmit}
                             style={{ display: loading ? "none" : "block" }}
                         >
                             Submit
                         </button>
                         <div
-                            className={styles.spinner}
+                            className={styles.spinnerGroup}
                             id="spinner"
                             style={{ display: loading ? "block" : "none" }}
                         >
-                            <div className={styles.loadingSpinner}></div>
+                            <div className={styles.spinner}></div>
                             <p>Loading...</p>
                         </div>
                     </div>

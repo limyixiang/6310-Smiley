@@ -145,21 +145,20 @@ export function Signin() {
                     <div className={styles.linkGroup}>
                         <a href="/forgetpassword"> Forget Password</a>
                     </div>
-                    <div>
+                    <div className={styles.buttonGroup}>
                         <button
                             id="button"
-                            className={styles.buttonGroup}
                             onClick={onSubmit}
                             style={{ display: loading ? "none" : "block" }}
                         >
                             Login
                         </button>
                         <div
-                            className={styles.spinner}
+                            className={styles.spinnerGroup}
                             id="spinner"
                             style={{ display: loading ? "block" : "none" }}
                         >
-                            <div className={styles.loadingSpinner}></div>
+                            <div className={styles.spinner}></div>
                             <p>Loading...</p>
                         </div>
                     </div>

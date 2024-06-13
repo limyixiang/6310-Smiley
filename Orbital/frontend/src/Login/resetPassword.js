@@ -89,11 +89,8 @@ export function ForgetPassword() {
                 className={styles.successMessage}
                 style={{ display: success ? "" : "none", color: "green" }}
             >
-                <div className={styles.linkGroup}>
-                    Password has been reset successfully. Please proceed to
-                    {"  "}
-                    <a href="/signin">login</a>.
-                </div>
+                Password has been reset successfully. Please proceed to login{" "}
+                <a href="/signin">here</a>.
             </div>
         );
     };
@@ -181,21 +178,20 @@ export function ForgetPassword() {
                         least 1 uppercase, 1 lowercase and 1 number.
                     </p>
                     {errorMessage()}
-                    <div>
+                    <div className={styles.buttonGroup}>
                         <button
                             id="button"
-                            className={styles.buttonGroup}
                             onClick={handleOnSubmit}
                             style={{ display: loading ? "none" : "block" }}
                         >
                             Reset Password
                         </button>
                         <div
-                            className={styles.spinner}
+                            className={styles.spinnerGroup}
                             id="spinner"
                             style={{ display: loading ? "block" : "none" }}
                         >
-                            <div className={styles.loadingSpinner}></div>
+                            <div className={styles.spinner}></div>
                             <p>Loading...</p>
                         </div>
                     </div>
