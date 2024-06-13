@@ -27,7 +27,7 @@ function AddCourseModal({
         "Saturday",
         "Sunday",
     ];
-    const frequencies = ["Daily", "Weekly", "Bi-Weekly", "Monthly"];
+    const frequencies = ["Weekly", "Bi-Weekly", "Monthly"];
     const defaultTaskNames = defaultTasks.map((task) => task.taskName);
     const getEntryNos = (freqArray, index) => {
         return freqArray[index] === "Weekly"
@@ -177,6 +177,11 @@ function AddCourseModal({
                                             "reminderNumberOfRepeats",
                                             index
                                         )}
+                                        disabled={
+                                            courseModalTasks.reminderFrequency[
+                                                index
+                                            ] === undefined
+                                        }
                                     >
                                         <option value="" disabled hidden>
                                             Entry No.
@@ -311,13 +316,18 @@ function AddCourseModal({
                                         "reminderNumberOfRepeats",
                                         defaultTasks.length
                                     )}
+                                    disabled={
+                                        courseModalTasks.reminderFrequency[
+                                            defaultTasks.length
+                                        ] === undefined
+                                    }
                                 >
                                     <option value="" disabled hidden>
                                         Entry No.
                                     </option>
-                                    {Array.from(
-                                        { length: 13 },
-                                        (_, index) => index + 1
+                                    {getEntryNos(
+                                        courseModalTasks.reminderFrequency,
+                                        defaultTasks.length
                                     ).map((entryNo) => (
                                         <option key={entryNo} value={entryNo}>
                                             {entryNo}
