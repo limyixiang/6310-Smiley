@@ -1,6 +1,7 @@
 import styles from "./landingPage.module.css";
 import UpcomingTasksContainer from "./upcomingTasksContainer";
 import AddTaskModal from "./addTaskModal";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function TaskContainer({
     viewTasks,
@@ -16,6 +17,41 @@ function TaskContainer({
     handleTaskCheckboxChange,
     errorMessage,
 }) {
+    // Current Date
+    const now = new Date();
+    // Get the first day of the week (assuming Monday is the first day of the week)
+    const firstDayOfWeek = new Date(
+        now.setDate(now.getDate() - now.getDay() + 1)
+    );
+    // Get the last day of the week (assuming Sunday is the last day of the week)
+    const lastDayOfWeek = new Date(
+        now.setDate(now.getDate() - now.getDay() + 7)
+    );
+    // Filter tasks that are due within the current week
+    const currentWeekTasks = tasks.filter((task) => {
+        const dueDate = new Date(task.dueDate);
+        return dueDate >= firstDayOfWeek && dueDate <= lastDayOfWeek;
+    });
+    // Filter tasks that are due the next week
+    const nextWeekTasks = tasks.filter((task) => {
+        const dueDate = new Date(task.dueDate);
+        const nextWeekLastDay = new Date(lastDayOfWeek);
+        nextWeekLastDay.setDate(nextWeekLastDay.getDate() + 7);
+        return dueDate >= lastDayOfWeek && dueDate <= nextWeekLastDay;
+    });
+
+    const displayedTasks =
+        viewTasks === "thisWeek" ? currentWeekTasks : nextWeekTasks;
+
+    const getPercentageCompleted = () => {
+        const completedTasks = displayedTasks.filter(
+            (task) => task.status === "Done"
+        );
+        return Math.round(
+            (completedTasks.length / displayedTasks.length) * 100
+        );
+    };
+
     function courseDescription(courseId) {
         const course = courses.filter((course) => course._id === courseId)[0];
         return course ? course.courseCode + " " + course.courseName : "";
@@ -55,12 +91,17 @@ function TaskContainer({
                 </option>
             </select>
             <UpcomingTasksContainer
-                viewTasks={viewTasks}
-                tasks={tasks}
+                displayedTasks={displayedTasks}
                 handleDeleteTask={handleDeleteTask}
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 courseDescription={courseDescription}
                 deadlineDescription={deadlineDescription}
+            />
+            <ProgressBar
+                animated
+                now={getPercentageCompleted()}
+                variant="info"
+                label={`${getPercentageCompleted()}%`}
             />
             <button className={styles.buttonGroup} onClick={openTaskModal}>
                 Add a task
