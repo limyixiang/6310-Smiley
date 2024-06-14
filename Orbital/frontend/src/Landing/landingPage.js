@@ -419,13 +419,9 @@ function LandingPage() {
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />
-            <center>
-                <p className={styles.linkGroup}>
-                    <b>
-                        <a href="/">Back to Dashboard</a>
-                    </b>
-                </p>
-            </center>
+            <div className={styles.linkGroup}>
+                <a href="/">Back to Dashboard</a>
+            </div>
         </div>
     );
 }

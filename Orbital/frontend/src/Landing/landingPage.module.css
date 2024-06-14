@@ -12,130 +12,109 @@
 
 .mainContainer {
     display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    /* width: 1200px; */
-    margin: 30px 10px;
-    gap: 20px;
-}
-
-/*left courses and right upcoming ddls*/
-.coursesContainer {
-    flex: 6;
-}
-
-.tasksContainer {
-    flex: 3;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.upcomingTasksContainer {
-    height: 80vh;
-    overflow-y: scroll;
-}
-
-.coursesContainer h2,
-.tasksContainer h2 {
-    margin-bottom: 20px;
-}
-
-.coursesHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.buttonGroup {
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-/*popups for add a task*/
-.backdropTaskPopup {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(
-        0,
-        0,
-        0,
-        0.75
-    ); /* Semi-transparent backdrop when popup open*/
-    display: flex;
+    width: 100vw;
+    height: 100vh;
     justify-content: center;
     align-items: center;
-}
+    min-height: 100vh;
+    background: linear-gradient(#cfeefd, #d7fefc);
+    background-size: cover;
+    background-position: center;
+    user-select: none;
+} /*acts as the body{}*/
 
-.addATaskPopup {
-    flex-direction: column;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    right: 50%;
-    bottom: auto;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    background: rgb(255, 255, 255);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*popup boxes styling*/
-}
+/*left courses, right tasks, top link groups*/
+.coursesContainer {
+    width: 60vw;
+    height: 85vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0 5vw 0 5vw;
+} /*left*/
 
-.addATaskPopup input,
-.addATaskPopup select {
-    width: 100%;
-    padding: 10px;
-    margin-right: 10px;
-    border-radius: 5px;
-    border: 1px solid #6f90d0;
-    margin-bottom: 20px;
-}
+.tasksContainer {
+    width: 40vw;
+    height: 85vh;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 0 5vw 0 5vw;
+} /*right*/
 
-.addATaskPopup button {
-    padding: 10px 20px;
-    border: 1px solid #6f90d0;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
+.linkGroup {
+    display: flex;
+    position: fixed;
+    top: 5vh;
+    right: 7vw;
+} /*hyperlink to other pages*/
+
+.linkGroup a {
+    border: 2px solid rgba(0, 83, 124, 0.3);
+    border-radius: 30px;
+    padding: 10px 30px;
+    color: #000055;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+} /*hyperlink text*/
+
+.linkGroup a:hover {
+    background-color: rgba(0, 124, 185, 0.3);
+} /*hyperlink on hover*/
+
+/*CourseContainer*/
+.coursesHeader {
+    padding: 0 0 3vh 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+} /*header and button*/
+
+.coursesHeader h2 {
+    color: #000055;
+    font-size: 25px;
+    text-align: left;
+    letter-spacing: 0.05vw;
+} /*YOUR COURSES*/
+
+.coursesHeader button {
+    width: 10vw;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    color: #fff;
     cursor: pointer;
-}
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+} /*Add a course button*/
 
-.addATaskPopup button:hover {
-    background-color: #c6e2ff;
-}
-
-/*course popout*/
 .addACoursePopup {
-    flex-direction: column;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
-    right: auto;
-    bottom: auto;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    background: rgb(255, 255, 255);
-    padding: 20px;
+    translate: -50% -50%;
+    background: rgb(241, 250, 255);
+    padding: 4vh 2vw 4vh 2vw;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*popup boxes styling*/
-}
+    border: 2px solid rgba(8, 5, 76, 0.2);
+    box-shadow: 0 0 20px rgba(133, 212, 249, 0.5);
+    color: #000055;
+} /* popup box styling*/
 
 .backdropCoursePopup {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100vw;
+    height: 100vh;
     background-color: rgba(
         0,
         0,
         0,
-        0.75
+        0.7
     ); /* Semi-transparent backdrop when popup open*/
     display: flex;
     justify-content: center;
@@ -143,96 +122,156 @@
 }
 
 .formGroup {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
+    width: 100%;
+    margin: 2vh 0 2vh 0;
+} /*input box and label*/
 
+.formGroup label {
+    font-size: 16px;
+}
 .formGroup input {
     width: 100%;
+    height: 100%;
+    background: white;
+    outline: none;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #000055;
     padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #6f90d0;
-    border-radius: 5px;
-}
+} /*input box content*/
 
-.selectReminderFrequency h3 {
-    margin-bottom: 10px;
-}
+.formGroup input::placeholder {
+    color: rgba(0, 0, 85, 0.6);
+} /*input box placeholder*/
 
 /*remindergroup contains dropdowncontainer and checkboxcontainer*/
 .reminderGroup {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.reminderGroup label {
-    margin-right: 10px;
-}
-
-.dropdownContainer {
-    display: block;
-    margin-bottom: 10px;
     align-items: baseline;
 }
 
-.dropdownContainer input {
-    width: max-content;
-    padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #6f90d0;
-    border-radius: 5px;
+.checkboxContainer {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.checkboxContainer input {
+    margin-right: 15px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    accent-color: rgb(3, 97, 212);
+}
+
+.dropdownContainer {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .dropdownContainer select {
+    width: 100%;
+    margin: 0 0 0 3vw;
+    background: white;
+    outline: none;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #000055;
     padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #6f90d0;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
     cursor: pointer;
 }
 
 .dropdownContainer select:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #7cc8ff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.checkboxContainer {
+.reminderGroupOthers {
+    display: block;
+    justify-content: space-between;
+}
+
+.checkboxContainerOthers {
     display: flex;
-    align-items: top;
+    margin-top: 20px;
     margin-bottom: 10px;
 }
 
-.checkboxContainer input[type="checkbox"] {
+.checkboxContainerOthers input[type="text"] {
+    width: 78%;
+    height: 100%;
+    background: white;
+    outline: none;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #000055;
+    padding: 8px;
+    margin: 0 0 0 3vw;
+}
+
+.checkboxContainerOthers input[type="checkbox"] {
     margin-right: 15px;
     width: 15px;
     height: 15px;
+    cursor: pointer;
+    accent-color: rgb(3, 97, 212);
 }
 
-.addACoursePopup button {
-    padding: 10px 20px;
-    border: 1px solid #6f90d0;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
+.dropdownContainerOthers {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+.dropdownContainerOthers select {
+    width: 21%;
+    background: white;
+    outline: none;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #000055;
+    padding: 8px;
     cursor: pointer;
 }
 
+.dropdownContainerOthers select:focus {
+    outline: none;
+    border-color: #7cc8ff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.addACoursePopup button {
+    padding: 10px 30px;
+    margin: 10px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+}
+
 .addACoursePopup button:hover {
-    background-color: #c6e2ff;
+    background: linear-gradient(to right, #408bfb, #3227b0);
 }
 
 .courseDraggable {
     user-select: none;
     padding: 16px;
-    margin: 0 0 8px 0;
+    margin: 1.5vh 0 1.5vh 0;
     background-color: #fff;
-    border: 1px solid #6f90d0;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
     border-radius: 4px;
     cursor: grab;
     transition: background-color 0.2s ease;
@@ -242,6 +281,92 @@
 
 .courseDraggable:hover {
     background-color: #c6e2ff;
+}
+
+/*TaskContainer*/
+.tasksHeader {
+    color: #000055;
+    font-size: 25px;
+    text-align: left;
+    letter-spacing: 0.05vw;
+}
+.addTaskButton {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+    margin-top: 15px;
+}
+
+.addATaskPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    background: rgb(241, 250, 255);
+    padding: 4vh 2vw 4vh 2vw;
+    border-radius: 10px;
+    border: 2px solid rgba(8, 5, 76, 0.2);
+    box-shadow: 0 0 20px rgba(133, 212, 249, 0.5);
+    color: #000055;
+}
+
+.backdropTaskPopup {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.7
+    ); /* Semi-transparent backdrop when popup open*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upcomingTasksContainer {
+    height: 60vh;
+    overflow-y: scroll;
+}
+
+.addATaskPopup input,
+.addATaskPopup select {
+    display: inline;
+    width: 100%;
+    height: 100%;
+    background: white;
+    outline: none;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #000055;
+    padding: 8px;
+}
+
+.addATaskPopup button {
+    padding: 10px 30px;
+    margin: 10px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+}
+
+.addATaskPopup button:hover {
+    background: linear-gradient(to right, #408bfb, #3227b0);
 }
 
 /*courses and tasks shown in the page after adding*/
@@ -327,43 +452,4 @@
     position: absolute;
     top: 5%;
     right: 5%;
-}
-
-/*link back to dashboard*/
-.linkGroup {
-    position: fixed;
-    bottom: 50px;
-    right: 100px;
-    margin: 20px;
-    font-size: 14px;
-}
-
-.linkGroup a {
-    color: rgb(55, 0, 128);
-    text-decoration: none;
-}
-
-.linkGroup a:hover {
-    text-decoration: underline;
-}
-
-/*buttons*/
-.buttonGroup {
-    width: 100%;
-    height: 45px;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    background: linear-gradient(to right, #3227b0, #408bfb);
-    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.buttonGroup:hover {
-    background-color: #0056b3;
 }

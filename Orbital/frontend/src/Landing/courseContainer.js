@@ -24,13 +24,8 @@ function CourseContainer({
     return (
         <div className={styles.coursesContainer}>
             <div className={styles.coursesHeader}>
-                <h2>Your Courses</h2>
-                <button
-                    className={styles.buttonGroup}
-                    onClick={openCourseModal}
-                >
-                    Add a course
-                </button>
+                <h2>YOUR COURSES</h2>
+                <button onClick={openCourseModal}>Add a course</button>
             </div>
             <AddCourseModal
                 courseValues={courseValues}

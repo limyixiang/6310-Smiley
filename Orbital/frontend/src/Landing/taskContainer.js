@@ -28,8 +28,8 @@ function TaskContainer({
     }
 
     return (
-        <div className={styles.TaskContainer}>
-            <h2>Upcoming Deadlines</h2>
+        <div className={styles.tasksContainer}>
+            <h2 className={styles.tasksHeader}>UPCOMING DEADLINES</h2>
             <select
                 id="sortBy"
                 value={landingPageValues.sortBy}
@@ -62,7 +62,7 @@ function TaskContainer({
                 courseDescription={courseDescription}
                 deadlineDescription={deadlineDescription}
             />
-            <button className={styles.buttonGroup} onClick={openTaskModal}>
+            <button className={styles.addTaskButton} onClick={openTaskModal}>
                 Add a task
             </button>
             <AddTaskModal
