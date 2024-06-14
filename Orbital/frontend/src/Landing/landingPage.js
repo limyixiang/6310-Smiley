@@ -197,8 +197,13 @@ function LandingPage() {
 
     // Course inputted shown below
     const handleAddCourse = async () => {
-        if (courseCode.trim() === "") {
-            setErr("Invalid course code.");
+        if (
+            courseCode.trim() === "" ||
+            !(/\d/.test(courseCode) && /[a-zA-Z]/.test(courseCode))
+        ) {
+            setErr(
+                "Invalid course code. Course code should contain at least a letter and a digit."
+            );
             return;
         } else if (courseName.trim() === "") {
             setErr("Invalid course name.");
@@ -230,16 +235,17 @@ function LandingPage() {
                 }
             }
             // console.log(tasks);
-            console.log(temporaryCourses);
+            // console.log(temporaryCourses);
             const courseOrder = temporaryCourses.map((course) => course._id);
             createCourse({
                 courseName: courseName,
-                courseCode: courseCode,
+                courseCode: courseCode.toUpperCase(),
                 userid: user._id,
                 tasks: tasks,
                 courseOrder: courseOrder,
             })
                 .then((data) => {
+                    console.log(data);
                     if (data.error) {
                         setErr(data.error);
                     } else {

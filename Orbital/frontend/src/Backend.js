@@ -293,9 +293,10 @@ export const createCourse = async (course) => {
                 },
             }
         );
+        console.log(response);
         return response.data;
     } catch (err) {
-        return err.response.error;
+        return { error: err.response.data.error };
     }
 };
 

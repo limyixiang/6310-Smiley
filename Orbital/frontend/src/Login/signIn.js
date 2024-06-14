@@ -30,7 +30,7 @@ export function Signin() {
     const onSubmit = async (event) => {
         event.preventDefault();
         setValues({ ...values, success: false, loading: true });
-        signin({ email, password })
+        signin({ email: email.toLowerCase(), password })
             .then((data) => {
                 if (data.error) {
                     setValues({

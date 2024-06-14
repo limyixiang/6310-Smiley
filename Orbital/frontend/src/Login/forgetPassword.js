@@ -34,7 +34,7 @@ export function ForgetPassword() {
         setInputValue({ ...inputValue, success: false, loading: true });
 
         // Placeholder for the forget password function calling the backend
-        forgetPasswordAuthentication({ email })
+        forgetPasswordAuthentication({ email: email.toLowerCase() })
             .then((data) => {
                 if (data.error) {
                     setInputValue({

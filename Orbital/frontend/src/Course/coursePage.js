@@ -8,7 +8,7 @@ import {
     completeTask,
     reverseCompleteTask,
 } from "../Backend";
-
+import ProgressBar from "react-bootstrap/ProgressBar";
 import CourseTasksList from "./courseTasksList";
 import CourseCompletedTasks from "./courseCompletedTasks";
 
@@ -87,11 +87,47 @@ function CoursePage() {
         });
     };
 
-    function deadlineDescription(task) {
+    const deadlineDescription = (task) => {
         return task.dueDate == null
             ? ""
             : "Due: " + new Date(task.dueDate).toDateString() + " ";
-    }
+    };
+
+    const getPercentageSemCompleted = () => {
+        const completed = completedTasks.length;
+        const incomplete = incompleteTasks.length;
+        const total = completed + incomplete;
+        if (total === 0) return 0;
+        return Math.round((completed / total) * 100);
+    };
+
+    const getPercentageWeekCompleted = () => {
+        // Current Date
+        const now = new Date();
+        // Get the first day of the week (assuming Monday is the first day of the week)
+        const firstDayOfWeek = new Date(
+            now.setDate(now.getDate() - now.getDay() + 1)
+        );
+        // Get the last day of the week (assuming Sunday is the last day of the week)
+        const lastDayOfWeek = new Date(
+            now.setDate(now.getDate() - now.getDay() + 7)
+        );
+        // Filter tasks that are due within the current week
+        const currentWeekCompletedTasks = completedTasks.filter((task) => {
+            const dueDate = new Date(task.dueDate);
+            return dueDate >= firstDayOfWeek && dueDate <= lastDayOfWeek;
+        }).length;
+        const currentWeekIncompleteTasks = incompleteTasks.filter((task) => {
+            const dueDate = new Date(task.dueDate);
+            return dueDate >= firstDayOfWeek && dueDate <= lastDayOfWeek;
+        }).length;
+        const totalCurrentWeekTasks =
+            currentWeekCompletedTasks + currentWeekIncompleteTasks;
+        if (totalCurrentWeekTasks === 0) return 0;
+        return Math.round(
+            (currentWeekCompletedTasks / totalCurrentWeekTasks) * 100
+        );
+    };
 
     return (
         <div className={styles.mainContainer}>
@@ -129,6 +165,22 @@ function CoursePage() {
                     />
                 </div>
             </div>
+            {/* Percentage of tasks completed for the week */}
+            Percentage of tasks completed for the week
+            <ProgressBar
+                animated
+                now={getPercentageWeekCompleted()}
+                variant="info"
+                label={`${getPercentageWeekCompleted()}%`}
+            />
+            {/* Percentage of tasks completed for the semester */}
+            Percentage of tasks completed for the semester
+            <ProgressBar
+                animated
+                now={getPercentageSemCompleted()}
+                variant="info"
+                label={`${getPercentageSemCompleted()}%`}
+            />
             <center>
                 <p className={styles.courseToLandingPage}>
                     <b>
