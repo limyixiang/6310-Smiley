@@ -31,6 +31,17 @@ exports.createCourse = async (req, res) => {
         }
 
         const user = await User.findById(req.body.userid);
+        const existingCourses = await Course.find({
+            _id: { $in: user.courses },
+        });
+        for (const course of existingCourses) {
+            if (course.courseCode === req.body.courseCode) {
+                console.log("Course with the same course code already exists.");
+                return res.status(400).json({
+                    error: "Course with the same course code already exists.",
+                });
+            }
+        }
         const course = new Course({
             courseName: req.body.courseName,
             courseCode: req.body.courseCode,
