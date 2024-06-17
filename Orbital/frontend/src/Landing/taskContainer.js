@@ -79,14 +79,12 @@ function TaskContainer({
         <div className={styles.tasksContainer}>
             <h2 className={styles.tasksHeader}>UPCOMING DEADLINES</h2>
             <div className={styles.sortByDropdownContainer}>
+                <label htmlFor="sortBy">Sort By:</label>
                 <select
                     id="sortBy"
                     value={landingPageValues.sortBy}
                     onChange={handleInputChange("landingPageValues", "sortBy")}
                 >
-                    <option value="" disabled hidden>
-                        Sort By:
-                    </option>
                     <option name="sortByOption" value="date">
                         Nearest Deadline
                     </option>
@@ -94,6 +92,7 @@ function TaskContainer({
                         Priority Level
                     </option>
                 </select>
+                <label htmlFor="viewTasks">Filter By:</label>
                 <select
                     id="viewTasks"
                     value={landingPageValues.viewTasks}
@@ -102,9 +101,6 @@ function TaskContainer({
                         "viewTasks"
                     )}
                 >
-                    <option value="" disabled hidden>
-                        Filter By:
-                    </option>
                     <option name="viewTasksOption" value="thisWeek">
                         This Week
                     </option>

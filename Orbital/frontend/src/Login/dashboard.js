@@ -1,6 +1,6 @@
 import { useState, React } from "react";
 import { isAuthenticated, signout } from "../Backend";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./dashboardPage.module.css";
 import logo from "./smileytransparent.jpg";
 
@@ -13,6 +13,10 @@ const Dashboard = () => {
         signout(); // Perform signout action
         console.log("Signed out");
         navigate("/signin"); // Redirect to login page after sign out
+    };
+
+    const onLandingPage = () => {
+        navigate("/landingpage", { state: { user: authenticatedUser.user } });
     };
 
     const handleClick = (e) => {
@@ -94,12 +98,7 @@ const Dashboard = () => {
                 </h1>
             </div>
             <div className={styles.linkGroup2}>
-                <Link
-                    to="/landingpage"
-                    state={{ user: authenticatedUser.user }}
-                >
-                    <button>LANDING</button>
-                </Link>
+                <button onClick={onLandingPage}>LANDING</button>
                 <button onClick={onSignout}>SIGN OUT</button>
             </div>
             <div className={styles.logoContainer}>

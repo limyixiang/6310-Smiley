@@ -2,7 +2,7 @@ import styles from "./landingPage.module.css";
 import AddCourseModal from "./addCourseModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function CourseContainer({
     user,
@@ -21,6 +21,12 @@ function CourseContainer({
     handleAddToTemporaryCourseArray,
     handleOnDragEnd,
 }) {
+    const navigate = useNavigate();
+
+    const onCoursePage = (course) => {
+        navigate("/coursepage", { state: { course, user } });
+    };
+
     return (
         <div className={styles.coursesContainer}>
             <div className={styles.coursesHeader}>
@@ -45,29 +51,24 @@ function CourseContainer({
             {/* only display courseCode */}
             <div className={styles.coursesList}>
                 {courses.map((course, index) => (
-                    <Link
+                    <div
                         key={index}
-                        to={"/coursepage"}
-                        state={{
-                            course: course,
-                            user: user,
-                        }}
+                        className={styles.courseItem}
+                        onClick={() => onCoursePage(course)}
                     >
-                        <div className={styles.courseItem}>
-                            <div className={styles.courseItemText}>
-                                {course.courseCode}
-                            </div>
-                            <div>
-                                <FontAwesomeIcon
-                                    className={`${styles.trashcan} ${styles.courseTrashcan}`}
-                                    icon={faTrashCan}
-                                    onClick={(event) =>
-                                        handleDeleteCourse(event, course._id)
-                                    }
-                                />
-                            </div>
+                        <div className={styles.courseItemText}>
+                            {course.courseCode}
                         </div>
-                    </Link>
+                        <div>
+                            <FontAwesomeIcon
+                                className={`${styles.trashcan} ${styles.courseTrashcan}`}
+                                icon={faTrashCan}
+                                onClick={(event) =>
+                                    handleDeleteCourse(event, course._id)
+                                }
+                            />
+                        </div>
+                    </div>
                 ))}
             </div>
         </div>

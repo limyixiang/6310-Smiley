@@ -19,17 +19,17 @@ function AddTaskModal({
             className={styles.addATaskPopup}
             overlayClassName={styles.backdropTaskPopup}
         >
-            <h2>Add Your Task</h2>
+            <h2>PLEASE PROVIDE SOME DETAILS OF THE TASK:</h2>
             {/* Select a Course dropdown */}
-            <div className={styles.dropdownContainer}>
-                <label htmlFor="courseSelect"> Select a Course</label>
+            <div className={styles.dropdownContainer2}>
+                <label htmlFor="courseSelect"> Select Course</label>
                 <select
                     id="courseSelect"
                     value={taskValues.taskCourseId}
                     onChange={handleInputChange("task", "taskCourseId")}
                 >
                     <option value="" disabled hidden>
-                        Select a Course
+                        Select Course
                     </option>
                     {courses.map((course, index) => (
                         <option
@@ -43,7 +43,7 @@ function AddTaskModal({
                 </select>
             </div>
             {/* Input task name text box */}
-            <div className={styles.formGroup}>
+            <div className={styles.formGroup2}>
                 <label htmlFor="taskName">Task Name</label>
                 <input
                     id="taskName"
@@ -54,7 +54,7 @@ function AddTaskModal({
                 />
             </div>
             {/* Select Priority Level dropdown */}
-            <div className={styles.dropdownContainer}>
+            <div className={styles.dropdownContainer2}>
                 <label htmlFor="priorityLevel">Select a Priority Level</label>
                 <select
                     id="priorityLevel"
@@ -69,7 +69,7 @@ function AddTaskModal({
                 </select>
             </div>
             {/* Deadline date selector */}
-            <div className={styles.formGroup}>
+            <div className={styles.deadlineGroup}>
                 <label htmlFor="dueDate">Deadline</label>
                 <input
                     id="dueDate"

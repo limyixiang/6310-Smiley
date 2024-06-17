@@ -348,9 +348,7 @@ function AddCourseModal({
 
             {currentPage === 2 && (
                 <div>
-                    <h2>
-                        Drag and drop to order the priority of your courses.
-                    </h2>
+                    <h2>DRAG AND DROP TO ORDER YOUR COURSE PRIORITIES:</h2>
                     <DragDropContext onDragEnd={handleOnDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided) => (

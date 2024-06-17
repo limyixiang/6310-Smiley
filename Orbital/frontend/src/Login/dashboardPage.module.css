@@ -49,6 +49,7 @@
 
 .linkGroup1 a:hover {
     background-color: rgba(0, 124, 185, 0.3);
+    cursor: pointer;
 } /*hyperlink on hover*/
 
 /*///////////////////////////////////////*/
@@ -92,6 +93,7 @@
 
 .linkGroup2 button:hover {
     background-color: rgba(0, 124, 185, 0.3);
+    cursor: pointer;
 } /*hyperlink on hover*/
 
 /*Applies to all dashboard pages*/
@@ -163,11 +165,13 @@
 .logo {
     width: 50%;
     height: 50%;
+    cursor: pointer;
 } /*smiley logo image*/
 
 .logoShake {
     width: 50%;
     height: 50%;
+    cursor: pointer;
     animation: spin 3s ease;
 } /*smiley logo image on click*/
 
