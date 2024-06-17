@@ -43,7 +43,7 @@
 
 .formTitle {
     font-size: 30px;
-    font-weight: 600;
+    font-weight: bold;
     color: #000055;
     margin-bottom: 30px;
     text-align: center;
@@ -119,6 +119,10 @@
     font-weight: bold;
     background: linear-gradient(to right, #3227b0, #408bfb);
 } /*button*/
+
+.buttonGroup button:hover {
+    background: linear-gradient(to right, #408bfb, #3227b0);
+} /*button on hover*/
 
 .spinnerGroup {
     margin-top: 20px;
@@ -208,6 +212,7 @@
 .logoContainer h1 {
     color: #000055;
     font-size: 22px;
+    font-weight: bold;
     letter-spacing: 1px;
     margin: 0;
 } /*smiley logo text*/

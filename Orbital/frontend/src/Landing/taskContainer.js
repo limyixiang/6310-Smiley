@@ -1,7 +1,6 @@
 import styles from "./landingPage.module.css";
 import UpcomingTasksContainer from "./upcomingTasksContainer";
 import AddTaskModal from "./addTaskModal";
-import ProgressBar from "react-bootstrap/ProgressBar";
 
 function TaskContainer({
     viewTasks,
@@ -52,6 +51,19 @@ function TaskContainer({
         );
     };
 
+    const ProgressBar = ({ now, label }) => {
+        return (
+            <div className={styles.progressContainer}>
+                <div
+                    className={styles.progressBar}
+                    style={{ width: `${now}%` }}
+                >
+                    <span className={styles.progressLabel}>{label}</span>
+                </div>
+            </div>
+        );
+    };
+
     function courseDescription(courseId) {
         const course = courses.filter((course) => course._id === courseId)[0];
         return course ? course.courseCode + " " + course.courseName : "";
@@ -66,30 +78,41 @@ function TaskContainer({
     return (
         <div className={styles.tasksContainer}>
             <h2 className={styles.tasksHeader}>UPCOMING DEADLINES</h2>
-            <select
-                id="sortBy"
-                value={landingPageValues.sortBy}
-                onChange={handleInputChange("landingPageValues", "sortBy")}
-            >
-                <option name="sortByOption" value="date">
-                    Nearest Deadline
-                </option>
-                <option name="sortByOption" value="priorityLevel">
-                    Priority Level
-                </option>
-            </select>
-            <select
-                id="viewTasks"
-                value={landingPageValues.viewTasks}
-                onChange={handleInputChange("landingPageValues", "viewTasks")}
-            >
-                <option name="viewTasksOption" value="thisWeek">
-                    This Week
-                </option>
-                <option name="viewTasksOption" value="nextWeek">
-                    Next Week
-                </option>
-            </select>
+            <div className={styles.sortByDropdownContainer}>
+                <select
+                    id="sortBy"
+                    value={landingPageValues.sortBy}
+                    onChange={handleInputChange("landingPageValues", "sortBy")}
+                >
+                    <option value="" disabled hidden>
+                        Sort By:
+                    </option>
+                    <option name="sortByOption" value="date">
+                        Nearest Deadline
+                    </option>
+                    <option name="sortByOption" value="priorityLevel">
+                        Priority Level
+                    </option>
+                </select>
+                <select
+                    id="viewTasks"
+                    value={landingPageValues.viewTasks}
+                    onChange={handleInputChange(
+                        "landingPageValues",
+                        "viewTasks"
+                    )}
+                >
+                    <option value="" disabled hidden>
+                        Filter By:
+                    </option>
+                    <option name="viewTasksOption" value="thisWeek">
+                        This Week
+                    </option>
+                    <option name="viewTasksOption" value="nextWeek">
+                        Next Week
+                    </option>
+                </select>
+            </div>
             <UpcomingTasksContainer
                 displayedTasks={displayedTasks}
                 handleDeleteTask={handleDeleteTask}
@@ -97,13 +120,14 @@ function TaskContainer({
                 courseDescription={courseDescription}
                 deadlineDescription={deadlineDescription}
             />
-            <ProgressBar
-                animated
-                now={getPercentageCompleted()}
-                variant="info"
-                label={`${getPercentageCompleted()}%`}
-            />
-            <button className={styles.buttonGroup} onClick={openTaskModal}>
+            <div className={styles.landingProgressBarContainer}>
+                <p>Your Progress:</p>
+                <ProgressBar
+                    now={getPercentageCompleted()}
+                    label={`${getPercentageCompleted()}%`}
+                />
+            </div>
+            <button className={styles.addTaskButton} onClick={openTaskModal}>
                 Add a task
             </button>
             <AddTaskModal

@@ -86,3 +86,49 @@
 .courseToLandingPage a:hover {
     text-decoration: underline;
 }
+
+/*coursePage progress bar*/
+.progressBarContainer {
+    width: 40vw;
+    height: 85vh;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 0 5vw 0 5vw;
+}
+
+.courseProgressBarContainer {
+    display: block;
+    margin-top: 10px;
+}
+
+.courseProgressBarContainer p {
+    text-align: left;
+    color: #000055;
+}
+
+.progressContainer {
+    width: 100%;
+    height: 15px;
+    background-color: white;
+    border-radius: 30px;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    margin: 10px 0 0 0;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: #c6e2ff;
+    border-radius: 30px;
+    text-align: right;
+    transition: width 0.2s ease-in-out;
+}
+
+.progressLabel {
+    position: relative;
+    top: -4px;
+    padding: 10px;
+    color: #000055;
+    font-weight: bold;
+    font-size: 12px;
+}

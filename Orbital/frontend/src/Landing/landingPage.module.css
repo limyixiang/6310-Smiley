@@ -18,7 +18,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(#cfeefd, #d7fefc);
+    background: linear-gradient(#e8f7ff, #e5fffe);
     background-size: cover;
     background-position: center;
     user-select: none;
@@ -93,6 +93,10 @@
     background: linear-gradient(to right, #3227b0, #408bfb);
 } /*Add a course button*/
 
+.coursesHeader button:hover {
+    background: linear-gradient(to right, #408bfb, #3227b0);
+} /*Add a course button on hover*/
+
 .addACoursePopup {
     position: fixed;
     top: 50%;
@@ -119,7 +123,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} /* backdrop styling*/
 
 .formGroup {
     width: 100%;
@@ -128,7 +132,8 @@
 
 .formGroup label {
     font-size: 16px;
-}
+} /*input box label*/
+
 .formGroup input {
     width: 100%;
     height: 100%;
@@ -150,13 +155,13 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-}
+} /*reminder group*/
 
 .checkboxContainer {
     display: flex;
     margin-top: 10px;
     margin-bottom: 10px;
-}
+} /*checkbox container*/
 
 .checkboxContainer input {
     margin-right: 15px;
@@ -164,13 +169,13 @@
     height: 15px;
     cursor: pointer;
     accent-color: rgb(3, 97, 212);
-}
+} /*checkbox box*/
 
 .dropdownContainer {
     display: flex;
     margin-top: 10px;
     margin-bottom: 10px;
-}
+} /*dropdown container*/
 
 .dropdownContainer select {
     width: 100%;
@@ -183,24 +188,24 @@
     color: #000055;
     padding: 8px;
     cursor: pointer;
-}
+} /*dropdown dropdown*/
 
 .dropdownContainer select:focus {
     outline: none;
     border-color: #7cc8ff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
+} /*dropdown dropdown on focus*/
 
 .reminderGroupOthers {
     display: block;
     justify-content: space-between;
-}
+} /*reminder group for other tasks*/
 
 .checkboxContainerOthers {
     display: flex;
     margin-top: 20px;
     margin-bottom: 10px;
-}
+} /*checkbox container for other tasks*/
 
 .checkboxContainerOthers input[type="text"] {
     width: 78%;
@@ -213,7 +218,7 @@
     color: #000055;
     padding: 8px;
     margin: 0 0 0 3vw;
-}
+} /*input box content for other tasks*/
 
 .checkboxContainerOthers input[type="checkbox"] {
     margin-right: 15px;
@@ -221,14 +226,14 @@
     height: 15px;
     cursor: pointer;
     accent-color: rgb(3, 97, 212);
-}
+} /*checkbox box for other tasks*/
 
 .dropdownContainerOthers {
     display: flex;
     margin-top: 10px;
     margin-bottom: 10px;
     justify-content: space-between;
-}
+} /*dropdown container for other tasks*/
 
 .dropdownContainerOthers select {
     width: 21%;
@@ -240,13 +245,13 @@
     color: #000055;
     padding: 8px;
     cursor: pointer;
-}
+} /*dropdown dropdown for other tasks*/
 
 .dropdownContainerOthers select:focus {
     outline: none;
     border-color: #7cc8ff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
+} /*dropdown dropdown on focus for other tasks*/
 
 .addACoursePopup button {
     padding: 10px 30px;
@@ -260,11 +265,11 @@
     cursor: pointer;
     font-weight: bold;
     background: linear-gradient(to right, #3227b0, #408bfb);
-}
+} /*submission buttons for course popup*/
 
 .addACoursePopup button:hover {
     background: linear-gradient(to right, #408bfb, #3227b0);
-}
+} /*submission buttons on hover for course popup*/
 
 .courseDraggable {
     user-select: none;
@@ -277,11 +282,11 @@
     transition: background-color 0.2s ease;
     top: auto !important;
     left: auto !important;
-}
+} /*course draggable on page 2 popup*/
 
 .courseDraggable:hover {
     background-color: #c6e2ff;
-}
+} /*course draggable on hover on page 2 popup*/
 
 /*TaskContainer*/
 .tasksHeader {
@@ -290,6 +295,32 @@
     text-align: left;
     letter-spacing: 0.05vw;
 }
+
+.sortByDropdownContainer {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.sortByDropdownContainer select {
+    width: 100%;
+    margin: 0 0 0 3vw;
+    background: white;
+    outline: none;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #000055;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.sortByDropdownContainer select:focus {
+    outline: none;
+    border-color: #7cc8ff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 .addTaskButton {
     width: 100%;
     height: 45px;
@@ -351,6 +382,23 @@
     padding: 8px;
 }
 
+.addTaskButton {
+    padding: 10px 30px;
+    margin: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(to right, #3227b0, #408bfb);
+} /*add a task button*/
+
+.addTaskButton:hover {
+    background: linear-gradient(to right, #408bfb, #3227b0);
+} /*add a task button on hover*/
+
 .addATaskPopup button {
     padding: 10px 30px;
     margin: 10px;
@@ -363,11 +411,11 @@
     cursor: pointer;
     font-weight: bold;
     background: linear-gradient(to right, #3227b0, #408bfb);
-}
+} /*submission buttons for task popup*/
 
 .addATaskPopup button:hover {
     background: linear-gradient(to right, #408bfb, #3227b0);
-}
+} /*submission buttons on hover for task popup*/
 
 /*courses and tasks shown in the page after adding*/
 
@@ -426,6 +474,42 @@
 .taskCheckbox {
     flex: 1;
     margin: 0px;
+}
+
+.landingProgressBarContainer {
+    display: block;
+    margin-top: 10px;
+}
+
+.landingProgressBarContainer p {
+    text-align: left;
+    color: #000055;
+}
+
+.progressContainer {
+    width: 100%;
+    height: 15px;
+    background-color: white;
+    border-radius: 30px;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    margin: 10px 0 0 0;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: #c6e2ff;
+    border-radius: 30px;
+    text-align: right;
+    transition: width 0.2s ease-in-out;
+}
+
+.progressLabel {
+    position: relative;
+    top: -4px;
+    padding: 10px;
+    color: #000055;
+    font-weight: bold;
+    font-size: 12px;
 }
 
 .taskItem {

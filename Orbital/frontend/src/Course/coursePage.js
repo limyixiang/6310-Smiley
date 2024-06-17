@@ -8,7 +8,6 @@ import {
     completeTask,
     reverseCompleteTask,
 } from "../Backend";
-import ProgressBar from "react-bootstrap/ProgressBar";
 import CourseTasksList from "./courseTasksList";
 import CourseCompletedTasks from "./courseCompletedTasks";
 
@@ -129,6 +128,19 @@ function CoursePage() {
         );
     };
 
+    const ProgressBar = ({ now, label }) => {
+        return (
+            <div className={styles.progressContainer}>
+                <div
+                    className={styles.progressBar}
+                    style={{ width: `${now}%` }}
+                >
+                    <span className={styles.progressLabel}>{label}</span>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className={styles.mainContainer}>
             <div className={styles.courseHeader}>
@@ -165,22 +177,22 @@ function CoursePage() {
                     />
                 </div>
             </div>
-            {/* Percentage of tasks completed for the week */}
-            Percentage of tasks completed for the week
-            <ProgressBar
-                animated
-                now={getPercentageWeekCompleted()}
-                variant="info"
-                label={`${getPercentageWeekCompleted()}%`}
-            />
-            {/* Percentage of tasks completed for the semester */}
-            Percentage of tasks completed for the semester
-            <ProgressBar
-                animated
-                now={getPercentageSemCompleted()}
-                variant="info"
-                label={`${getPercentageSemCompleted()}%`}
-            />
+            <div className={styles.progressBarContainer}>
+                <div className={styles.courseProgressBarContainer}>
+                    <p>Percentage of tasks completed for the week:</p>
+                    <ProgressBar
+                        now={getPercentageWeekCompleted()}
+                        label={`${getPercentageWeekCompleted()}%`}
+                    />
+                </div>
+                <div className={styles.courseProgressBarContainer}>
+                    <p>Percentage of tasks completed for the semester:</p>
+                    <ProgressBar
+                        now={getPercentageSemCompleted()}
+                        label={`${getPercentageSemCompleted()}%`}
+                    />
+                </div>
+            </div>
             <center>
                 <p className={styles.courseToLandingPage}>
                     <b>
