@@ -63,9 +63,10 @@ function CourseContainer({
                             <FontAwesomeIcon
                                 className={`${styles.trashcan} ${styles.courseTrashcan}`}
                                 icon={faTrashCan}
-                                onClick={(event) =>
-                                    handleDeleteCourse(event, course._id)
-                                }
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    handleDeleteCourse(event, course._id);
+                                }}
                             />
                         </div>
                     </div>
