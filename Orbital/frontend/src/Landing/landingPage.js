@@ -28,6 +28,7 @@ function LandingPage() {
         openModalType: null,
         courseName: "",
         courseCode: "",
+        addingCourse: false,
     });
 
     const defaultTasks = [
@@ -61,7 +62,7 @@ function LandingPage() {
 
     // Destructuring values from the state
     const { refresh, sortBy, viewTasks } = landingPageValues;
-    const { courseName, courseCode } = courseValues;
+    const { courseName, courseCode, addingCourse } = courseValues;
     const {
         isSelected,
         reminderDay,
@@ -170,6 +171,7 @@ function LandingPage() {
                 courseCode: "",
                 courseName: "",
                 openModalType: null,
+                addingCourse: false,
             }));
             setCourseModalTasks({
                 isSelected: [],
@@ -197,6 +199,7 @@ function LandingPage() {
 
     // Course inputted shown below
     const handleAddCourse = async () => {
+        setErr("");
         if (
             courseCode.trim() === "" ||
             !(/\d/.test(courseCode) && /[a-zA-Z]/.test(courseCode))
@@ -237,6 +240,7 @@ function LandingPage() {
             // console.log(tasks);
             // console.log(temporaryCourses);
             const courseOrder = temporaryCourses.map((course) => course._id);
+            setCourseValues({ ...courseValues, addingCourse: true });
             createCourse({
                 courseName: courseName,
                 courseCode: courseCode.toUpperCase(),

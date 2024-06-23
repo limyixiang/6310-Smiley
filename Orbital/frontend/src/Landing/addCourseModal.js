@@ -341,6 +341,18 @@ function AddCourseModal({
                         </div>
                     </div>
                     {errorMessage()}
+                    <div
+                        className={styles.spinnerGroup}
+                        id="spinner"
+                        style={{
+                            display: courseValues.addingCourse
+                                ? "block"
+                                : "none",
+                        }}
+                    >
+                        <div className={styles.spinner}></div>
+                        <p>Loading...</p>
+                    </div>
                     <button onClick={nextPage}>Next</button>
                     <button onClick={() => closeModal("course")}>Close</button>
                 </div>
