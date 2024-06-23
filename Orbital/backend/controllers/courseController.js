@@ -79,7 +79,7 @@ exports.createCourse = async (req, res) => {
                 );
             }
         }
-        console.log("Tasks created successfully");
+        console.log("Recurring tasks created successfully");
         for (const courseid of req.body.courseOrder) {
             const course = await Course.findById(courseid);
             course.priority = req.body.courseOrder.indexOf(courseid);

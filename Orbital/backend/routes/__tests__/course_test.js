@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require("../../app");
 const Course = require("../../models/courseModel");
 const User = require("../../models/userModel");
+const Task = require("../../models/tasksModel");
 
 // Access Test Database
 const mongoose = require("mongoose");
@@ -48,8 +49,10 @@ describe("course route testing", () => {
             .post("/courses/createcourse")
             .send({
                 courseName: "bar",
-                courseCode: "foo",
+                courseCode: "BAR123",
                 userid: userid,
+                courseOrder: ["temp"],
+                tasks: [],
             })
             .expect(201);
     }),
@@ -57,19 +60,47 @@ describe("course route testing", () => {
             await request(server)
                 .post("/courses/createcourse")
                 .send({
-                    courseName: "foo",
+                    courseName: "bar",
                     courseCode: "",
                     userid: userid,
+                    courseOrder: ["temp"],
+                    tasks: [],
                 })
                 .expect(422);
+        }),
+        it("returns an error when creating a course with an invalid course code input", async () => {
+            await request(server)
+                .post("/courses/createcourse")
+                .send({
+                    courseName: "bar",
+                    courseCode: "bar",
+                    userid: userid,
+                    courseOrder: ["temp"],
+                    tasks: [],
+                })
+                .expect(422);
+        }),
+        it("returns an error when creating a course with an existing course code", async () => {
+            await request(server)
+                .post("/courses/createcourse")
+                .send({
+                    courseName: "bar",
+                    courseCode: "BAR123",
+                    userid: userid,
+                    courseOrder: ["temp"],
+                    tasks: [],
+                })
+                .expect(400);
         }),
         it("returns an error when creating a course with an empty course name input", async () => {
             await request(server)
                 .post("/courses/createcourse")
                 .send({
                     courseName: "",
-                    courseCode: "foo",
+                    courseCode: "BAR123",
                     userid: userid,
+                    courseOrder: ["temp"],
+                    tasks: [],
                 })
                 .expect(422);
         });
@@ -105,4 +136,44 @@ describe("course route testing", () => {
                 .send({ courseid: "123" })
                 .expect(500);
         });
+
+    it("should create recurring tasks successfully when a new course is created", async () => {
+        await request(server)
+            .post("/courses/createcourse")
+            .send({
+                courseName: "foobar",
+                courseCode: "FB123",
+                userid: userid,
+                courseOrder: ["temp"],
+                tasks: [
+                    {
+                        recurringTaskName: "Read Chapter 1",
+                        recurringTaskPriorityLevel: "High",
+                        reminderDay: "Monday",
+                        reminderFrequency: "Weekly",
+                        reminderNumberOfRepeats: 13,
+                    },
+                ],
+            })
+            .expect(201);
+
+        // Verify the course was created
+        const course = await Course.findOne({ courseCode: "FB123" });
+        expect(course).not.toBeNull();
+
+        // Verify the task was created with the correct recurrence
+        const tasks = await Task.find({ course: course._id });
+        expect(tasks.length).toEqual(13);
+        const refDate = new Date();
+        refDate.setHours(0, 0, 0, 0);
+        // Set refDate to the nearest Monday
+        refDate.setDate(refDate.getDate() + ((1 + 7 - refDate.getDay()) % 7));
+        tasks.forEach((task) => {
+            expect(task.taskName).toEqual("Read Chapter 1");
+            expect(task.priority).toEqual("High");
+            expect(task.dueDate).toEqual(refDate);
+            // Increment refDate by 7 days
+            refDate.setDate(refDate.getDate() + 7);
+        });
+    });
 });

@@ -28,12 +28,26 @@ describe("Course Model Test", () => {
         it("saves a course", async () => {
             const course = new Course({
                 courseName: "foo",
-                courseCode: "foo",
+                courseCode: "FOO123",
             });
             const savedCourse = await course.save();
             const expected = "foo";
             const actual = savedCourse.courseName;
             expect(actual).toEqual(expected);
+        });
+
+        it("throws an error if course code is not in the correct format", async () => {
+            const course = new Course({
+                courseName: "foo",
+                courseCode: "foo",
+            });
+            try {
+                const savedCourse = await course.save();
+            } catch (error) {
+                const expected =
+                    "Course validation failed: courseCode: Path `courseCode` is invalid (foo).";
+                expect(error.message).toEqual(expected);
+            }
         });
     });
 
@@ -41,7 +55,7 @@ describe("Course Model Test", () => {
         it("gets a course", async () => {
             const course = new Course({
                 courseName: "foo",
-                courseCode: "foo",
+                courseCode: "FOO123",
             });
             await course.save();
 
@@ -56,7 +70,7 @@ describe("Course Model Test", () => {
         it("updates a course", async () => {
             const course = new Course({
                 courseName: "foo",
-                courseCode: "foo",
+                courseCode: "FOO123",
             });
             await course.save();
             course.courseName = "bar";
@@ -71,7 +85,7 @@ describe("Course Model Test", () => {
         it("deletes a course", async () => {
             const course = new Course({
                 courseName: "foo",
-                courseCode: "foo",
+                courseCode: "FOO123",
             });
             await course.save();
             await Course.findOneAndDelete({ courseName: "foo" });

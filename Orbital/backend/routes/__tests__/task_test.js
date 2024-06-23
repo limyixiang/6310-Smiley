@@ -1,8 +1,8 @@
 const request = require("supertest");
 const app = require("../../app");
-const Task = require("../../models/tasksModel");
-const Course = require("../../models/courseModel");
 const User = require("../../models/userModel");
+const Course = require("../../models/courseModel");
+const Task = require("../../models/tasksModel");
 
 // Access Test Database
 const mongoose = require("mongoose");
@@ -49,8 +49,10 @@ describe("task route testing", () => {
                     .post("/courses/createcourse")
                     .send({
                         courseName: "bar",
-                        courseCode: "foo",
+                        courseCode: "BAR123",
                         userid: userid,
+                        courseOrder: ["temp"],
+                        tasks: [],
                     })
                     .then((res) => {
                         courseid = res.body.data._id;
@@ -119,32 +121,6 @@ describe("task route testing", () => {
                 .expect(422);
         });
 
-    it("can get tasks for a user", async () => {
-        await request(server)
-            .post("/tasks/gettasksforuser")
-            .send({ userid: userid })
-            .expect(200);
-    }),
-        it("returns an error when getting tasks with an invalid user id", async () => {
-            await request(server)
-                .post("/tasks/gettasksforuser")
-                .send({ userid: "123" })
-                .expect(500);
-        });
-
-    it("can get tasks for a course", async () => {
-        await request(server)
-            .post("/tasks/gettasksforcourse")
-            .send({ courseid: courseid })
-            .expect(200);
-    }),
-        it("returns an error when getting tasks with an invalid course id", async () => {
-            await request(server)
-                .post("/tasks/gettasksforcourse")
-                .send({ courseid: "123" })
-                .expect(500);
-        });
-
     it("can complete a task", async () => {
         const res = await Task.findOne({ taskName: "fooo" });
         const taskid = res._id;
@@ -189,4 +165,101 @@ describe("task route testing", () => {
         it("returns an error when deleting a task with an invalid task id", async () => {
             await request(server).delete("/tasks/deletetask/123").expect(500);
         });
+
+    describe("fetch tasks in the correct order", () => {
+        let expectedOrderByDate, expectedOrderByPriority;
+        beforeAll(async () => {
+            await request(server)
+                .post("/tasks/createtask")
+                .send({
+                    taskName: "fooo",
+                    dueDate: "2024-05-30",
+                    priority: "High",
+                    courseid: courseid,
+                    userid: userid,
+                })
+                .expect(201);
+            await request(server)
+                .post("/tasks/createtask")
+                .send({
+                    taskName: "bar",
+                    dueDate: "2024-05-30",
+                    priority: "Low",
+                    courseid: courseid,
+                    userid: userid,
+                })
+                .expect(201);
+            await request(server)
+                .post("/tasks/createtask")
+                .send({
+                    taskName: "baz",
+                    dueDate: "2024-05-29",
+                    priority: "Low",
+                    courseid: courseid,
+                    userid: userid,
+                })
+                .expect(201);
+            expectedOrderByDate = ["baz", "fooo", "bar"];
+            expectedOrderByPriority = ["fooo", "baz", "bar"];
+        });
+        it("can get tasks (sorted by date) for a user", async () => {
+            const res = await request(server)
+                .post("/tasks/gettasksbydateforuser")
+                .send({ userid: userid })
+                .expect(200);
+            const taskOrder = res.body.map((task) => task.taskName);
+            expect(taskOrder).toEqual(expectedOrderByDate);
+        }),
+            it("returns an error when getting tasks with an invalid user id", async () => {
+                await request(server)
+                    .post("/tasks/gettasksbydateforuser")
+                    .send({ userid: "123" })
+                    .expect(500);
+            });
+
+        it("can get tasks (sorted by priority) for a user", async () => {
+            const res = await request(server)
+                .post("/tasks/gettasksbypriorityforuser")
+                .send({ userid: userid })
+                .expect(200);
+            const taskOrder = res.body.map((task) => task.taskName);
+            expect(taskOrder).toEqual(expectedOrderByPriority);
+        }),
+            it("returns an error when getting tasks with an invalid user id", async () => {
+                await request(server)
+                    .post("/tasks/gettasksbypriorityforuser")
+                    .send({ userid: "123" })
+                    .expect(500);
+            });
+
+        it("can get tasks (sorted by date) for a course", async () => {
+            const res = await request(server)
+                .post("/tasks/gettasksbydateforcourse")
+                .send({ courseid: courseid })
+                .expect(200);
+            const taskOrder = res.body.map((task) => task.taskName);
+            expect(taskOrder).toEqual(expectedOrderByDate);
+        }),
+            it("returns an error when getting tasks with an invalid course id", async () => {
+                await request(server)
+                    .post("/tasks/gettasksbydateforcourse")
+                    .send({ courseid: "123" })
+                    .expect(500);
+            });
+
+        it("can get tasks (sorted by priority) for a course", async () => {
+            const res = await request(server)
+                .post("/tasks/gettasksbypriorityforcourse")
+                .send({ courseid: courseid })
+                .expect(200);
+            const taskOrder = res.body.map((task) => task.taskName);
+            expect(taskOrder).toEqual(expectedOrderByPriority);
+        }),
+            it("returns an error when getting tasks with an invalid course id", async () => {
+                await request(server)
+                    .post("/tasks/gettasksbypriorityforcourse")
+                    .send({ courseid: "123" })
+                    .expect(500);
+            });
+    });
 });
