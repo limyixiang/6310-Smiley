@@ -342,16 +342,19 @@ function AddCourseModal({
                     </div>
                     {errorMessage()}
                     <div
-                        className={styles.spinnerGroup}
                         id="spinner"
                         style={{
                             display: courseValues.addingCourse
                                 ? "block"
                                 : "none",
                         }}
+                        className={styles.spinnerGroup}
                     >
                         <div className={styles.spinner}></div>
-                        <p>Loading...</p>
+                        <p>
+                            Please wait patiently as we load your course
+                            request...
+                        </p>
                     </div>
                     <button onClick={nextPage}>Next</button>
                     <button onClick={() => closeModal("course")}>Close</button>
