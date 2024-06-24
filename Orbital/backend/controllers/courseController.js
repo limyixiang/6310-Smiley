@@ -97,7 +97,7 @@ exports.createCourse = async (req, res) => {
 exports.deleteCourse = async (req, res) => {
     try {
         // Extract course ID from request parameters
-        const courseId = req.params.id;
+        const courseId = String(req.params.id).trim();
 
         // Find course by ID and delete it
         const deletedCourse = await Course.findByIdAndDelete(courseId);
@@ -109,20 +109,45 @@ exports.deleteCourse = async (req, res) => {
                 .json({ success: false, error: "Course not found." });
         }
 
-        // Remove course from user's array of courses
+        // Find user associated with the course and update their course and task arrays
         const user = await User.findById(deletedCourse.user);
-        user.courses = user.courses.filter((course) => course._id != courseId);
+        if (user) {
+            // array of tasks to be removed
+            const toBeRemovedTasks = await Task.find({
+                course: courseId,
+            });
+            for (const task of toBeRemovedTasks) {
+                user.tasksByDate = user.tasksByDate.filter(
+                    (t) => String(t._id).trim() != String(task._id).trim()
+                );
+                user.tasksByPriority = user.tasksByPriority.filter(
+                    (t) => String(t._id).trim() != String(task._id).trim()
+                );
+            }
+            user.courses = user.courses.filter(
+                (course) => String(course._id).trim() != courseId
+            );
+            await user.save();
+        }
+
+        // Delete all tasks associated with the course
+        const deletedTasks = await Task.deleteMany({ course: courseId });
+
         await user.save();
 
         // Respond with success message
         res.status(200).json({
             success: true,
-            message: "Course deleted successfully.",
-            data: user.courses,
+            message: `Course and ${deletedTasks.deletedCount} corresponding tasks deleted successfully.`,
+            data: {
+                courses: user ? user.courses : [],
+                tasksByDate: user ? user.tasksByDate : [],
+                tasksByPriority: user ? user.tasksByPriority : [],
+            },
         });
     } catch (error) {
         // Handle errors
-        // console.error(error);
+        console.error(error);
         res.status(500).json({
             success: false,
             error: "Internal server error.",
