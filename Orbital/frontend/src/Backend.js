@@ -332,3 +332,34 @@ export const getCourses = async (user) => {
         return err.response.data;
     }
 };
+
+// User
+export const updateSubscriptions = async (userid, subscription) => {
+    // API call to update subscriptions
+    try {
+        const response = await axios.post(
+            `${URL}/user/updatesubscriptions`,
+            JSON.stringify({ userid, subscription }),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+// Push Notifications
+export const sendSubscription = (subscription, title, message) => {
+    return fetch("http://localhost:8000/notifications/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ subscription, title, message }),
+        headers: {
+            "content-type": "application/json",
+        },
+    });
+};

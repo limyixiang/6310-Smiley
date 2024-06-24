@@ -1,8 +1,9 @@
-import { useState, React } from "react";
-import { isAuthenticated, signout } from "../Backend";
+import { useState, React, useEffect } from "react";
+import { isAuthenticated, signout, updateSubscriptions } from "../Backend";
 import { useNavigate } from "react-router-dom";
 import styles from "./dashboardPage.module.css";
 import logo from "./smileytransparent.jpg";
+import { getExistingSubscription } from "../utils/Push";
 
 const Dashboard = () => {
     const navigate = useNavigate(); // Initialize navigation
@@ -56,6 +57,28 @@ const Dashboard = () => {
         }, 3000); // Adjust this value to match the animation duration
     };
 
+    const check_and_update_subscription = (user) =>
+        getExistingSubscription().then((subscription) => {
+            if (subscription) {
+                const subscriptionJson = subscription.toJSON();
+                console.log("Auth key:", subscriptionJson.keys.auth);
+                console.log("p256dh key:", subscriptionJson.keys.p256dh);
+                console.log(subscriptionJson.keys);
+                // Optionally, send the subscription to your backend for storage or updates
+                updateSubscriptions(user._id, subscriptionJson);
+            } else {
+                console.log("No existing subscription found.");
+                // Here you might want to call a function to create a new subscription
+            }
+        });
+
+    // Check for existing subscription on component mount
+    useEffect(() => {
+        if (authenticatedUser) {
+            check_and_update_subscription(authenticatedUser.user);
+        }
+    }, [authenticatedUser]); // Dependencies array
+
     return !authenticatedUser ? (
         <div className={styles.mainContainer1}>
             <div className={styles.rippleContainer} onClick={handleClick}>
@@ -88,6 +111,7 @@ const Dashboard = () => {
         </div>
     ) : (
         <div className={styles.mainContainer2}>
+            {/* {check_and_update_subscription(authenticatedUser.user)} */}
             <div className={styles.rippleContainer} onClick={handleClick}>
                 <div className={styles.ripple}></div>
             </div>

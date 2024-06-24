@@ -2,6 +2,9 @@ const Task = require("../models/tasksModel");
 const User = require("../models/userModel");
 const Course = require("../models/courseModel");
 const { validationResult } = require("express-validator");
+const {
+    scheduleTaskDeadlineNotification,
+} = require("./notificationsController");
 
 const insertTaskByDate = async (arr, newDeadline, task) => {
     const numTasks = arr.length;
@@ -305,6 +308,11 @@ exports.createTask = async (req, res) => {
         } catch (err) {
             console.log(err);
         }
+        scheduleTaskDeadlineNotification({
+            duedate: task.dueDate,
+            user: user,
+            taskName: task.taskName,
+        });
         if (res) {
             return res
                 .status(201)

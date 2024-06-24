@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema(
         tasksByPriority: [
             { type: mongoose.Schema.Types.ObjectId, ref: "Task" },
         ],
+        subscriptions: [
+            { type: mongoose.Schema.Types.ObjectId, ref: "Subscription" },
+        ],
     },
     { timestamps: true }
 );
