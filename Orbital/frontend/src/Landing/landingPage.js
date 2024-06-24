@@ -62,7 +62,7 @@ function LandingPage() {
 
     // Destructuring values from the state
     const { refresh, sortBy, viewTasks } = landingPageValues;
-    const { courseName, courseCode, addingCourse } = courseValues;
+    const { courseName, courseCode } = courseValues;
     const {
         isSelected,
         reminderDay,
@@ -251,6 +251,10 @@ function LandingPage() {
                 .then((data) => {
                     console.log(data);
                     if (data.error) {
+                        setCourseValues({
+                            ...courseValues,
+                            addingCourse: false,
+                        });
                         setErr(data.error);
                     } else {
                         setCourses([...courses, data.data]);
