@@ -21,17 +21,25 @@ exports.subscribe = async (req, res) => {
 };
 
 exports.scheduleTaskDeadlineNotification = (task) => {
-    const { dueDate, user, taskName } = task;
-    // const notificationTime = new Date(dueDate.getTime() - 60 * 60 * 1000); // 1 hour before due date
-    const notificationTime = new Date(Date.now() + 5 * 1000); // 1 minute after current time
+    const { courseCode, dueDate, user, taskName } = task;
+    // console.log(dueDate, taskName);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueToday = dueDate === today.getTime();
+    // console.log("dueToday:", dueToday);
+    const notificationTime = dueToday
+        ? new Date(Date.now() + 10 * 1000) // 10 seconds after current time
+        : new Date(dueDate - 24 * 60 * 60 * 1000); // 1 day before due date
+    // const notificationTime = new Date(Date.now() + 5 * 1000); // 5 seconds after current time
 
     schedule.scheduleJob(notificationTime, async () => {
         // const subscription = await getUserSubscription(user);
         const subscriptions = await Subscription.find({ user: user });
         const payload = JSON.stringify({
-            title: "Test Notification",
-            message: `Your task "${taskName}" was created 5 seconds ago.`,
-            // message: `Your task "${taskName}" is due in 1 hour.`,
+            title: `Task Deadline Notification - ${courseCode}`,
+            message: dueToday
+                ? `Your task "${taskName}" is due today!`
+                : `Your task "${taskName}" is due in 1 day.`,
         });
 
         for (const subscription of subscriptions) {

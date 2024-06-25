@@ -309,7 +309,8 @@ exports.createTask = async (req, res) => {
             console.log(err);
         }
         scheduleTaskDeadlineNotification({
-            duedate: task.dueDate,
+            courseCode: course.courseCode,
+            dueDate: newDeadline,
             user: user,
             taskName: task.taskName,
         });

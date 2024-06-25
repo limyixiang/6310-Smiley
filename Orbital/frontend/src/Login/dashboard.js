@@ -1,4 +1,4 @@
-import { useState, React, useEffect } from "react";
+import { useState, React } from "react";
 import { isAuthenticated, signout, updateSubscriptions } from "../Backend";
 import { useNavigate } from "react-router-dom";
 import styles from "./dashboardPage.module.css";
@@ -17,6 +17,9 @@ const Dashboard = () => {
     };
 
     const onLandingPage = () => {
+        if (authenticatedUser) {
+            check_and_update_subscription(authenticatedUser.user);
+        }
         navigate("/landingpage", { state: { user: authenticatedUser.user } });
     };
 
@@ -71,13 +74,6 @@ const Dashboard = () => {
                 // Here you might want to call a function to create a new subscription
             }
         });
-
-    // Check for existing subscription on component mount
-    useEffect(() => {
-        if (authenticatedUser) {
-            check_and_update_subscription(authenticatedUser.user);
-        }
-    }, [authenticatedUser]); // Dependencies array
 
     return !authenticatedUser ? (
         <div className={styles.mainContainer1}>
