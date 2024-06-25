@@ -4,6 +4,7 @@ const Course = require("../models/courseModel");
 const { validationResult } = require("express-validator");
 const {
     scheduleTaskDeadlineNotification,
+    cancelTaskDeadlineNotification,
 } = require("./notificationsController");
 
 const insertTaskByDate = async (arr, newDeadline, task) => {
@@ -308,12 +309,15 @@ exports.createTask = async (req, res) => {
         } catch (err) {
             console.log(err);
         }
-        scheduleTaskDeadlineNotification({
+        const jobId = scheduleTaskDeadlineNotification({
             courseCode: course.courseCode,
             dueDate: newDeadline,
             user: user,
             taskName: task.taskName,
         });
+        console.log(jobId);
+        task.set("notification", jobId);
+        task.save();
         if (res) {
             return res
                 .status(201)
@@ -438,6 +442,7 @@ exports.completeTask = async (req, res) => {
             return res.status(200).json({ message: "Task already completed" });
         }
         task.status = "Done";
+        await cancelTaskDeadlineNotification(task);
         await task.save();
         return res.status(200).json({ message: "Task completed successfully" });
     } catch (error) {
@@ -455,6 +460,14 @@ exports.reverseCompleteTask = async (req, res) => {
                 .json({ message: "Task already not completed" });
         }
         task.status = "Todo";
+        const newDeadline = new Date(task.dueDate).getTime();
+        const jobId = scheduleTaskDeadlineNotification({
+            courseCode: task.course.courseCode,
+            dueDate: newDeadline,
+            user: task.user,
+            taskName: task.taskName,
+        });
+        task.set("notification", jobId);
         await task.save();
         return res
             .status(200)
