@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const Task = require("../models/tasksModel");
 const { validationResult } = require("express-validator");
 const { createTask } = require("./taskController");
+const { deleteTaskDeadlineNotification } = require("./notificationsController");
 
 const days = [
     "Sunday",
@@ -119,6 +120,9 @@ exports.deleteCourse = async (req, res) => {
             const toBeRemovedTaskIds = new Set(
                 toBeRemovedTasks.map((task) => task._id.toString())
             );
+            for (const taskId of toBeRemovedTaskIds) {
+                await deleteTaskDeadlineNotification(taskId);
+            }
             user.tasksByDate = user.tasksByDate.filter(
                 (taskId) => !toBeRemovedTaskIds.has(taskId.toString())
             );

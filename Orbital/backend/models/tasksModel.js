@@ -38,10 +38,12 @@ const taskSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
-    notification: {
-        type: String,
-        required: false,
-    },
+    notifications: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "agendaJobs",
+        },
+    ],
     createdAt: {
         type: Date,
         default: Date.now,
