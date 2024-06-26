@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const Task = require("../models/tasksModel");
 const { validationResult } = require("express-validator");
 const { createTask } = require("./taskController");
+const { deleteTaskDeadlineNotification } = require("./notificationsController");
 
 const days = [
     "Sunday",
@@ -97,7 +98,7 @@ exports.createCourse = async (req, res) => {
 exports.deleteCourse = async (req, res) => {
     try {
         // Extract course ID from request parameters
-        const courseId = String(req.params.id).trim();
+        const courseId = req.params.id;
 
         // Find course by ID and delete it
         const deletedCourse = await Course.findByIdAndDelete(courseId);
@@ -116,16 +117,20 @@ exports.deleteCourse = async (req, res) => {
             const toBeRemovedTasks = await Task.find({
                 course: courseId,
             });
-            for (const task of toBeRemovedTasks) {
-                user.tasksByDate = user.tasksByDate.filter(
-                    (t) => String(t._id).trim() != String(task._id).trim()
-                );
-                user.tasksByPriority = user.tasksByPriority.filter(
-                    (t) => String(t._id).trim() != String(task._id).trim()
-                );
+            const toBeRemovedTaskIds = new Set(
+                toBeRemovedTasks.map((task) => task._id.toString())
+            );
+            for (const taskId of toBeRemovedTaskIds) {
+                await deleteTaskDeadlineNotification(taskId);
             }
+            user.tasksByDate = user.tasksByDate.filter(
+                (taskId) => !toBeRemovedTaskIds.has(taskId.toString())
+            );
+            user.tasksByPriority = user.tasksByPriority.filter(
+                (taskId) => !toBeRemovedTaskIds.has(taskId.toString())
+            );
             user.courses = user.courses.filter(
-                (course) => String(course._id).trim() != courseId
+                (course) => course._id != courseId
             );
             await user.save();
         }
@@ -147,7 +152,7 @@ exports.deleteCourse = async (req, res) => {
         });
     } catch (error) {
         // Handle errors
-        console.error(error);
+        // console.error(error);
         res.status(500).json({
             success: false,
             error: "Internal server error.",

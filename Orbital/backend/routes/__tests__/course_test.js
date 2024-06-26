@@ -136,6 +136,7 @@ describe("course route testing", () => {
                 .send({ courseid: "123" })
                 .expect(500);
         });
+    // it("deletes all corresponding tasks when a course is deleted", async () => {});
 
     it("should create recurring tasks successfully when a new course is created", async () => {
         await request(server)
