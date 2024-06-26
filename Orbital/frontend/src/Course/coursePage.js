@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./coursePage.module.css";
 import {
     getTasksByDateForCourse,
@@ -12,6 +12,7 @@ import CourseTasksList from "./courseTasksList";
 import CourseCompletedTasks from "./courseCompletedTasks";
 
 function CoursePage() {
+    const navigate = useNavigate();
     const [tasks, setTasks] = useState({
         completedTasks: [],
         incompleteTasks: [],
@@ -141,14 +142,18 @@ function CoursePage() {
         );
     };
 
+    const onLandingPage = () => {
+        navigate("/landingpage", { state: { user } });
+    };
+
     return (
         <div className={styles.mainContainer}>
             <div className={styles.courseHeader}>
                 {course.courseCode + " " + course.courseName}
             </div>
             <div className={styles.courseTasksContainer}>
-                <div className={styles.sortByLabel}>
-                    Sort By:
+                <div className={styles.sortByDropdownContainer}>
+                    <label htmlFor="courseTasksSortBy">Sort By:</label>
                     <select
                         id="courseTasksSortBy"
                         value={sortBy}
@@ -193,15 +198,9 @@ function CoursePage() {
                     />
                 </div>
             </div>
-            <center>
-                <p className={styles.courseToLandingPage}>
-                    <b>
-                        <Link to="/landingPage" state={{ user: user }}>
-                            Back to Landing Page
-                        </Link>
-                    </b>
-                </p>
-            </center>
+            <div className={styles.linkGroup}>
+                <button onClick={onLandingPage}>Back to Landing</button>
+            </div>
         </div>
     );
 }

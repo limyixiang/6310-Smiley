@@ -29,11 +29,16 @@ function UpcomingTasksContainer({
                                     : "none",
                         }}
                     >
-                        {courseDescription(task.course) + " - " + task.taskName}
-                        <br />
-                        {deadlineDescription(task.dueDate) +
-                            "Priority: " +
-                            task.priority}
+                        <div className={styles.taskDescription}>
+                            {courseDescription(task.course) +
+                                " - " +
+                                task.taskName}
+                        </div>
+                        <div className={styles.taskDeadlinePriority}>
+                            {deadlineDescription(task.dueDate) +
+                                ", Priority: " +
+                                task.priority}
+                        </div>
                     </span>
                     <FontAwesomeIcon
                         className={`${styles.trashcan} ${styles.taskTrashcan}`}

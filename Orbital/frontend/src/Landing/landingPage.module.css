@@ -63,6 +63,7 @@
 
 .linkGroup a:hover {
     background-color: #c6e2ff;
+    cursor: pointer;
 } /*hyperlink on hover*/
 
 /*CourseContainer*/
@@ -350,6 +351,56 @@
     background-color: #c6e2ff;
 } /*course draggable on hover on page 2 popup*/
 
+.spinnerGroup {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: black;
+} /*spinner container*/
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    background-color: blue;
+    border-radius: 50%;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    background: conic-gradient(
+        rgb(98, 125, 213),
+        rgb(0, 238, 255),
+        #0eebac,
+        rgb(98, 125, 213)
+    );
+    animation: spin 1.4s linear infinite;
+    box-shadow: 0px 0px 10px -8px black;
+    border: 1px solid white;
+} /*spinner animation*/
+
+.spinner::before {
+    content: "";
+    background-color: white;
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0px 0px 10px -8px black;
+    border: 1px solid white;
+} /*filler inside the spinner*/
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+} /*spinner animation*/
+
 /*TaskContainer*/
 .tasksHeader {
     color: #000055;
@@ -439,7 +490,18 @@
     flex: 9;
     padding: 10px;
     text-align: left;
+}
+
+.taskDescription {
     color: #000055;
+    font-size: 16px;
+    text-align: left;
+}
+
+.taskDeadlinePriority {
+    color: rgba(255, 0, 0);
+    font-size: 12px;
+    text-align: left;
 }
 
 .taskTrashcan {
@@ -642,53 +704,3 @@
     font-size: 12px;
     color: red;
 } /*error message*/
-
-.spinnerGroup {
-    display: block;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 12px;
-    color: black;
-} /*spinner container*/
-
-.spinner {
-    width: 32px;
-    height: 32px;
-    background-color: blue;
-    border-radius: 50%;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    background: conic-gradient(
-        rgb(98, 125, 213),
-        rgb(0, 238, 255),
-        #0eebac,
-        rgb(98, 125, 213)
-    );
-    animation: spin 1.4s linear infinite;
-    box-shadow: 0px 0px 10px -8px black;
-    border: 1px solid white;
-} /*spinner animation*/
-
-.spinner::before {
-    content: "";
-    background-color: white;
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: inset 0px 0px 10px -8px black;
-    border: 1px solid white;
-} /*filler inside the spinner*/
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-} /*spinner animation*/
