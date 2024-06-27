@@ -103,3 +103,33 @@ export async function getExistingSubscription() {
         return null;
     }
 }
+
+export async function createSubscription() {
+    // Ensure service worker is supported and registered
+    if ("serviceWorker" in navigator) {
+        try {
+            await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+
+            // Wait for the service worker to be ready
+            const readyRegistration = await navigator.serviceWorker.ready;
+
+            // Attempt to subscribe to push notifications
+            const newSubscription =
+                await readyRegistration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+                });
+
+            return newSubscription;
+        } catch (error) {
+            console.error(
+                "Service Worker registration or subscription creation failed:",
+                error
+            );
+            return null;
+        }
+    } else {
+        console.log("Service Workers are not supported in this browser.");
+        return null;
+    }
+}
