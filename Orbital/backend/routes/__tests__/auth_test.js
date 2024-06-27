@@ -1,6 +1,9 @@
 const request = require("supertest");
 const app = require("../../app");
 const User = require("../../models/userModel");
+const {
+    gracefulShutdown,
+} = require("../../controllers/notificationsController");
 
 // Access Test Database
 const mongoose = require("mongoose");
@@ -22,8 +25,10 @@ beforeAll(async () => {
 
 afterAll(async () => {
     await User.deleteMany({});
-    mongoose.connection.close();
-    server.close();
+    await mongoose.connection.close();
+    await gracefulShutdown();
+    await server.close();
+    await new Promise((resolve) => server.close(resolve));
 });
 
 describe("auth route testing", () => {

@@ -127,3 +127,18 @@ exports.deleteTaskDeadlineNotification = async (taskId) => {
         // console.log("cancelled");
     }
 };
+
+// Define the gracefulShutdown function
+const gracefulShutdown = async () => {
+    console.log("Shutting down gracefully...");
+    await agenda.stop();
+    await agenda.close();
+    console.log("Agenda stopped, exiting...");
+    // process.exit(0);
+};
+
+// Attach graceful shutdown to relevant signals, e.g., SIGINT from pressing Ctrl+C
+process.on("SIGINT", gracefulShutdown);
+
+// Gracefully stopping Agenda
+exports.gracefulShutdown = gracefulShutdown;

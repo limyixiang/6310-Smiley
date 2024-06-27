@@ -3,6 +3,9 @@ const app = require("../../app");
 const Course = require("../../models/courseModel");
 const User = require("../../models/userModel");
 const Task = require("../../models/tasksModel");
+const {
+    gracefulShutdown,
+} = require("../../controllers/notificationsController");
 
 // Access Test Database
 const mongoose = require("mongoose");
@@ -25,8 +28,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    mongoose.connection.close();
-    server.close();
+    await mongoose.connection.close();
+    await server.close();
+    await gracefulShutdown();
 });
 
 describe("course route testing", () => {
@@ -136,7 +140,6 @@ describe("course route testing", () => {
                 .send({ courseid: "123" })
                 .expect(500);
         });
-    // it("deletes all corresponding tasks when a course is deleted", async () => {});
 
     it("should create recurring tasks successfully when a new course is created", async () => {
         await request(server)
@@ -176,5 +179,20 @@ describe("course route testing", () => {
             // Increment refDate by 7 days
             refDate.setDate(refDate.getDate() + 7);
         });
-    });
+    }),
+        it("should delete all related tasks when a course is deleted", async () => {
+            const course = await Course.findOne({ courseCode: "FB123" });
+            expect(course).not.toBeNull();
+            const courseid = course._id;
+            const befTasks = await Task.find({ course: courseid });
+            expect(befTasks.length).toEqual(13);
+            await request(server)
+                .delete(`/courses/deletecourse/${courseid}`)
+                .send({ courseid: courseid })
+                .expect(200);
+            const aftTasks = await Task.find({ course: courseid });
+            expect(aftTasks.length).toEqual(0);
+            const aftCourse = await Course.findOne({ courseCode: "FB123" });
+            expect(aftCourse).toBeNull();
+        });
 });

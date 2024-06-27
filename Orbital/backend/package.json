@@ -24,6 +24,7 @@
     "scripts": {
         "start": "nodemon index.js",
         "test": "jest",
+        "test:openHandles": "jest --detectOpenHandles",
         "server": "nodemon server"
     },
     "author": "",

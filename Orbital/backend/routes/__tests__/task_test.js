@@ -3,6 +3,9 @@ const app = require("../../app");
 const User = require("../../models/userModel");
 const Course = require("../../models/courseModel");
 const Task = require("../../models/tasksModel");
+const {
+    gracefulShutdown,
+} = require("../../controllers/notificationsController");
 
 // Access Test Database
 const mongoose = require("mongoose");
@@ -30,8 +33,9 @@ afterAll(async () => {
     await User.deleteMany({});
     await Course.deleteMany({});
     await Task.deleteMany({});
-    mongoose.connection.close();
-    server.close();
+    await mongoose.connection.close();
+    await server.close();
+    await gracefulShutdown();
 });
 
 describe("task route testing", () => {
