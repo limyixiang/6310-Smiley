@@ -9,6 +9,7 @@ const {
 
 // Access Test Database
 const mongoose = require("mongoose");
+const e = require("express");
 var mongoDB =
     "mongodb+srv://Smiley:6310-Smiley@6310-smiley.yxgidpp.mongodb.net/integrationTestingCourse?retryWrites=true&w=majority&appName=6310-Smiley";
 
@@ -181,6 +182,9 @@ describe("course route testing", () => {
         });
     }),
         it("should delete all related tasks when a course is deleted", async () => {
+            let user = await User.findById(userid);
+            const userTasksByDate = user.tasksByDate.length;
+            const userTasksByPriority = user.tasksByPriority.length;
             const course = await Course.findOne({ courseCode: "FB123" });
             expect(course).not.toBeNull();
             const courseid = course._id;
@@ -194,5 +198,10 @@ describe("course route testing", () => {
             expect(aftTasks.length).toEqual(0);
             const aftCourse = await Course.findOne({ courseCode: "FB123" });
             expect(aftCourse).toBeNull();
+            user = await User.findById(userid);
+            const newUserTasksByDate = user.tasksByDate.length;
+            const newUserTasksByPriority = user.tasksByPriority.length;
+            expect(newUserTasksByDate).toEqual(userTasksByDate - 13);
+            expect(newUserTasksByPriority).toEqual(userTasksByPriority - 13);
         });
 });
