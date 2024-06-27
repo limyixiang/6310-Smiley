@@ -32,7 +32,7 @@ function CourseCompletedTasks({
                             </div>
                             <div className={styles.taskDeadlinePriority}>
                                 {deadlineDescription(task) +
-                                    "Priority: " +
+                                    ", Priority: " +
                                     task.priority}
                             </div>
                         </div>
