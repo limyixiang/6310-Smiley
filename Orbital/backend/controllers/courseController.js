@@ -57,7 +57,7 @@ exports.createCourse = async (req, res) => {
         const tasks = req.body.tasks;
         for (const task of tasks) {
             const refDate = new Date();
-            refDate.setHours(0, 0, 0, 0);
+            refDate.setUTCHours(-8, 0, 0, 0);
             const dayOfWeek = days.indexOf(task.reminderDay);
             // console.log(refDate.getDate());
             refDate.setDate(

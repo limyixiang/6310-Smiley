@@ -251,7 +251,8 @@ exports.createTask = async (req, res) => {
         const user = await User.findById(req.body.userid);
         const course = await Course.findById(req.body.courseid);
         const dueDate = new Date(req.body.dueDate);
-        dueDate.setHours(0, 0, 0, 0);
+        dueDate.setUTCHours(-8, 0, 0, 0);
+        console.log(new Date(dueDate));
         const task = new Task({
             taskName: req.body.taskName,
             dueDate: dueDate,

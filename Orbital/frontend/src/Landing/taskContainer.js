@@ -21,22 +21,23 @@ function TaskContainer({
     // Get the first day of the week (assuming Monday is the first day of the week)
     const firstDayOfWeek = new Date(
         now.setDate(now.getDate() - now.getDay() + 1)
-    ).setHours(0, 0, 0, 0);
+    ).setUTCHours(-8, 0, 0, 0);
     // Get the last day of the week (assuming Sunday is the last day of the week)
     const lastDayOfWeek = new Date(
         now.setDate(now.getDate() - now.getDay() + 7)
-    ).setHours(0, 0, 0, 0);
+    ).setUTCHours(-8, 0, 0, 0);
     // Filter tasks that are due within the current week
     const currentWeekTasks = tasks.filter((task) => {
         const dueDate = new Date(task.dueDate);
         return dueDate >= firstDayOfWeek && dueDate <= lastDayOfWeek;
     });
+    // console.log(new Date(lastDayOfWeek));
     // Filter tasks that are due the next week
     const nextWeekTasks = tasks.filter((task) => {
         const dueDate = new Date(task.dueDate);
         const nextWeekLastDay = new Date(lastDayOfWeek);
         nextWeekLastDay.setDate(nextWeekLastDay.getDate() + 7);
-        nextWeekLastDay.setHours(0, 0, 0, 0);
+        nextWeekLastDay.setUTCHours(-8, 0, 0, 0);
         return dueDate > lastDayOfWeek && dueDate <= nextWeekLastDay;
     });
 
