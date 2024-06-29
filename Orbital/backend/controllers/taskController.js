@@ -2,6 +2,12 @@ const Task = require("../models/tasksModel");
 const User = require("../models/userModel");
 const Course = require("../models/courseModel");
 const { validationResult } = require("express-validator");
+const {
+    scheduleTaskDeadlineNotification,
+    disableTaskDeadlineNotification,
+    enableTaskDeadlineNotification,
+    deleteTaskDeadlineNotification,
+} = require("./notificationsController");
 
 const insertTaskByDate = async (arr, newDeadline, task) => {
     const numTasks = arr.length;
@@ -305,6 +311,24 @@ exports.createTask = async (req, res) => {
         } catch (err) {
             console.log(err);
         }
+        // const jobId = scheduleTaskDeadlineNotification({
+        //     courseCode: course.courseCode,
+        //     dueDate: newDeadline,
+        //     user: user,
+        //     taskName: task.taskName,
+        // });
+        // console.log(jobId);
+        // task.set("notification", jobId);
+        // await task.save();
+        const jobs = await scheduleTaskDeadlineNotification({
+            courseCode: course.courseCode,
+            dueDate: newDeadline,
+            user: user,
+            taskName: task.taskName,
+        });
+        // might want to append new jobs to already existing jobs next time instead of completely overwriting
+        task.set("notifications", jobs);
+        await task.save();
         if (res) {
             return res
                 .status(201)
@@ -326,6 +350,9 @@ exports.deleteTask = async (req, res) => {
     try {
         // Extract task ID from request parameters
         const taskId = req.params.id;
+
+        // Remove related notifications job orders
+        await deleteTaskDeadlineNotification(taskId);
 
         // Find task by ID and delete it
         const deletedTask = await Task.findByIdAndDelete(taskId);
@@ -429,6 +456,8 @@ exports.completeTask = async (req, res) => {
             return res.status(200).json({ message: "Task already completed" });
         }
         task.status = "Done";
+        // await cancelTaskDeadlineNotification(task);
+        await disableTaskDeadlineNotification(task);
         await task.save();
         return res.status(200).json({ message: "Task completed successfully" });
     } catch (error) {
@@ -446,6 +475,15 @@ exports.reverseCompleteTask = async (req, res) => {
                 .json({ message: "Task already not completed" });
         }
         task.status = "Todo";
+        const newDeadline = new Date(task.dueDate).getTime();
+        // const jobId = scheduleTaskDeadlineNotification({
+        //     courseCode: task.course.courseCode,
+        //     dueDate: newDeadline,
+        //     user: task.user,
+        //     taskName: task.taskName,
+        // });
+        // task.set("notification", jobId);
+        await enableTaskDeadlineNotification(task);
         await task.save();
         return res
             .status(200)

@@ -28,6 +28,7 @@ function LandingPage() {
         openModalType: null,
         courseName: "",
         courseCode: "",
+        addingCourse: false,
     });
 
     const defaultTasks = [
@@ -170,6 +171,7 @@ function LandingPage() {
                 courseCode: "",
                 courseName: "",
                 openModalType: null,
+                addingCourse: false,
             }));
             setCourseModalTasks({
                 isSelected: [],
@@ -197,8 +199,14 @@ function LandingPage() {
 
     // Course inputted shown below
     const handleAddCourse = async () => {
-        if (courseCode.trim() === "") {
-            setErr("Invalid course code.");
+        setErr("");
+        if (
+            courseCode.trim() === "" ||
+            !(/\d/.test(courseCode) && /[a-zA-Z]/.test(courseCode))
+        ) {
+            setErr(
+                "Invalid course code. Course code should contain at least a letter and a digit."
+            );
             return;
         } else if (courseName.trim() === "") {
             setErr("Invalid course name.");
@@ -230,17 +238,23 @@ function LandingPage() {
                 }
             }
             // console.log(tasks);
-            console.log(temporaryCourses);
+            // console.log(temporaryCourses);
             const courseOrder = temporaryCourses.map((course) => course._id);
+            setCourseValues({ ...courseValues, addingCourse: true });
             createCourse({
                 courseName: courseName,
-                courseCode: courseCode,
+                courseCode: courseCode.toUpperCase(),
                 userid: user._id,
                 tasks: tasks,
                 courseOrder: courseOrder,
             })
                 .then((data) => {
+                    console.log(data);
                     if (data.error) {
+                        setCourseValues({
+                            ...courseValues,
+                            addingCourse: false,
+                        });
                         setErr(data.error);
                     } else {
                         setCourses([...courses, data.data]);
@@ -419,13 +433,9 @@ function LandingPage() {
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />
-            <center>
-                <p className={styles.linkGroup}>
-                    <b>
-                        <a href="/">Back to Dashboard</a>
-                    </b>
-                </p>
-            </center>
+            <div className={styles.linkGroup}>
+                <a href="/">Back to Dashboard</a>
+            </div>
         </div>
     );
 }

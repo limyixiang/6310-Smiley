@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const Task = require("../models/tasksModel");
 const { validationResult } = require("express-validator");
 const { createTask } = require("./taskController");
+const { deleteTaskDeadlineNotification } = require("./notificationsController");
 
 const days = [
     "Sunday",
@@ -31,6 +32,17 @@ exports.createCourse = async (req, res) => {
         }
 
         const user = await User.findById(req.body.userid);
+        const existingCourses = await Course.find({
+            _id: { $in: user.courses },
+        });
+        for (const course of existingCourses) {
+            if (course.courseCode === req.body.courseCode) {
+                console.log("Course with the same course code already exists.");
+                return res.status(400).json({
+                    error: "Course with the same course code already exists.",
+                });
+            }
+        }
         const course = new Course({
             courseName: req.body.courseName,
             courseCode: req.body.courseCode,
@@ -68,7 +80,7 @@ exports.createCourse = async (req, res) => {
                 );
             }
         }
-        console.log("Tasks created successfully");
+        console.log("Recurring tasks created successfully");
         for (const courseid of req.body.courseOrder) {
             const course = await Course.findById(courseid);
             course.priority = req.body.courseOrder.indexOf(courseid);
@@ -98,16 +110,45 @@ exports.deleteCourse = async (req, res) => {
                 .json({ success: false, error: "Course not found." });
         }
 
-        // Remove course from user's array of courses
+        // Find user associated with the course and update their course and task arrays
         const user = await User.findById(deletedCourse.user);
-        user.courses = user.courses.filter((course) => course._id != courseId);
+        if (user) {
+            // array of tasks to be removed
+            const toBeRemovedTasks = await Task.find({
+                course: courseId,
+            });
+            const toBeRemovedTaskIds = new Set(
+                toBeRemovedTasks.map((task) => task._id.toString())
+            );
+            for (const taskId of toBeRemovedTaskIds) {
+                await deleteTaskDeadlineNotification(taskId);
+            }
+            user.tasksByDate = user.tasksByDate.filter(
+                (taskId) => !toBeRemovedTaskIds.has(taskId.toString())
+            );
+            user.tasksByPriority = user.tasksByPriority.filter(
+                (taskId) => !toBeRemovedTaskIds.has(taskId.toString())
+            );
+            user.courses = user.courses.filter(
+                (course) => course._id != courseId
+            );
+            await user.save();
+        }
+
+        // Delete all tasks associated with the course
+        const deletedTasks = await Task.deleteMany({ course: courseId });
+
         await user.save();
 
         // Respond with success message
         res.status(200).json({
             success: true,
-            message: "Course deleted successfully.",
-            data: user.courses,
+            message: `Course and ${deletedTasks.deletedCount} corresponding tasks deleted successfully.`,
+            data: {
+                courses: user ? user.courses : [],
+                tasksByDate: user ? user.tasksByDate : [],
+                tasksByPriority: user ? user.tasksByPriority : [],
+            },
         });
     } catch (error) {
         // Handle errors

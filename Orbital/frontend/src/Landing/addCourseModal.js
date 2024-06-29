@@ -58,7 +58,7 @@ function AddCourseModal({
         >
             {currentPage === 1 && (
                 <div>
-                    <h2>Please provide some details of the course.</h2>
+                    <h2>PLEASE PROVIDE SOME DETAILS OF THE COURSE:</h2>
                     {/* Input Course Code text box */}
                     <div className={styles.formGroup}>
                         <label htmlFor="addCourseCode">Course Code</label>
@@ -201,8 +201,11 @@ function AddCourseModal({
                                 </div>
                             </div>
                         ))}
-                        <div key="Others" className={styles.reminderGroup}>
-                            <div className={styles.checkboxContainer}>
+                        <div
+                            key="Others"
+                            className={styles.reminderGroupOthers}
+                        >
+                            <div className={styles.checkboxContainerOthers}>
                                 <input
                                     type="checkbox"
                                     value={
@@ -221,8 +224,6 @@ function AddCourseModal({
                                     }
                                 />
                                 <label>Others</label>
-                            </div>
-                            <div className={styles.dropdownContainer}>
                                 <input
                                     type="text"
                                     name="taskName"
@@ -237,6 +238,8 @@ function AddCourseModal({
                                         defaultTasks.length
                                     )}
                                 />
+                            </div>
+                            <div className={styles.dropdownContainerOthers}>
                                 <select
                                     name="daySelect"
                                     value={
@@ -338,6 +341,21 @@ function AddCourseModal({
                         </div>
                     </div>
                     {errorMessage()}
+                    <div
+                        id="spinner"
+                        style={{
+                            display: courseValues.addingCourse
+                                ? "block"
+                                : "none",
+                        }}
+                        className={styles.spinnerGroup}
+                    >
+                        <div className={styles.spinner}></div>
+                        <p>
+                            Please wait patiently as we load your course
+                            request...
+                        </p>
+                    </div>
                     <button onClick={nextPage}>Next</button>
                     <button onClick={() => closeModal("course")}>Close</button>
                 </div>
@@ -345,9 +363,7 @@ function AddCourseModal({
 
             {currentPage === 2 && (
                 <div>
-                    <h2>
-                        Drag and drop to order the priority of your courses.
-                    </h2>
+                    <h2>DRAG AND DROP TO ORDER YOUR COURSE PRIORITIES:</h2>
                     <DragDropContext onDragEnd={handleOnDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided) => (

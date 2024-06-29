@@ -1,88 +1,249 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /*ensures that padding and border are included in total width and height*/
+    font-family: "Calibri", sans-serif;
+} /*applies to all CSS files*/
+
 .mainContainer {
-    display: block;
-    justify-content: space-between;
-    padding: 20px;
-    margin: 30px 10px;
-}
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(#e8f7ff, #e5fffe);
+    background-size: cover;
+    background-position: center;
+    user-select: none;
+} /*acts as the body{}*/
 
 .courseHeader {
-    flex: 1;
+    width: 100vw;
+    height: 20vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0 5vw 0 5vw;
+    font-size: 40px;
+    font-weight: bold;
+    display: flex;
     align-items: center;
     justify-content: center;
-    display: flex;
-    width: 100%;
-    height: 50px;
+    color: #000055;
     text-align: center;
-    font-size: xx-large;
+    border-bottom: 1px solid #000055;
+    z-index: 1;
+    background: linear-gradient(#bee8ff, #c9fffd);
 }
 
 .courseTasksContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    justify-content: left;
-    float: left;
-}
+    width: 60vw;
+    height: 80vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 5vh 5vw 0 5vw;
+} /*left*/
 
-.sortByLabel {
-    font-size: 16px;
-    padding-left: 7%;
-    text-align: left;
-}
+.sortByDropdownContainer {
+    display: flex;
+    margin: 10px 0 10px 0;
+    align-items: baseline;
+} /*sortby dropdown*/
+
+.sortByDropdownContainer label {
+    font-size: 12px;
+    color: #000055;
+} /*sortby dropdown label*/
+
+.sortByDropdownContainer select {
+    width: 30%;
+    margin: 0 0 0 10px;
+    background: white;
+    outline: none;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border-radius: 30px;
+    font-size: 12px;
+    color: #000055;
+    cursor: pointer;
+    padding-left: 5px;
+} /*sortby dropdown box*/
+
+.sortByDropdownContainer select:focus {
+    outline: none;
+    border-color: #7cc8ff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+} /*sortby dropdown box on focus*/
 
 .upcomingCompletedContainer {
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    gap: 20px;
-    justify-content: left;
-    font-size: 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.courseTasksListUpcoming {
+    width: 50%;
+    height: 100%;
+    flex: 1;
+    margin-right: 50px;
+}
+
+.courseTasksListCompleted {
+    width: 50%;
+    height: 100%;
+    flex: 1;
 }
 
 .courseTasksList {
-    display: flex;
-    flex-direction: column;
-    float: left;
-    padding: 20px;
-    gap: 20px;
+    width: 100%;
+    height: 60vh;
+    overflow-y: auto;
+    flex-wrap: wrap;
 }
 
-.courseTaskItem {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.courseTaskItem input {
-    flex: 1;
-    margin: 0px;
-}
-
-.taskItemDescriptor {
-    flex: 20;
+.courseTasksHeader {
+    color: #000055;
+    font-size: 25px;
     text-align: left;
-    font-size: 16px;
+    position: relative;
+    letter-spacing: 0.05vw;
+    margin-bottom: 10px;
+} /*upcoming deadlines*/
+
+.courseTasksList p {
+    color: #000055;
+    font-size: 25px;
+    text-align: left;
+    letter-spacing: 0.05vw;
+} /*upcoming deadlines*/
+
+.courseTaskRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-right: 10px;
+    word-wrap: break-word;
 }
 
-.deadlineDescriptor {
+.courseTaskCheckbox {
+    flex: 1;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    accent-color: rgb(3, 97, 212);
+}
+
+.taskItem {
+    flex: 9;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.taskDescription {
+    color: #000055;
+    font-size: 16px;
+    text-align: left;
+}
+
+.taskDeadlinePriority {
+    color: rgba(255, 0, 0);
+    font-size: 12px;
+    text-align: left;
+}
+
+.taskTrashcan {
+    flex: 0.5;
+    cursor: pointer;
+}
+
+/*applies to all trashcan icon*/
+.trashcan {
+    padding: 10px 10px;
+    color: rgba(0, 0, 0, 0.5);
+} /*trashcan icon*/
+
+.trashcan:hover {
+    color: #ff1a1a;
+    cursor: pointer;
+} /*trashcan icon on hover*/
+
+/*coursePage progress bar*/
+.progressBarContainer {
+    width: 40vw;
+    height: 80vh;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 5vh 5vw 0 5vw;
+}
+
+.courseProgressBarContainer {
+    display: block;
+    margin-top: 10px;
+}
+
+.courseProgressBarContainer p {
+    text-align: left;
+    color: #000055;
+}
+
+.progressContainer {
+    width: 100%;
+    height: 15px;
+    background-color: white;
+    border-radius: 30px;
+    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    margin: 10px 0 0 0;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: #c6e2ff;
+    border-radius: 30px;
+    text-align: right;
+    transition: width 0.2s ease-in-out;
+}
+
+.progressLabel {
+    position: relative;
+    top: -4px;
+    padding: 10px;
+    color: #000055;
+    font-weight: bold;
     font-size: 12px;
 }
 
-/*link back to course page*/
-.courseToLandingPage {
+/*link back to landing page*/
+.linkGroup {
+    display: flex;
     position: fixed;
-    bottom: 50px;
-    right: 100px;
-    margin: 20px;
-    font-size: 14px;
-}
+    bottom: 7vh;
+    right: 5vw;
+} /*hyperlink to other pages*/
 
-.courseToLandingPage a {
-    color: rgb(55, 0, 128);
+.linkGroup button {
+    border: 2px solid rgba(0, 110, 255, 0.3);
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin: 10px;
+    color: #000055;
+    background: none;
     text-decoration: none;
-}
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+} /*hyperlink text*/
 
-.courseToLandingPage a:hover {
-    text-decoration: underline;
-}
+.linkGroup button:hover {
+    background-color: #c6e2ff;
+    cursor: pointer;
+} /*hyperlink on hover*/

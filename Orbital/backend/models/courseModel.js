@@ -5,15 +5,15 @@ const courseSchema = new mongoose.Schema({
     courseCode: {
         type: String,
         required: true,
+        match: /^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$/, // All uppercase with at least one digit and one uppercase letter
     },
     courseName: {
         type: String,
         required: true,
     },
-    // turned required off for now, for testing purposes
     priority: {
         type: Number,
-        required: false,
+        default: 0,
     },
     tasksByDate: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     tasksByPriority: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],

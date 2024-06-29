@@ -49,7 +49,7 @@ function Signup() {
         setFormValues({ ...formValues, success: false, loading: true });
 
         // Placeholder for the signup function calling the backend
-        signup({ name, email, password })
+        signup({ name, email: email.toLowerCase(), password })
             .then((data) => {
                 if (data.error) {
                     setFormValues({

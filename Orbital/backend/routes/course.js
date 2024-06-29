@@ -10,7 +10,9 @@ const {
 router.post(
     "/createcourse",
     [
-        check("courseCode", "Course Code is required.").isLength({ min: 1 }),
+        check("courseCode", "Course code is invalid.").matches(
+            /^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]+$/
+        ),
         check("courseName", "Course Name is required.").isLength({ min: 1 }),
     ],
     createCourse

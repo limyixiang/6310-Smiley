@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./coursePage.module.css";
 import {
     getTasksByDateForCourse,
@@ -8,11 +8,11 @@ import {
     completeTask,
     reverseCompleteTask,
 } from "../Backend";
-
 import CourseTasksList from "./courseTasksList";
 import CourseCompletedTasks from "./courseCompletedTasks";
 
 function CoursePage() {
+    const navigate = useNavigate();
     const [tasks, setTasks] = useState({
         completedTasks: [],
         incompleteTasks: [],
@@ -87,11 +87,64 @@ function CoursePage() {
         });
     };
 
-    function deadlineDescription(task) {
+    const deadlineDescription = (task) => {
         return task.dueDate == null
             ? ""
             : "Due: " + new Date(task.dueDate).toDateString() + " ";
-    }
+    };
+
+    const getPercentageSemCompleted = () => {
+        const completed = completedTasks.length;
+        const incomplete = incompleteTasks.length;
+        const total = completed + incomplete;
+        if (total === 0) return 0;
+        return Math.round((completed / total) * 100);
+    };
+
+    const getPercentageWeekCompleted = () => {
+        // Current Date
+        const now = new Date();
+        // Get the first day of the week (assuming Monday is the first day of the week)
+        const firstDayOfWeek = new Date(
+            now.setDate(now.getDate() - now.getDay() + 1)
+        );
+        // Get the last day of the week (assuming Sunday is the last day of the week)
+        const lastDayOfWeek = new Date(
+            now.setDate(now.getDate() - now.getDay() + 7)
+        );
+        // Filter tasks that are due within the current week
+        const currentWeekCompletedTasks = completedTasks.filter((task) => {
+            const dueDate = new Date(task.dueDate);
+            return dueDate >= firstDayOfWeek && dueDate <= lastDayOfWeek;
+        }).length;
+        const currentWeekIncompleteTasks = incompleteTasks.filter((task) => {
+            const dueDate = new Date(task.dueDate);
+            return dueDate >= firstDayOfWeek && dueDate <= lastDayOfWeek;
+        }).length;
+        const totalCurrentWeekTasks =
+            currentWeekCompletedTasks + currentWeekIncompleteTasks;
+        if (totalCurrentWeekTasks === 0) return 0;
+        return Math.round(
+            (currentWeekCompletedTasks / totalCurrentWeekTasks) * 100
+        );
+    };
+
+    const ProgressBar = ({ now, label }) => {
+        return (
+            <div className={styles.progressContainer}>
+                <div
+                    className={styles.progressBar}
+                    style={{ width: `${now}%` }}
+                >
+                    <span className={styles.progressLabel}>{label}</span>
+                </div>
+            </div>
+        );
+    };
+
+    const onLandingPage = () => {
+        navigate("/landingpage", { state: { user } });
+    };
 
     return (
         <div className={styles.mainContainer}>
@@ -99,8 +152,8 @@ function CoursePage() {
                 {course.courseCode + " " + course.courseName}
             </div>
             <div className={styles.courseTasksContainer}>
-                <div className={styles.sortByLabel}>
-                    Sort By:
+                <div className={styles.sortByDropdownContainer}>
+                    <label htmlFor="courseTasksSortBy">Sort By:</label>
                     <select
                         id="courseTasksSortBy"
                         value={sortBy}
@@ -129,15 +182,25 @@ function CoursePage() {
                     />
                 </div>
             </div>
-            <center>
-                <p className={styles.courseToLandingPage}>
-                    <b>
-                        <Link to="/landingPage" state={{ user: user }}>
-                            Back to Landing Page
-                        </Link>
-                    </b>
-                </p>
-            </center>
+            <div className={styles.progressBarContainer}>
+                <div className={styles.courseProgressBarContainer}>
+                    <p>Percentage of tasks completed for the week:</p>
+                    <ProgressBar
+                        now={getPercentageWeekCompleted()}
+                        label={`${getPercentageWeekCompleted()}%`}
+                    />
+                </div>
+                <div className={styles.courseProgressBarContainer}>
+                    <p>Percentage of tasks completed for the semester:</p>
+                    <ProgressBar
+                        now={getPercentageSemCompleted()}
+                        label={`${getPercentageSemCompleted()}%`}
+                    />
+                </div>
+            </div>
+            <div className={styles.linkGroup}>
+                <button onClick={onLandingPage}>Back to Landing</button>
+            </div>
         </div>
     );
 }

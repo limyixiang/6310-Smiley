@@ -9,38 +9,41 @@ function CourseCompletedTasks({
     deadlineDescription,
 }) {
     return (
-        <div className={styles.courseTasksList}>
-            Completed Tasks
-            {completedTasks.map((task, index) => (
-                <div key={index} className={styles.courseTaskItem}>
-                    <input
-                        name="task-checkbox"
-                        className="task-checkbox"
-                        type="checkbox"
-                        onChange={() => handleTaskCheckboxChange(task)}
-                        checked={task.status === "Done"}
-                    />
-                    <div
-                        className={styles.taskItemDescriptor}
-                        style={{
-                            textDecoration: "line-through",
-                        }}
-                    >
-                        <span>{task.taskName}</span>
-                        <br />
-                        <span className={styles.deadlineDescriptor}>
-                            {deadlineDescription(task) +
-                                "Priority: " +
-                                task.priority}
-                        </span>
+        <div className={styles.courseTasksListCompleted}>
+            <h2 className={styles.courseTasksHeader}>COMPLETED TASKS</h2>
+            <div className={styles.courseTasksList}>
+                {completedTasks.map((task, index) => (
+                    <div key={index} className={styles.courseTaskRow}>
+                        <input
+                            name="task-checkbox"
+                            className={styles.courseTaskCheckbox}
+                            type="checkbox"
+                            onChange={() => handleTaskCheckboxChange(task)}
+                            checked={task.status === "Done"}
+                        />
+                        <div
+                            className={styles.taskItem}
+                            style={{
+                                textDecoration: "line-through",
+                            }}
+                        >
+                            <div className={styles.taskDescription}>
+                                {task.taskName}
+                            </div>
+                            <div className={styles.taskDeadlinePriority}>
+                                {deadlineDescription(task) +
+                                    ", Priority: " +
+                                    task.priority}
+                            </div>
+                        </div>
+                        <FontAwesomeIcon
+                            className={`${styles.trashcan} ${styles.taskTrashcan}`}
+                            icon={faTrashCan}
+                            onClick={() => handleDeleteTask(task._id)}
+                        />
                     </div>
-                    <FontAwesomeIcon
-                        className="trashcan task-trashcan"
-                        icon={faTrashCan}
-                        onClick={() => handleDeleteTask(task._id)}
-                    />
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 }

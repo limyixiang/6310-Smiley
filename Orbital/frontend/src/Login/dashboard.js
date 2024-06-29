@@ -1,8 +1,9 @@
 import { useState, React } from "react";
-import { isAuthenticated, signout } from "../Backend";
-import { useNavigate, Link } from "react-router-dom";
+import { isAuthenticated, signout, updateSubscriptions } from "../Backend";
+import { useNavigate } from "react-router-dom";
 import styles from "./dashboardPage.module.css";
 import logo from "./smileytransparent.jpg";
+import { getExistingSubscription, createSubscription } from "../utils/Push";
 
 const Dashboard = () => {
     const navigate = useNavigate(); // Initialize navigation
@@ -13,6 +14,13 @@ const Dashboard = () => {
         signout(); // Perform signout action
         console.log("Signed out");
         navigate("/signin"); // Redirect to login page after sign out
+    };
+
+    const onLandingPage = () => {
+        if (authenticatedUser) {
+            check_and_update_subscription(authenticatedUser.user);
+        }
+        navigate("/landingpage", { state: { user: authenticatedUser.user } });
     };
 
     const handleClick = (e) => {
@@ -52,6 +60,26 @@ const Dashboard = () => {
         }, 3000); // Adjust this value to match the animation duration
     };
 
+    const check_and_update_subscription = (user) =>
+        getExistingSubscription().then(async (subscription) => {
+            if (subscription) {
+                const subscriptionJson = subscription.toJSON();
+                // console.log("Auth key:", subscriptionJson.keys.auth);
+                // console.log("p256dh key:", subscriptionJson.keys.p256dh);
+                // console.log(subscriptionJson.keys);
+                // Optionally, send the subscription to your backend for storage or updates
+                updateSubscriptions(user._id, subscriptionJson);
+            } else {
+                console.log("No existing subscription found.");
+                // Here you might want to call a function to create a new subscription
+                console.log("Creating new subscription");
+                const newSubscription = await createSubscription(user);
+                const subscriptionJson = newSubscription.toJSON();
+                // console.log(subscriptionJson.keys);
+                updateSubscriptions(user._id, subscriptionJson);
+            }
+        });
+
     return !authenticatedUser ? (
         <div className={styles.mainContainer1}>
             <div className={styles.rippleContainer} onClick={handleClick}>
@@ -84,6 +112,7 @@ const Dashboard = () => {
         </div>
     ) : (
         <div className={styles.mainContainer2}>
+            {/* {check_and_update_subscription(authenticatedUser.user)} */}
             <div className={styles.rippleContainer} onClick={handleClick}>
                 <div className={styles.ripple}></div>
             </div>
@@ -94,12 +123,7 @@ const Dashboard = () => {
                 </h1>
             </div>
             <div className={styles.linkGroup2}>
-                <Link
-                    to="/landingpage"
-                    state={{ user: authenticatedUser.user }}
-                >
-                    <button>LANDING</button>
-                </Link>
+                <button onClick={onLandingPage}>LANDING</button>
                 <button onClick={onSignout}>SIGN OUT</button>
             </div>
             <div className={styles.logoContainer}>
