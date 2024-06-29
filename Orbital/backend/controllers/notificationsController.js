@@ -52,7 +52,7 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
     const { courseCode, dueDate, user, taskName } = task;
     // console.log(dueDate, taskName);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(-8, 0, 0, 0);
     const dueToday = dueDate === today.getTime();
     // console.log("dueToday:", dueToday);
     const notificationTime = dueToday
@@ -100,7 +100,7 @@ exports.enableTaskDeadlineNotification = async (taskId) => {
     const jobs = task.notifications;
     // console.log(jobs);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(-8, 0, 0, 0);
     const dueToday = task.dueDate.getTime() === today.getTime();
     const newMessage = dueToday
         ? `Your task "${task.taskName}" is due today!`
