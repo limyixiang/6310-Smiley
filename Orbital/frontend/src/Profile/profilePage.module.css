@@ -1,0 +1,49 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /*ensures that padding and border are included in total width and height*/
+    font-family: "Calibri", sans-serif;
+} /*applies to all CSS files*/
+
+.mainContainer {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(#e8f7ff, #e5fffe);
+    background-size: cover;
+    background-position: center;
+    user-select: none;
+} /*acts as the body{}*/
+
+.linkGroup {
+    display: flex;
+    position: fixed;
+    top: 5vh;
+    right: 7vw;
+} /*hyperlink to other pages*/
+
+.linkGroup button {
+    border: 2px solid rgba(0, 110, 255, 0.3);
+    border-radius: 30px;
+    padding: 10px 30px;
+    color: #000055;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+    background: transparent;
+} /*hyperlink text*/
+
+.linkGroup button:hover {
+    background-color: #c6e2ff;
+    cursor: pointer;
+} /*hyperlink on hover*/

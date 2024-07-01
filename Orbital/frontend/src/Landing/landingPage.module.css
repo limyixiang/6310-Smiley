@@ -66,6 +66,19 @@
     cursor: pointer;
 } /*hyperlink on hover*/
 
+.profileGroup {
+    display: flex;
+    position: fixed;
+    top: 5vh;
+    left: 7vw;
+} /*profile group*/
+
+.profileGroup i {
+    font-size: 50px;
+    color: #000055;
+    cursor: pointer;
+} /*profile image icon*/
+
 /*CourseContainer*/
 .coursesHeader {
     padding: 0 0 3vh 0;

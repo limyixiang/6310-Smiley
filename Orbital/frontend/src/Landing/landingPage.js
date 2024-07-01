@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./landingPage.module.css";
 import {
     createCourse,
@@ -398,8 +399,22 @@ function LandingPage() {
         setTemporaryCourses(updatedCourses);
     };
 
+    const navigate = useNavigate();
+    const onProfilePage = () => {
+        navigate("/profilepage", { state: { user } });
+    };
+
     return (
         <div className={styles.mainContainer}>
+            <Helmet>
+                <link
+                    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+                    rel="stylesheet"
+                />
+            </Helmet>
+            <div className={styles.profileGroup}>
+                <i class="bx bxs-user-circle" onClick={onProfilePage}></i>
+            </div>
             <CourseContainer
                 user={user}
                 courses={courses}
