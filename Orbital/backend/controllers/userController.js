@@ -77,3 +77,25 @@ exports.updateSubscriptions = async (req, res) => {
         });
     }
 };
+
+//Update Profile
+exports.profileChange = async (req, res) => {
+    try {
+        const { name, userid } = req.body;
+        const user = await User.findByIdAndUpdate(userid, { name: name });
+        console.log(user);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: "Error updating profile.",
+        });
+    }
+};

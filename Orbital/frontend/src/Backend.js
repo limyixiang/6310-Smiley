@@ -363,3 +363,22 @@ export const sendSubscription = (subscription, title, message) => {
         },
     });
 };
+
+export const profileChange = async (name, userid) => {
+    // API call to change profile
+    try {
+        const response = await axios.post(
+            `${URL}/user/profilechange`,
+            JSON.stringify({ name, userid }),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};

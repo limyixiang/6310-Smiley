@@ -4,6 +4,7 @@ const {
     getUserById,
     getUser,
     updateSubscriptions,
+    profileChange,
 } = require("../controllers/userController");
 const {
     isSignedIn,
@@ -13,5 +14,6 @@ const {
 router.param("userId", getUserById);
 router.get("/user/:userId", isSignedIn, isAuthenticated, getUser);
 router.post("/updateSubscriptions", updateSubscriptions);
+router.post("/profilechange", profileChange);
 
 module.exports = router;
