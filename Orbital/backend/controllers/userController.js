@@ -83,7 +83,7 @@ exports.profileChange = async (req, res) => {
     try {
         const { name, userid } = req.body;
         const user = await User.findByIdAndUpdate(userid, { name: name });
-        console.log(user);
+        // console.log(user);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
