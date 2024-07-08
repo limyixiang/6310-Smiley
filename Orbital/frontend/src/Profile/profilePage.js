@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SketchPicker } from "react-color";
 import { useLocation, useNavigate } from "react-router-dom";
 import { profileChange } from "../Backend";
@@ -18,9 +18,14 @@ function ProfilePage() {
     const { name, error, success } = formValues;
 
     const [colors, setColors] = useState({
-        main: { hex: "#000055", rgb: { r: 0, g: 0, b: 85, a: 1 } },
-        border: { hex: "#006eff", rgb: { r: 0, g: 110, b: 255, a: 0.3 } },
-        background: { hex: "#c6e2ff", rgb: { r: 198, g: 226, b: 255, a: 1 } },
+        mainText: { hex: "#000055", rgb: { r: 0, g: 0, b: 85, a: 1 } },
+        pageBackground: {
+            hex: "#e8f7ff",
+            rgb: { r: 232, g: 247, b: 255, a: 1 },
+        },
+        border: { hex: "#006eff", rgb: { r: 0, g: 110, b: 255, a: 0.4 } },
+        hover: { hex: "#c6e2ff", rgb: { r: 198, g: 226, b: 255, a: 1 } },
+        focus: { hex: "#afdeff", rgb: { r: 124, g: 200, b: 255, a: 1 } },
     });
 
     /*useEffect(() => {
@@ -53,27 +58,37 @@ function ProfilePage() {
 
     const updateCSS = (colors) => {
         document.documentElement.style.setProperty(
-            "--main-color",
-            `rgba(${colors.main.rgb.r}, ${colors.main.rgb.g}, ${colors.main.rgb.b}, ${colors.main.rgb.a})`
+            "--mainText-color",
+            `rgba(${colors.mainText.rgb.r}, ${colors.mainText.rgb.g}, ${colors.mainText.rgb.b}, ${colors.mainText.rgb.a})`
+        );
+        document.documentElement.style.setProperty(
+            "--pageBackground-color",
+            `rgba(${colors.pageBackground.rgb.r}, ${colors.pageBackground.rgb.g}, ${colors.pageBackground.rgb.b}, ${colors.pageBackground.rgb.a})`
         );
         document.documentElement.style.setProperty(
             "--border-color",
             `rgba(${colors.border.rgb.r}, ${colors.border.rgb.g}, ${colors.border.rgb.b}, ${colors.border.rgb.a})`
         );
         document.documentElement.style.setProperty(
-            "--background-color",
-            `rgba(${colors.background.rgb.r}, ${colors.background.rgb.g}, ${colors.background.rgb.b}, ${colors.background.rgb.a})`
+            "--hover-color",
+            `rgba(${colors.hover.rgb.r}, ${colors.hover.rgb.g}, ${colors.hover.rgb.b}, ${colors.hover.rgb.a})`
+        );
+        document.documentElement.style.setProperty(
+            "--focus-color",
+            `rgba(${colors.focus.rgb.r}, ${colors.focus.rgb.g}, ${colors.focus.rgb.b}, ${colors.focus.rgb.a})`
         );
     };
 
     const setDefaultColors = () => {
         const defaultColors = {
-            main: { hex: "#000055", rgb: { r: 0, g: 0, b: 85, a: 1 } },
-            border: { hex: "#006eff", rgb: { r: 0, g: 110, b: 255, a: 0.3 } },
-            background: {
-                hex: "#c6e2ff",
-                rgb: { r: 198, g: 226, b: 255, a: 1 },
+            mainText: { hex: "#000055", rgb: { r: 0, g: 0, b: 85, a: 1 } },
+            pageBackground: {
+                hex: "#e8f7ff",
+                rgb: { r: 232, g: 247, b: 255, a: 1 },
             },
+            border: { hex: "#006eff", rgb: { r: 0, g: 110, b: 255, a: 0.4 } },
+            hover: { hex: "#c6e2ff", rgb: { r: 198, g: 226, b: 255, a: 1 } },
+            focus: { hex: "#afdeff", rgb: { r: 124, g: 200, b: 255, a: 1 } },
         };
         setColors(defaultColors);
         updateCSS(defaultColors);
@@ -180,30 +195,47 @@ function ProfilePage() {
             </div>
             <div className={styles.colorContainer}>
                 <div className={styles.colorPicker}>
-                    <h2>Pick Colors</h2>
+                    <p>Pick Color for Main Text</p>
                     <SketchPicker
-                        color={colors.main.rgb}
+                        color={colors.mainText.rgb}
                         onChange={(color) =>
                             handleColorChange(
                                 {
-                                    ...colors.main,
+                                    ...colors.mainText,
                                     hex: color.hex,
                                     rgb: color.rgb,
                                 },
-                                "main"
+                                "mainText"
                             )
                         }
                         disableAlpha={false}
                     />
                 </div>
                 <div className={styles.colorPicker}>
-                    <h2>Pick Colors</h2>
+                    <p>Pick Color for Backdrops</p>
                     <SketchPicker
-                        color={colors.border}
+                        color={colors.pageBackground.rgb}
                         onChange={(color) =>
                             handleColorChange(
                                 {
-                                    ...colors.main,
+                                    ...colors.pageBackground,
+                                    hex: color.hex,
+                                    rgb: color.rgb,
+                                },
+                                "pageBackground"
+                            )
+                        }
+                        disableAlpha={false}
+                    />
+                </div>
+                <div className={styles.colorPicker}>
+                    <p>Pick Color for Borders</p>
+                    <SketchPicker
+                        color={colors.border.rgb}
+                        onChange={(color) =>
+                            handleColorChange(
+                                {
+                                    ...colors.border,
                                     hex: color.hex,
                                     rgb: color.rgb,
                                 },
@@ -214,17 +246,34 @@ function ProfilePage() {
                     />
                 </div>
                 <div className={styles.colorPicker}>
-                    <h2>Pick Colors</h2>
+                    <p>Pick Color on Hover</p>
                     <SketchPicker
-                        color={colors.background}
+                        color={colors.hover.rgb}
                         onChange={(color) =>
                             handleColorChange(
                                 {
-                                    ...colors.main,
+                                    ...colors.hover,
                                     hex: color.hex,
                                     rgb: color.rgb,
                                 },
-                                "background"
+                                "hover"
+                            )
+                        }
+                        disableAlpha={false}
+                    />
+                </div>
+                <div className={styles.colorPicker}>
+                    <p>Pick Color on Focus</p>
+                    <SketchPicker
+                        color={colors.focus.rgb}
+                        onChange={(color) =>
+                            handleColorChange(
+                                {
+                                    ...colors.focus,
+                                    hex: color.hex,
+                                    rgb: color.rgb,
+                                },
+                                "focus"
                             )
                         }
                         disableAlpha={false}

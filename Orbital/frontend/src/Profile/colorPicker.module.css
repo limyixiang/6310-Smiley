@@ -1,6 +1,7 @@
 :root {
-    --main-color: #000055;
-    /* --main-color-translucent: rgba(0, 0, 85, 0.3); */
-    --border-color: rgba(0, 110, 255, 0.3);
-    --background-color: #c6e2ff;
+    --mainText-color: #000055;
+    --pageBackground-color: #e8f7ff;
+    --border-color: rgba(0, 110, 255, 0.4);
+    --hover-color: #c6e2ff;
+    --focus-color: #afdeff;
 }

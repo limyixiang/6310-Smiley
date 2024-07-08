@@ -20,7 +20,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(#e8f7ff, #e5fffe);
+    background: var(--pageBackground-color);
     background-size: cover;
     background-position: center;
     user-select: none;
@@ -34,7 +34,7 @@
 }
 
 .headerGroup h2 {
-    color: var(--main-color);
+    color: var(--mainText-color);
 }
 
 .formContainer {
@@ -55,7 +55,7 @@
     border: 2px solid var(--border-color);
     border-radius: 30px;
     padding: 10px 30px;
-    color: var(--main-color);
+    color: var(--mainText-color);
     text-decoration: none;
     font-weight: bold;
     letter-spacing: 1px;
@@ -64,7 +64,7 @@
 } /*hyperlink text*/
 
 .linkGroup button:hover {
-    background-color: var(--background-color);
+    background-color: var(--hover-color);
     cursor: pointer;
 } /*hyperlink on hover*/
 
@@ -74,7 +74,12 @@
 }
 
 .colorContainer h2 {
-    color: var(--main-color);
+    color: var(--mainText-color);
+}
+
+.colorPicker p {
+    text-align: left;
+    color: var(--mainText-color);
 }
 
 .colorPicker {
