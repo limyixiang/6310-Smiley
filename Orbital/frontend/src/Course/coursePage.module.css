@@ -173,7 +173,7 @@
 /*applies to all trashcan icon*/
 .trashcan {
     padding: 10px 10px;
-    color: rgba(0, 0, 0, 0.5);
+    color: grey;
 } /*trashcan icon*/
 
 .trashcan:hover {

@@ -81,8 +81,11 @@ exports.updateSubscriptions = async (req, res) => {
 //Update Profile
 exports.profileChange = async (req, res) => {
     try {
-        const { name, userid } = req.body;
-        const user = await User.findByIdAndUpdate(userid, { name: name });
+        const { userid, name, theme } = req.body;
+        const user = await User.findByIdAndUpdate(userid, {
+            name: name,
+            colorTheme: theme,
+        });
         // console.log(user);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
@@ -97,5 +100,20 @@ exports.profileChange = async (req, res) => {
             success: false,
             error: "Error updating profile.",
         });
+    }
+};
+
+exports.getColorTheme = async (req, res) => {
+    try {
+        const { userid } = req.body;
+        const user = await User.findById(userid);
+        // console.log(userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+        // console.log(user.colorTheme);
+        return res.json(user.colorTheme);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
     }
 };

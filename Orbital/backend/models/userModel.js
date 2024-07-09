@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema(
         subscriptions: [
             { type: mongoose.Schema.Types.ObjectId, ref: "Subscription" },
         ],
+        colorTheme: {
+            type: String,
+            trim: true,
+            required: true,
+            default: "default",
+        },
     },
     { timestamps: true }
 );
