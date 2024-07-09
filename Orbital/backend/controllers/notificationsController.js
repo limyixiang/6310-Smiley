@@ -2,6 +2,8 @@ const webpush = require("web-push");
 const Agenda = require("agenda");
 const Subscription = require("../models/subscriptionModel");
 const Task = require("../models/tasksModel");
+const User = require("../models/userModel");
+const WebPushError = require("web-push").WebPushError;
 
 const publicVapidKey =
     "BKr2V1iW4iK7ug_Wsp0FRLObRnBgkV7GdPPFoACp7f6sdKH-muu7UMp8pQsdPXCztIf-d3CecoGmffSXffO62cs";
@@ -23,9 +25,22 @@ const agenda = new Agenda({
 agenda.define("send web push", async (job) => {
     const { subscription, title, message } = job.attrs.data;
     const payload = JSON.stringify({ title, message });
-    await webpush
-        .sendNotification(subscription, payload)
-        .catch((err) => console.error("err", err));
+    try {
+        await webpush.sendNotification(subscription, payload);
+    } catch (error) {
+        if (error instanceof WebPushError && error.statusCode === 410) {
+            const user = await User.findById(subscription.user);
+            console.log("Subscription is no longer valid.");
+            await Subscription.findByIdAndDelete(subscription._id);
+            user.subscriptions.filter(
+                (subscription) => subscription !== subscription._id
+            );
+            await user.save();
+            console.log("Expired subscription removed.");
+        } else {
+            console.log(error);
+        }
+    }
 });
 
 // exports.subscribe = async (req, res) => {
@@ -48,6 +63,94 @@ exports.subscribe = async (req, res) => {
     res.status(200).json({ success: true });
 };
 
+agenda.define("scheduleWeeklySummaryNotification", async () => {
+    const users = await User.find();
+    console.log("scheduling weekly summary notification");
+    // const users = await User.find({ email: "test@gmail.com" });
+    // const users = await User.find({ email: "e1121685@u.nus.edu" });
+    // const users = await User.find({ email: "e1157341@u.nus.edu" });
+
+    for (const user of users) {
+        const subscriptions = user.subscriptions;
+        // console.log(subscriptions.length);
+        if (subscriptions.length === 0) {
+            continue;
+        }
+        // Calculate the start of the current week (Monday at 00:00)
+        const startOfWeek = new Date();
+        startOfWeek.setUTCHours(-8, 0, 0, 0);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1);
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(endOfWeek.getDate() + 7);
+        endOfWeek.setUTCMilliseconds(endOfWeek.getUTCMilliseconds() - 1);
+        // console.log(startOfWeek, endOfWeek);
+
+        const userTasks = await Task.find({
+            _id: { $in: user.tasksByDate },
+        }).then((tasks) =>
+            tasks.filter(
+                (task) =>
+                    task.dueDate >= startOfWeek && task.dueDate < endOfWeek
+            )
+        );
+        const taskCount = userTasks.length;
+        // console.log(taskCount);
+
+        if (taskCount === 0) {
+            continue;
+        }
+
+        const completedTaskCount = userTasks.filter(
+            (task) => task.status === "Done"
+        ).length;
+
+        const remainingTaskCount = taskCount - completedTaskCount;
+
+        const title = "Weekly Task Summary";
+        const message =
+            taskCount === completedTaskCount
+                ? "Congratulations! You completed all tasks this week!"
+                : `You completed ${completedTaskCount} out of ${taskCount} ${
+                      taskCount == 1 ? "task" : "tasks"
+                  } this week! Remember to finish the remaining ${remainingTaskCount} ${
+                      remainingTaskCount == 1 ? "task" : "tasks"
+                  }!`;
+        console.log(message);
+        for (const subscription_id of subscriptions) {
+            const subscription = await Subscription.findById(subscription_id);
+            if (subscription == null) {
+                continue;
+            }
+            // console.log(subscription);
+            try {
+                await agenda.schedule("in 1 seconds", "send web push", {
+                    subscription,
+                    title,
+                    message,
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+});
+
+// Start Agenda
+(async function () {
+    await agenda.start();
+    await agenda.every("0 9 * * 0", "scheduleWeeklySummaryNotification");
+})();
+
+agenda.on("success", async (job) => {
+    try {
+        if (job.attrs.data.title === "Weekly Task Summary") {
+            await job.remove();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 exports.scheduleTaskDeadlineNotification = async (task) => {
     const { courseCode, dueDate, user, taskName } = task;
     // console.log(dueDate, taskName);
@@ -67,23 +170,29 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
         : `Your task "${taskName}" is due in 1 day.`;
     var jobs = [];
     for (const subscription of subscriptions) {
-        const job = await agenda.schedule(notificationTime, "send web push", {
-            subscription,
-            title,
-            message,
-        });
-        // console.log(job);
-        // console.log(job.attrs._id);
-        jobs.push(job.attrs._id);
+        if (subscription == null) {
+            continue;
+        }
+        try {
+            const job = await agenda.schedule(
+                notificationTime,
+                "send web push",
+                {
+                    subscription,
+                    title,
+                    message,
+                }
+            );
+            // console.log(job);
+            // console.log(job.attrs._id);
+            jobs.push(job.attrs._id);
+        } catch (error) {
+            console.log(error);
+        }
     }
     // console.log(jobs);
     return jobs;
 };
-
-// Start Agenda
-(async function () {
-    await agenda.start();
-})();
 
 exports.disableTaskDeadlineNotification = async (taskId) => {
     const task = await Task.findById(taskId);
