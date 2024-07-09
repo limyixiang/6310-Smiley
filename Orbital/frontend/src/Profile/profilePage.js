@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { SketchPicker } from "react-color";
 import { useLocation, useNavigate } from "react-router-dom";
-import { profileChange } from "../Backend";
+import { profileChange, signout } from "../Backend";
 import styles from "./profilePage.module.css";
 import "./colorPicker.module.css";
 
@@ -12,86 +11,64 @@ function ProfilePage() {
 
     const [formValues, setFormValues] = useState({
         name: user ? user.name : "",
+        theme: user ? user.colorTheme : "default",
         error: false,
         success: false,
     });
-    const { name, error, success } = formValues;
+    const { name, theme, error, success } = formValues;
 
-    const [colors, setColors] = useState({
-        mainText: { hex: "#000055", rgb: { r: 0, g: 0, b: 85, a: 1 } },
-        pageBackground: {
-            hex: "#e8f7ff",
-            rgb: { r: 232, g: 247, b: 255, a: 1 },
+    const themes = {
+        light: {
+            "--mainText-color": "rgb(0, 0, 0)",
+            "--pageBackground-color": "rgb(255, 255, 255)",
+            "--elementBackground-color": "rgb(255, 255, 255)",
+            "--border-color": "rgba(153, 153, 153, 0.4)",
+            "--hover-color": "rgb(217, 217, 217)",
+            "--focus-color": "rgb(211, 211, 211)",
         },
-        border: { hex: "#006eff", rgb: { r: 0, g: 110, b: 255, a: 0.4 } },
-        hover: { hex: "#c6e2ff", rgb: { r: 198, g: 226, b: 255, a: 1 } },
-        focus: { hex: "#afdeff", rgb: { r: 124, g: 200, b: 255, a: 1 } },
-    });
-
-    /*useEffect(() => {
-        getColors({ userid: user._id })
-            .then((data) => {
-                setColors({
-                    main: data.main,
-                    border: data.border,
-                    background: data.background,
-                });
-                updateCSS({
-                    main: data.main,
-                    border: data.border,
-                    background: data.background,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [user._id]);*/
-
-    const handleColorChange = (color, key) => {
-        const newColors = {
-            ...colors,
-            [key]: color,
-        };
-        setColors(newColors);
-        updateCSS(newColors);
+        dark: {
+            "--mainText-color": "rgb(187, 187, 187)",
+            "--pageBackground-color": "rgb(0, 0, 0)",
+            "--elementBackground-color": "rgb(23, 23, 23)",
+            "--border-color": "rgba(212, 212, 212, 0.4)",
+            "--hover-color": "grey",
+            "--focus-color": "rgb(67, 67, 67)",
+        },
+        default: {
+            "--mainText-color": "rgb(0, 0, 66)",
+            "--pageBackground-color": "#d8f5fd",
+            "--elementBackground-color": "rgb(241, 253, 255)",
+            "--border-color": "rgba(71, 180, 230, 0.4)",
+            "--hover-color": "#c5edff",
+            "--focus-color": "rgba(118, 198, 235, 0.4)",
+        },
+        green: {
+            "--mainText-color": "rgb(0, 66, 17)",
+            "--pageBackground-color": "rgb(199, 228, 207)",
+            "--elementBackground-color": "rgb(241, 255, 245)",
+            "--border-color": "rgba(0, 160, 35, 0.4)",
+            "--hover-color": "rgb(210, 246, 219)",
+            "--focus-color": "rgba(0, 178, 118, 0.483)",
+        },
+        pink: {
+            "--mainText-color": "rgb(51, 0, 48)",
+            "--pageBackground-color": "#fff2fa",
+            "--elementBackground-color": "rgb(255, 254, 255)",
+            "--border-color": "rgba(255, 139, 249, 0.4)",
+            "--hover-color": "#fee1ff",
+            "--focus-color": "rgba(235, 149, 224, 0.4)",
+        },
     };
 
-    const updateCSS = (colors) => {
-        document.documentElement.style.setProperty(
-            "--mainText-color",
-            `rgba(${colors.mainText.rgb.r}, ${colors.mainText.rgb.g}, ${colors.mainText.rgb.b}, ${colors.mainText.rgb.a})`
-        );
-        document.documentElement.style.setProperty(
-            "--pageBackground-color",
-            `rgba(${colors.pageBackground.rgb.r}, ${colors.pageBackground.rgb.g}, ${colors.pageBackground.rgb.b}, ${colors.pageBackground.rgb.a})`
-        );
-        document.documentElement.style.setProperty(
-            "--border-color",
-            `rgba(${colors.border.rgb.r}, ${colors.border.rgb.g}, ${colors.border.rgb.b}, ${colors.border.rgb.a})`
-        );
-        document.documentElement.style.setProperty(
-            "--hover-color",
-            `rgba(${colors.hover.rgb.r}, ${colors.hover.rgb.g}, ${colors.hover.rgb.b}, ${colors.hover.rgb.a})`
-        );
-        document.documentElement.style.setProperty(
-            "--focus-color",
-            `rgba(${colors.focus.rgb.r}, ${colors.focus.rgb.g}, ${colors.focus.rgb.b}, ${colors.focus.rgb.a})`
-        );
-    };
-
-    const setDefaultColors = () => {
-        const defaultColors = {
-            mainText: { hex: "#000055", rgb: { r: 0, g: 0, b: 85, a: 1 } },
-            pageBackground: {
-                hex: "#e8f7ff",
-                rgb: { r: 232, g: 247, b: 255, a: 1 },
-            },
-            border: { hex: "#006eff", rgb: { r: 0, g: 110, b: 255, a: 0.4 } },
-            hover: { hex: "#c6e2ff", rgb: { r: 198, g: 226, b: 255, a: 1 } },
-            focus: { hex: "#afdeff", rgb: { r: 124, g: 200, b: 255, a: 1 } },
-        };
-        setColors(defaultColors);
-        updateCSS(defaultColors);
+    const changeTheme = (themeName) => {
+        const selectedTheme = themes[themeName];
+        setFormValues({
+            ...formValues,
+            theme: themeName,
+        });
+        for (const key in selectedTheme) {
+            document.documentElement.style.setProperty(key, selectedTheme[key]);
+        }
     };
 
     const onLandingPage = () => {
@@ -124,7 +101,7 @@ function ProfilePage() {
             error: false,
         });
 
-        profileChange(name, user._id)
+        profileChange(user._id, name, theme)
             .then((data) => {
                 if (data.error) {
                     setFormValues({
@@ -138,10 +115,16 @@ function ProfilePage() {
                         success: true,
                         error: false,
                     });
+                    navigate("/profilepage", { state: { user } });
                 }
             })
             .catch();
-        navigate("/profilepage", { state: { user } });
+    };
+
+    const onSignout = () => {
+        signout(); // Perform signout action
+        console.log("Signed out");
+        navigate("/signin"); // Redirect to login page after sign out
     };
 
     // Displays error message if there's any
@@ -175,114 +158,37 @@ function ProfilePage() {
                 <h2>Hi, {user.name}</h2>
             </div>
             <div className={styles.formContainer}>
-                <form>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="name">Username</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={name}
-                            onChange={handleInputChange("name")}
-                            placeholder="Name"
-                            required
-                        />
-                    </div>
-                    {successMessage()}
-                    {errorMessage()}
-                    <button onClick={handleProfileUpdate}>Confirm</button>
-                </form>
+                <div className={styles.formGroup}>
+                    <label htmlFor="name">CHANGE YOUR USERNAME:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={name}
+                        onChange={handleInputChange("name")}
+                        placeholder="Username"
+                        required
+                    />
+                </div>
             </div>
             <div className={styles.colorContainer}>
-                <div className={styles.colorPicker}>
-                    <p>Pick Color for Main Text</p>
-                    <SketchPicker
-                        color={colors.mainText.rgb}
-                        onChange={(color) =>
-                            handleColorChange(
-                                {
-                                    ...colors.mainText,
-                                    hex: color.hex,
-                                    rgb: color.rgb,
-                                },
-                                "mainText"
-                            )
-                        }
-                        disableAlpha={false}
-                    />
-                </div>
-                <div className={styles.colorPicker}>
-                    <p>Pick Color for Backdrops</p>
-                    <SketchPicker
-                        color={colors.pageBackground.rgb}
-                        onChange={(color) =>
-                            handleColorChange(
-                                {
-                                    ...colors.pageBackground,
-                                    hex: color.hex,
-                                    rgb: color.rgb,
-                                },
-                                "pageBackground"
-                            )
-                        }
-                        disableAlpha={false}
-                    />
-                </div>
-                <div className={styles.colorPicker}>
-                    <p>Pick Color for Borders</p>
-                    <SketchPicker
-                        color={colors.border.rgb}
-                        onChange={(color) =>
-                            handleColorChange(
-                                {
-                                    ...colors.border,
-                                    hex: color.hex,
-                                    rgb: color.rgb,
-                                },
-                                "border"
-                            )
-                        }
-                        disableAlpha={false}
-                    />
-                </div>
-                <div className={styles.colorPicker}>
-                    <p>Pick Color on Hover</p>
-                    <SketchPicker
-                        color={colors.hover.rgb}
-                        onChange={(color) =>
-                            handleColorChange(
-                                {
-                                    ...colors.hover,
-                                    hex: color.hex,
-                                    rgb: color.rgb,
-                                },
-                                "hover"
-                            )
-                        }
-                        disableAlpha={false}
-                    />
-                </div>
-                <div className={styles.colorPicker}>
-                    <p>Pick Color on Focus</p>
-                    <SketchPicker
-                        color={colors.focus.rgb}
-                        onChange={(color) =>
-                            handleColorChange(
-                                {
-                                    ...colors.focus,
-                                    hex: color.hex,
-                                    rgb: color.rgb,
-                                },
-                                "focus"
-                            )
-                        }
-                        disableAlpha={false}
-                    />
-                </div>
-                <button onClick={setDefaultColors}>Default</button>
+                <p>CHANGE THEME:</p>
+                <button onClick={() => changeTheme("default")}>
+                    Default Blue
+                </button>
+                <button onClick={() => changeTheme("light")}>Light</button>
+                <button onClick={() => changeTheme("dark")}>Dark</button>
+                <button onClick={() => changeTheme("green")}>Green</button>
+                <button onClick={() => changeTheme("pink")}>Pink</button>
+            </div>
+            {successMessage()}
+            {errorMessage()}
+            <div className={styles.buttonGroup}>
+                <button onClick={handleProfileUpdate}>Update Profile</button>
             </div>
             <div className={styles.linkGroup}>
                 <button onClick={onLandingPage}>Back to Landing</button>
+                <button onClick={onSignout}>Sign Out</button>
             </div>
         </div>
     );

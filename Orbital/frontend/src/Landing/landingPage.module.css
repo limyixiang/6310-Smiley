@@ -45,25 +45,26 @@
     padding: 0 5vw 0 5vw;
 } /*right*/
 
-.linkGroup {
+.buttonGroup {
     display: flex;
     position: fixed;
     top: 5vh;
     right: 7vw;
 } /*hyperlink to other pages*/
 
-.linkGroup a {
+.buttonGroup button {
     border: 2px solid var(--border-color);
     border-radius: 30px;
     padding: 10px 30px;
     color: var(--mainText-color);
+    background: transparent;
     text-decoration: none;
     font-weight: bold;
     letter-spacing: 1px;
     font-size: 16px;
 } /*hyperlink text*/
 
-.linkGroup a:hover {
+.buttonGroup button:hover {
     background-color: var(--hover-color);
     cursor: pointer;
 } /*hyperlink on hover*/
@@ -129,7 +130,7 @@
     padding: 10px;
     border: none;
     border-radius: 20px;
-    background-color: #fff;
+    background-color: var(--elementBackground-color);
     cursor: pointer;
     margin: 20px 20px 20px 20px;
     overflow: auto;
@@ -355,7 +356,7 @@
 .courseDraggable {
     padding: 16px;
     margin: 1.5vh 0 1.5vh 0;
-    background-color: #fff;
+    background-color: var(--elementBackground-color);
     border: 1.5px solid var(--border-color);
     border-radius: 5px;
     cursor: grab;
@@ -376,7 +377,7 @@
     margin-bottom: 20px;
     text-align: center;
     font-size: 12px;
-    color: black;
+    color: var(--mainText-color);
 } /*spinner container*/
 
 .spinner {
@@ -486,7 +487,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #fff;
+    background-color: var(--elementBackground-color);
     border: 1.5px solid var(--border-color);
     border-radius: 5px;
     padding: 10px;
@@ -708,7 +709,7 @@
 /*applies to all trashcan icon*/
 .trashcan {
     padding: 10px 10px;
-    color: rgba(0, 0, 0, 0.5);
+    color: grey;
 } /*trashcan icon*/
 
 .trashcan:hover {

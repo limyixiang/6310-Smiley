@@ -5,6 +5,7 @@ const {
     getUser,
     updateSubscriptions,
     profileChange,
+    getColorTheme,
 } = require("../controllers/userController");
 const {
     isSignedIn,
@@ -15,5 +16,6 @@ router.param("userId", getUserById);
 router.get("/user/:userId", isSignedIn, isAuthenticated, getUser);
 router.post("/updateSubscriptions", updateSubscriptions);
 router.post("/profilechange", profileChange);
+router.post("/getcolortheme", getColorTheme);
 
 module.exports = router;

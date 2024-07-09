@@ -404,6 +404,10 @@ function LandingPage() {
         navigate("/profilepage", { state: { user } });
     };
 
+    const onDashboardPage = () => {
+        navigate("/", { state: { user } });
+    };
+
     return (
         <div className={styles.mainContainer}>
             <Helmet>
@@ -448,8 +452,8 @@ function LandingPage() {
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />
-            <div className={styles.linkGroup}>
-                <a href="/">Back to Dashboard</a>
+            <div className={styles.buttonGroup}>
+                <button onClick={onDashboardPage}>Back to Dashboard</button>
             </div>
         </div>
     );
