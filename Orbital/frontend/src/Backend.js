@@ -334,6 +334,25 @@ export const getCourses = async (user) => {
 };
 
 // User
+export const getUserName = async (userid) => {
+    // API call to get user name
+    try {
+        const response = await axios.post(
+            `${URL}/user/getUserName`,
+            JSON.stringify(userid),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
 export const updateSubscriptions = async (userid, subscription) => {
     // API call to update subscriptions
     try {
@@ -351,17 +370,6 @@ export const updateSubscriptions = async (userid, subscription) => {
     } catch (err) {
         return err.response.data;
     }
-};
-
-// Push Notifications
-export const sendSubscription = (subscription, title, message) => {
-    return fetch("http://localhost:8000/notifications/subscribe", {
-        method: "POST",
-        body: JSON.stringify({ subscription, title, message }),
-        headers: {
-            "content-type": "application/json",
-        },
-    });
 };
 
 export const profileChange = async (userid, name, theme) => {
@@ -399,4 +407,15 @@ export const getColorTheme = async (userid) => {
     } catch (err) {
         return err.response.data;
     }
+};
+
+// Push Notifications
+export const sendSubscription = (subscription, title, message) => {
+    return fetch("http://localhost:8000/notifications/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ subscription, title, message }),
+        headers: {
+            "content-type": "application/json",
+        },
+    });
 };

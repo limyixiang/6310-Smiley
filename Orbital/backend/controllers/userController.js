@@ -26,6 +26,20 @@ exports.getUser = (req, res) => {
     return res.json(req.profile);
 };
 
+exports.getUserName = async (req, res) => {
+    try {
+        // console.log(req.body);
+        const { userid } = req.body;
+        const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        return res.status(200).json({ data: user.name });
+    } catch (err) {
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
 exports.updateSubscriptions = async (req, res) => {
     try {
         const { userid, subscription: sub } = req.body;

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { profileChange, signout } from "../Backend";
+import { getUserName, profileChange, signout } from "../Backend";
 import styles from "./profilePage.module.css";
 import "./colorPicker.module.css";
 
@@ -9,13 +9,21 @@ function ProfilePage() {
     const location = useLocation();
     const { user } = location.state;
 
+    const [userName, setUserName] = useState("");
+
     const [formValues, setFormValues] = useState({
-        name: user ? user.name : "",
+        name: "",
         theme: user ? user.colorTheme : "default",
         error: false,
         success: false,
     });
     const { name, theme, error, success } = formValues;
+
+    useEffect(() => {
+        getUserName({ userid: user._id }).then((data) => {
+            setUserName(data.data);
+        });
+    }, [user._id, success]);
 
     const themes = {
         light: {
@@ -155,7 +163,7 @@ function ProfilePage() {
     return (
         <div className={styles.mainContainer}>
             <div className={styles.headerGroup}>
-                <h2>Hi, {user.name}</h2>
+                <h2>Hi, {userName}</h2>
             </div>
             <div className={styles.formContainer}>
                 <div className={styles.formGroup}>

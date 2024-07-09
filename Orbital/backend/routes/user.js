@@ -3,6 +3,7 @@ const router = express.Router();
 const {
     getUserById,
     getUser,
+    getUserName,
     updateSubscriptions,
     profileChange,
     getColorTheme,
@@ -14,6 +15,7 @@ const {
 
 router.param("userId", getUserById);
 router.get("/user/:userId", isSignedIn, isAuthenticated, getUser);
+router.post("/getUserName", getUserName);
 router.post("/updateSubscriptions", updateSubscriptions);
 router.post("/profilechange", profileChange);
 router.post("/getcolortheme", getColorTheme);
