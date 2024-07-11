@@ -372,12 +372,30 @@ export const updateSubscriptions = async (userid, subscription) => {
     }
 };
 
-export const profileChange = async (userid, name, theme) => {
+export const profileChange = async (userid, name) => {
     // API call to change profile
     try {
         const response = await axios.post(
             `${URL}/user/profilechange`,
-            JSON.stringify({ userid, name, theme }),
+            JSON.stringify({ userid, name }),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+export const colorThemeChange = async (userid, theme) => {
+    try {
+        const response = await axios.post(
+            `${URL}/user/colorthemechange`,
+            JSON.stringify({ userid, theme }),
             {
                 headers: {
                     Accept: "application/json",
@@ -395,7 +413,7 @@ export const getColorTheme = async (userid) => {
     try {
         const response = await axios.post(
             `${URL}/user/getcolortheme`,
-            JSON.stringify({ userid }),
+            JSON.stringify(userid),
             {
                 headers: {
                     Accept: "application/json",

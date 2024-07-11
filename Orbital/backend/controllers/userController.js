@@ -95,10 +95,9 @@ exports.updateSubscriptions = async (req, res) => {
 //Update Profile
 exports.profileChange = async (req, res) => {
     try {
-        const { userid, name, theme } = req.body;
+        const { userid, name } = req.body;
         const user = await User.findByIdAndUpdate(userid, {
             name: name,
-            colorTheme: theme,
         });
         // console.log(user);
         if (!user) {
@@ -117,17 +116,32 @@ exports.profileChange = async (req, res) => {
     }
 };
 
-exports.getColorTheme = async (req, res) => {
+exports.colorThemeChange = async (req, res) => {
     try {
-        const { userid } = req.body;
-        const user = await User.findById(userid);
-        // console.log(userid);
+        const { userid, theme } = req.body;
+        console.log(userid, theme);
+        const user = await User.findByIdAndUpdate(userid, {
+            colorTheme: theme,
+        });
         if (!user) {
             return res.status(404).json({ error: "User not found." });
         }
-        // console.log(user.colorTheme);
-        return res.json(user.colorTheme);
+        return res.status(200).json({ success: true, user });
     } catch (error) {
         return res.status(500).json({ error: error.message });
+    }
+};
+
+exports.getColorTheme = async (req, res) => {
+    try {
+        const { userid } = req.body;
+        // console.log(req.body);
+        const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+        return res.status(200).json({ data: user.colorTheme });
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error." });
     }
 };

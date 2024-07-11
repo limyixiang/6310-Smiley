@@ -1,7 +1,7 @@
 :root {
     --mainText-color: rgb(0, 0, 66);
     --pageBackground-color: #d8f5fd;
-    --elementBackground-color: rgb(241, 253, 255);
+    --elementBackground-color: rgb(248, 254, 255);
     --border-color: rgba(71, 180, 230, 0.4);
     --hover-color: #c5edff;
     --focus-color: rgba(118, 198, 235, 0.4);
