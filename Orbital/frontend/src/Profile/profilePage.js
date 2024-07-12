@@ -81,12 +81,17 @@ function ProfilePage() {
             }
         };
 
-        getUserName({ userid: user._id }).then((data) => {
-            setUserName(data.data);
-        });
-        getColorTheme({ userid: user._id }).then((data) => {
-            setThemeColor(data.data);
-        });
+        getUserName({ userid: user._id })
+            .then((data) => {
+                setUserName(data.data);
+            })
+            .catch((err) => console.error("Error fetching data:", err));
+
+        getColorTheme({ userid: user._id })
+            .then((data) => {
+                setThemeColor(data.data);
+            })
+            .catch((err) => console.error("Error fetching data:", err));
     }, [user._id, success, themes]);
 
     const onLandingPage = () => {

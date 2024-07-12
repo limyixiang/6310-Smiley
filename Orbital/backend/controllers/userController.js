@@ -119,7 +119,7 @@ exports.profileChange = async (req, res) => {
 exports.colorThemeChange = async (req, res) => {
     try {
         const { userid, theme } = req.body;
-        console.log(userid, theme);
+        // console.log(userid, theme);
         const user = await User.findByIdAndUpdate(userid, {
             colorTheme: theme,
         });
