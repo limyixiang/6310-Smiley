@@ -12,6 +12,7 @@ import {
     reverseCompleteTask,
     deleteCourse,
     deleteTask,
+    getColorTheme,
     getPreferences,
 } from "../Backend";
 import CourseContainer from "./courseContainer";
