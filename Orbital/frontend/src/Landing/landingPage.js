@@ -12,9 +12,12 @@ import {
     reverseCompleteTask,
     deleteCourse,
     deleteTask,
+    getPreferences,
 } from "../Backend";
 import CourseContainer from "./courseContainer";
 import TaskContainer from "./taskContainer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 function LandingPage() {
     const [landingPageValues, setLandingPageValues] = useState({
@@ -408,6 +411,28 @@ function LandingPage() {
         navigate("/", { state: { user } });
     };
 
+    const onSettingsPage = async () => {
+        const preferences = await getUserNotificationsPreferences();
+        navigate("/settingspage", {
+            state: { user, preferences },
+        });
+    };
+
+    const getUserNotificationsPreferences = async () => {
+        try {
+            const response = await getPreferences({ userid: user._id });
+            if (response) {
+                console.log(response.data);
+                return response.data;
+            }
+        } catch (error) {
+            console.error(
+                "Failed to get user notifications preferences:",
+                error
+            );
+        }
+    };
+
     return (
         <div className={styles.mainContainer}>
             <Helmet>
@@ -418,6 +443,16 @@ function LandingPage() {
             </Helmet>
             <div className={styles.profileGroup}>
                 <i class="bx bxs-user-circle" onClick={onProfilePage}></i>
+            </div>
+            <div className={styles.settingsGroup}>
+                <FontAwesomeIcon
+                    className={styles.settingsIcon}
+                    icon={faGear}
+                    onClick={() => {
+                        console.log("Settings clicked");
+                        onSettingsPage();
+                    }}
+                />
             </div>
             <CourseContainer
                 user={user}

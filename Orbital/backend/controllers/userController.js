@@ -145,3 +145,56 @@ exports.getColorTheme = async (req, res) => {
         return res.status(500).json({ error: "Internal server error." });
     }
 };
+
+exports.updateNotifications = async (req, res) => {
+    try {
+        const {
+            userid,
+            notifications,
+            notificationsHigh,
+            notificationsLow,
+            reminderBeforeDeadline,
+            tutorialPriority,
+            lecturePriority,
+            quizPriority,
+        } = req.body;
+        console.log(req.body);
+        const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+        user.notifications = notifications;
+        user.notificationsHigh = notificationsHigh;
+        user.notificationsLow = notificationsLow;
+        user.reminderBeforeDeadline = reminderBeforeDeadline;
+        user.tutorialPriority = tutorialPriority;
+        user.lecturePriority = lecturePriority;
+        user.quizPriority = quizPriority;
+        await user.save();
+        return res.status(200).json({ success: true, user });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+exports.getPreferences = async (req, res) => {
+    try {
+        const { userid } = req.body;
+        const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+        return res.status(200).json({
+            notifications: user.notifications,
+            notificationsHigh: user.notificationsHigh,
+            notificationsLow: user.notificationsLow,
+            reminderBeforeDeadline: user.reminderBeforeDeadline,
+            tutorialPriority: user.tutorialPriority,
+            lecturePriority: user.lecturePriority,
+            quizPriority: user.quizPriority,
+        });
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};

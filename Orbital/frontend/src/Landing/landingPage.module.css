@@ -82,6 +82,16 @@
     cursor: pointer;
 } /*profile image icon*/
 
+.settingsGroup {
+    font-size: 50px;
+    display: flex;
+    position: fixed;
+    top: 5vh;
+    left: 14vw;
+    cursor: pointer;
+    color: var(--mainText-color);
+} /*profile group*/
+
 /*CourseContainer*/
 .coursesHeader {
     padding: 0 0 3vh 0;

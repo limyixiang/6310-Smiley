@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 var crypto = require("crypto");
 const { v4: uuidv4 } = require("uuid");
+const { type } = require("os");
 
 //User Schema
 const userSchema = new mongoose.Schema(
@@ -36,6 +37,34 @@ const userSchema = new mongoose.Schema(
             trim: true,
             required: true,
             default: "default",
+        },
+        notifications: {
+            type: Boolean,
+            default: true,
+        },
+        notificationsHigh: {
+            type: Boolean,
+            default: true,
+        },
+        notificationsLow: {
+            type: Boolean,
+            default: true,
+        },
+        reminderBeforeDeadline: {
+            type: Number,
+            default: 1440, // 1 day = 1440 minutes
+        },
+        tutorialPriority: {
+            type: String,
+            default: "Low",
+        },
+        lecturePriority: {
+            type: String,
+            default: "Low",
+        },
+        quizPriority: {
+            type: String,
+            default: "High",
         },
     },
     { timestamps: true }

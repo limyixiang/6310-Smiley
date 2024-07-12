@@ -427,6 +427,43 @@ export const getColorTheme = async (userid) => {
     }
 };
 
+export const updateNotifications = async (preferences) => {
+    try {
+        console.log(preferences);
+        const response = await axios.post(
+            `${URL}/user/updatenotifications`,
+            JSON.stringify(preferences),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+export const getPreferences = async (userid) => {
+    try {
+        const response = await axios.post(
+            `${URL}/user/getpreferences`,
+            JSON.stringify(userid),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response;
+    } catch (err) {
+        return err.response;
+    }
+};
+
 // Push Notifications
 export const sendSubscription = (subscription, title, message) => {
     return fetch("http://localhost:8000/notifications/subscribe", {

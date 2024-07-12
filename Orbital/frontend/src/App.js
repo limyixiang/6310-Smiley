@@ -7,6 +7,7 @@ import ResetPassword from "./Login/resetPassword.js";
 import LandingPage from "./Landing/landingPage.js";
 import CoursePage from "./Course/coursePage.js";
 import ProfilePage from "./Profile/profilePage.js";
+import SettingsPage from "./Settings/settingsPage.js";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 function App() {
@@ -47,6 +48,12 @@ function App() {
                         exact
                         path="/profilepage"
                         element={<ProfilePage />}
+                    />
+                    {/* Route for the SettingsPage component */}
+                    <Route
+                        exact
+                        path="/settingspage"
+                        element={<SettingsPage />}
                     />
                 </Routes>
             </Router>

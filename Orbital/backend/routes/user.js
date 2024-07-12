@@ -8,6 +8,8 @@ const {
     profileChange,
     getColorTheme,
     colorThemeChange,
+    updateNotifications,
+    getPreferences,
 } = require("../controllers/userController");
 const {
     isSignedIn,
@@ -21,5 +23,7 @@ router.post("/updateSubscriptions", updateSubscriptions);
 router.post("/profilechange", profileChange);
 router.post("/colorthemechange", colorThemeChange);
 router.post("/getcolortheme", getColorTheme);
+router.post("/updatenotifications", updateNotifications);
+router.post("/getpreferences", getPreferences);
 
 module.exports = router;
