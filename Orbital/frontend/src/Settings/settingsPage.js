@@ -72,9 +72,11 @@ function SettingsPage() {
         try {
             const response = await updateNotifications({
                 userid: user._id,
-                notifications: notifications,
-                notificationsHigh: notificationsHigh,
-                notificationsLow: notificationsLow,
+                notifications: notifications === "on" ? true : notifications,
+                notificationsHigh:
+                    notificationsHigh === "on" ? true : notificationsHigh,
+                notificationsLow:
+                    notificationsLow === "on" ? true : notificationsLow,
                 reminderBeforeDeadline: reminderBeforeDeadline,
                 tutorialPriority: tutorialPriority,
                 lecturePriority: lecturePriority,
