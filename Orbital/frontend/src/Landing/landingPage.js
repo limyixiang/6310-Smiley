@@ -21,6 +21,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 function LandingPage() {
+    const location = useLocation();
+    const { user } = location.state;
+
     const [landingPageValues, setLandingPageValues] = useState({
         refresh: false,
         sortBy: "date",
@@ -37,10 +40,11 @@ function LandingPage() {
     });
 
     const defaultTasks = [
-        { taskName: "Tutorial", taskPriority: "Low" },
-        { taskName: "Lecture", taskPriority: "Low" },
-        { taskName: "Quiz", taskPriority: "High" },
+        { taskName: "Tutorial", taskPriority: "placeholder" },
+        { taskName: "Lecture", taskPriority: "placeholder" },
+        { taskName: "Quiz", taskPriority: "placeholder" },
     ];
+    // console.log(defaultTasks);
 
     const [courseModalTasks, setCourseModalTasks] = useState({
         isSelected: [],
@@ -52,7 +56,6 @@ function LandingPage() {
             (task) => task.taskPriority
         ),
     });
-
     // console.log(courseModalTasks);
 
     const [taskValues, setTaskValues] = useState({
@@ -79,9 +82,6 @@ function LandingPage() {
     const { taskCourseId, priorityLevel, taskName, dueDate } = taskValues;
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
-
-    const location = useLocation();
-    const { user } = location.state;
 
     const themes = useMemo(
         () => ({

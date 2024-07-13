@@ -56,8 +56,16 @@ exports.createCourse = async (req, res) => {
         await user.save();
         const tasks = req.body.tasks;
         for (const task of tasks) {
+            var taskPriority = task.recurringTaskPriorityLevel;
+            if (task.recurringTaskName === "Tutorial") {
+                taskPriority = user.tutorialPriority;
+            } else if (task.recurringTaskName === "Lecture") {
+                taskPriority = user.lecturePriority;
+            } else if (task.recurringTaskName === "Quiz") {
+                taskPriority = user.quizPriority;
+            }
             const refDate = new Date();
-            refDate.setUTCHours(-8, 0, 0, 0);
+            // refDate.setUTCHours(-8, 0, 0, 0);
             const dayOfWeek = days.indexOf(task.reminderDay);
             // console.log(refDate.getDate());
             refDate.setDate(
@@ -69,7 +77,7 @@ exports.createCourse = async (req, res) => {
                     body: {
                         taskName: task.recurringTaskName,
                         dueDate: refDate,
-                        priority: task.recurringTaskPriorityLevel,
+                        priority: taskPriority,
                         userid: req.body.userid,
                         courseid: course._id,
                     },

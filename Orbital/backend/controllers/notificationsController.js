@@ -73,7 +73,7 @@ agenda.define("scheduleWeeklySummaryNotification", async () => {
     for (const user of users) {
         const subscriptions = user.subscriptions;
         // console.log(subscriptions.length);
-        if (subscriptions.length === 0) {
+        if (subscriptions.length === 0 || user.notifications === false) {
             continue;
         }
         // Calculate the start of the current week (Monday at 00:00)
@@ -139,6 +139,7 @@ agenda.define("scheduleWeeklySummaryNotification", async () => {
 (async function () {
     await agenda.start();
     await agenda.every("0 9 * * 0", "scheduleWeeklySummaryNotification");
+    // await agenda.every("20 20 * * 6", "scheduleWeeklySummaryNotification"); // testing
 })();
 
 agenda.on("success", async (job) => {
@@ -152,18 +153,20 @@ agenda.on("success", async (job) => {
 });
 
 exports.scheduleTaskDeadlineNotification = async (task) => {
-    const { courseCode, dueDate, user, taskName } = task;
+    const { courseCode, dueDate, userid, taskName, taskPriority } = task;
     // console.log(dueDate, taskName);
+    const user = await User.findById(userid);
     const today = new Date();
     today.setUTCHours(-8, 0, 0, 0);
     const dueToday = dueDate === today.getTime();
     // console.log("dueToday:", dueToday);
     const notificationTime = dueToday
         ? new Date(Date.now() + 10 * 1000) // 10 seconds after current time
-        : new Date(dueDate - 24 * 60 * 60 * 1000); // 1 day before due date
+        : // : new Date(dueDate - 24 * 60 * 60 * 1000); // 1 day before due date
+          new Date(dueDate - user.reminderBeforeDeadline * 60 * 1000); // user-defined time before due date
     // const notificationTime = new Date(Date.now() + 5 * 1000); // 5 seconds after current time
 
-    const subscriptions = await Subscription.find({ user: user });
+    const subscriptions = await Subscription.find({ user: userid });
     const title = `Task Deadline Notification - ${courseCode}`;
     const message = dueToday
         ? `Your task "${taskName}" is due today!`
@@ -186,6 +189,14 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
             // console.log(job);
             // console.log(job.attrs._id);
             jobs.push(job.attrs._id);
+            if (taskPriority === "High" && user.notificationsHigh === false) {
+                await agenda.disable({ _id: job.attrs._id });
+            } else if (
+                taskPriority === "Low" &&
+                user.notificationsLow === false
+            ) {
+                await agenda.disable({ _id: job.attrs._id });
+            }
         } catch (error) {
             console.log(error);
         }
@@ -211,8 +222,11 @@ exports.enableTaskDeadlineNotification = async (taskId) => {
     const today = new Date();
     today.setUTCHours(-8, 0, 0, 0);
     const dueToday = task.dueDate.getTime() === today.getTime();
+    const expired = task.dueDate.getTime() < today.getTime();
     const newMessage = dueToday
         ? `Your task "${task.taskName}" is due today!`
+        : expired
+        ? `Your task "${task.taskName}" is overdue!`
         : `Your task "${task.taskName}" is due in 1 day.`;
     // const testMessage = "Test Message";
     // console.log(dueToday);
@@ -234,6 +248,34 @@ exports.deleteTaskDeadlineNotification = async (taskId) => {
     for (const jobId of jobs) {
         await agenda.cancel({ _id: jobId });
         // console.log("cancelled");
+    }
+};
+
+exports.updateUserTasksNotifications = async (
+    userid,
+    highPreferenceChanged,
+    lowPreferenceChanged
+) => {
+    const user = await User.findById(userid);
+    const userTasks = await Task.find({ _id: { $in: user.tasksByDate } });
+    for (const task of userTasks) {
+        if (task.status === "Done") {
+            continue;
+        } else {
+            if (highPreferenceChanged && task.priority === "High") {
+                if (user.notificationsHigh === false) {
+                    await exports.disableTaskDeadlineNotification(task._id);
+                } else {
+                    await exports.enableTaskDeadlineNotification(task._id);
+                }
+            } else if (lowPreferenceChanged && task.priority === "Low") {
+                if (user.notificationsLow === false) {
+                    await exports.disableTaskDeadlineNotification(task._id);
+                } else {
+                    await exports.enableTaskDeadlineNotification(task._id);
+                }
+            }
+        }
     }
 };
 

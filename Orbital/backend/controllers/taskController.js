@@ -252,7 +252,7 @@ exports.createTask = async (req, res) => {
         const course = await Course.findById(req.body.courseid);
         const dueDate = new Date(req.body.dueDate);
         dueDate.setUTCHours(-8, 0, 0, 0);
-        console.log(new Date(dueDate));
+        console.log(dueDate);
         const task = new Task({
             taskName: req.body.taskName,
             dueDate: dueDate,
@@ -324,8 +324,9 @@ exports.createTask = async (req, res) => {
         const jobs = await scheduleTaskDeadlineNotification({
             courseCode: course.courseCode,
             dueDate: newDeadline,
-            user: user,
+            userid: req.body.userid,
             taskName: task.taskName,
+            taskPriority: task.priority,
         });
         // might want to append new jobs to already existing jobs next time instead of completely overwriting
         task.set("notifications", jobs);
@@ -476,20 +477,48 @@ exports.reverseCompleteTask = async (req, res) => {
                 .json({ message: "Task already not completed" });
         }
         task.status = "Todo";
-        const newDeadline = new Date(task.dueDate).getTime();
-        // const jobId = scheduleTaskDeadlineNotification({
-        //     courseCode: task.course.courseCode,
-        //     dueDate: newDeadline,
-        //     user: task.user,
-        //     taskName: task.taskName,
-        // });
-        // task.set("notification", jobId);
-        await enableTaskDeadlineNotification(task);
+        const user = await User.findById(task.user);
+        if (
+            (task.priority === "High" && user.notificationsHigh) ||
+            (task.priority === "Low" && user.notificationsLow)
+        ) {
+            await enableTaskDeadlineNotification(task);
+        }
         await task.save();
         return res
             .status(200)
             .json({ message: "Completion of task reversed successfully" });
     } catch (error) {
         return res.status(500).json({ error: error.message });
+    }
+};
+
+// Update user's task priorities
+exports.updateUserTasksPriority = async (
+    userid,
+    tutorialPriorityChanged,
+    lecturePriorityChanged,
+    quizPriorityChanged
+) => {
+    try {
+        const user = await User.findById(userid);
+        if (!user) {
+            return { success: false, error: "User not found." };
+        }
+        const userTasks = await Task.find({
+            _id: { $in: user.tasksByPriority },
+        });
+        for (const task of userTasks) {
+            if (tutorialPriorityChanged && task.taskName === "Tutorial") {
+                task.priority = user.tutorialPriority;
+            } else if (lecturePriorityChanged && task.taskName === "Lecture") {
+                task.priority = user.lecturePriority;
+            } else if (quizPriorityChanged && task.taskName === "Quiz") {
+                task.priority = user.quizPriority;
+            }
+            await task.save();
+        }
+    } catch (error) {
+        console.log(error);
     }
 };

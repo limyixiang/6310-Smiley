@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
 const Subscription = require("../models/subscriptionModel");
+const { updateUserTasksNotifications } = require("./notificationsController");
+const { updateUserTasksPriority } = require("./taskController");
 
 //Get By Id
 exports.getUserById = (req, res, next, id) => {
@@ -163,6 +165,17 @@ exports.updateNotifications = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: "User not found." });
         }
+        const highPreferenceChanged =
+            user.notificationsHigh !== notificationsHigh;
+        const lowPreferenceChanged = user.notificationsLow !== notificationsLow;
+        const tutorialPriorityChanged =
+            user.tutorialPriority !== tutorialPriority;
+        const lecturePriorityChanged = user.lecturePriority !== lecturePriority;
+        const quizPriorityChanged = user.quizPriority !== quizPriority;
+        const taskPriorityChanged =
+            tutorialPriorityChanged ||
+            lecturePriorityChanged ||
+            quizPriorityChanged;
         user.notifications = notifications;
         user.notificationsHigh = notificationsHigh;
         user.notificationsLow = notificationsLow;
@@ -171,6 +184,22 @@ exports.updateNotifications = async (req, res) => {
         user.lecturePriority = lecturePriority;
         user.quizPriority = quizPriority;
         await user.save();
+        if (highPreferenceChanged || lowPreferenceChanged) {
+            await updateUserTasksNotifications(
+                userid,
+                highPreferenceChanged,
+                lowPreferenceChanged
+            );
+        }
+        if (taskPriorityChanged) {
+            console.log("Updating task priority");
+            await updateUserTasksPriority(
+                userid,
+                tutorialPriorityChanged,
+                lecturePriorityChanged,
+                quizPriorityChanged
+            );
+        }
         return res.status(200).json({ success: true, user });
     } catch (error) {
         console.log(error.message);
