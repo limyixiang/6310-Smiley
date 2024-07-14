@@ -16,7 +16,33 @@ const Dashboard = () => {
     const authenticatedUser = isAuthenticated(); // Check if the user is authenticated
     const [isShaking, setShaking] = useState(false); // State for shaking animation
     const [userName, setUserName] = useState("");
+    const [quote, setQuote] = useState("Keep smiling and studying :D");
+    const [author, setAuthor] = useState("Smiley");
+    const [isQuoteDisabled, setIsQuoteDisabled] = useState(false);
 
+    const fetchQuote = async () => {
+        try {
+            const response = await fetch("https://api.quotable.io/random");
+            const data = await response.json();
+            setQuote(data.content);
+            setAuthor(data.author);
+        } catch (error) {
+            console.error("Error fetching the quote", error);
+        }
+    };
+
+    // Prevent spamming API
+    const handleFetchQuote = () => {
+        fetchQuote();
+
+        setIsQuoteDisabled(true);
+
+        setTimeout(() => {
+            setIsQuoteDisabled(false);
+        }, 1000);
+    };
+
+    // Updates username in dashboard on change in profile page
     useEffect(() => {
         if (authenticatedUser) {
             getUserName({ userid: authenticatedUser.user._id }).then((data) => {
@@ -150,6 +176,13 @@ const Dashboard = () => {
                     onClick={handleSmileyClick}
                 />
                 <h1>SMILEY</h1>
+            </div>
+            <div className={styles.quoteGroup}>
+                <p>" {quote} "</p>
+                <p>- {author}</p>
+                <button onClick={handleFetchQuote} disabled={isQuoteDisabled}>
+                    New Quote
+                </button>
             </div>
             <a
                 className={styles.attributionGroup}
