@@ -163,14 +163,27 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
     const notificationTime = dueToday
         ? new Date(Date.now() + 10 * 1000) // 10 seconds after current time
         : // : new Date(dueDate - 24 * 60 * 60 * 1000); // 1 day before due date
-          new Date(dueDate - user.reminderBeforeDeadline * 60 * 1000); // user-defined time before due date
+          new Date(
+              dueDate -
+                  user.reminderDaysBeforeDeadline * 24 * 60 * 60 * 1000 +
+                  user.reminderTime * 60 * 60 * 1000
+          ); // user-defined time before due date
     // const notificationTime = new Date(Date.now() + 5 * 1000); // 5 seconds after current time
-
+    console.log(notificationTime);
+    const daysBetweenDueDateAndToday =
+        (dueDate - today) / (24 * 60 * 60 * 1000);
+    const messageHelper =
+        daysBetweenDueDateAndToday < user.reminderDaysBeforeDeadline
+            ? daysBetweenDueDateAndToday
+            : user.reminderDaysBeforeDeadline;
     const subscriptions = await Subscription.find({ user: userid });
     const title = `Task Deadline Notification - ${courseCode}`;
-    const message = dueToday
-        ? `Your task "${taskName}" is due today!`
-        : `Your task "${taskName}" is due in 1 day.`;
+    const message =
+        dueToday || user.reminderDaysBeforeDeadline === 0
+            ? `Your task "${taskName}" is due today!`
+            : `Your task "${taskName}" is due in ${messageHelper} ${
+                  messageHelper <= 1 ? "day" : "days"
+              }.`;
     var jobs = [];
     for (const subscription of subscriptions) {
         if (subscription == null) {
@@ -217,17 +230,23 @@ exports.disableTaskDeadlineNotification = async (taskId) => {
 
 exports.enableTaskDeadlineNotification = async (taskId) => {
     const task = await Task.findById(taskId);
+    const user = await User.findById(task.user._id);
     const jobs = task.notifications;
     // console.log(jobs);
     const today = new Date();
     today.setUTCHours(-8, 0, 0, 0);
     const dueToday = task.dueDate.getTime() === today.getTime();
     const expired = task.dueDate.getTime() < today.getTime();
+    const daysLeft = (task.dueDate - today) / (24 * 60 * 60 * 1000);
     const newMessage = dueToday
         ? `Your task "${task.taskName}" is due today!`
         : expired
         ? `Your task "${task.taskName}" is overdue!`
-        : `Your task "${task.taskName}" is due in 1 day.`;
+        : daysLeft <= user.reminderDaysBeforeDeadline
+        ? `Your task "${task.taskName}" is due in ${daysLeft} ${
+              daysLeft === 1 ? "day" : "days"
+          }.`
+        : `Your task "${task.taskName}" is due in ${user.reminderDaysBeforeDeadline} days.`;
     // const testMessage = "Test Message";
     // console.log(dueToday);
     for (const jobId of jobs) {
@@ -274,6 +293,56 @@ exports.updateUserTasksNotifications = async (
                 } else {
                     await exports.enableTaskDeadlineNotification(task._id);
                 }
+            }
+        }
+    }
+};
+
+exports.updateUserNotificationsTiming = async (userid) => {
+    const user = await User.findById(userid);
+    const userTasks = await Task.find({ _id: { $in: user.tasksByDate } });
+    const now = new Date();
+    now.setUTCHours(-8, 0, 0, 0);
+    for (const task of userTasks) {
+        const jobs = task.notifications;
+        const daysLeft = (task.dueDate - now) / (24 * 60 * 60 * 1000);
+        if (daysLeft < 0) {
+            continue;
+        }
+        // console.log(daysLeft);
+        for (const jobId of jobs) {
+            const job = await agenda.jobs({ _id: jobId });
+            if (job.length > 0) {
+                // if we want to prevent rescheduling of jobs that have already been executed
+                // if (
+                //     job[0].attrs.nextRunAt === null ||
+                //     job[0].attrs.nextRunAt < now ||
+                //     job[0].attrs.lastFinishedAt !== null
+                // ) {
+                //     // console.log("Job has already been executed.");
+                //     // console.log(job);
+                //     continue; // Skip this job as it's considered finished
+                // }
+                const notificationTime = new Date(
+                    task.dueDate -
+                        user.reminderDaysBeforeDeadline * 24 * 60 * 60 * 1000 +
+                        user.reminderTime * 60 * 60 * 1000
+                );
+                job[0].attrs.nextRunAt = notificationTime;
+                if (daysLeft <= user.reminderDaysBeforeDeadline) {
+                    if (daysLeft === 0) {
+                        job[0].attrs.data.message = `Your task "${task.taskName}" is due today!`;
+                    } else {
+                        job[0].attrs.data.message = `Your task "${
+                            task.taskName
+                        }" is due in ${daysLeft} ${
+                            daysLeft === 1 ? "day" : "days"
+                        }.`;
+                    }
+                } else {
+                    job[0].attrs.data.message = `Your task "${task.taskName}" is due in ${user.reminderDaysBeforeDeadline} days.`;
+                }
+                await job[0].save();
             }
         }
     }

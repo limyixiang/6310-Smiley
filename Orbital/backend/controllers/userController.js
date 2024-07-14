@@ -1,6 +1,9 @@
 const User = require("../models/userModel");
 const Subscription = require("../models/subscriptionModel");
-const { updateUserTasksNotifications } = require("./notificationsController");
+const {
+    updateUserTasksNotifications,
+    updateUserNotificationsTiming,
+} = require("./notificationsController");
 const { updateUserTasksPriority } = require("./taskController");
 
 //Get By Id
@@ -155,7 +158,8 @@ exports.updateNotifications = async (req, res) => {
             notifications,
             notificationsHigh,
             notificationsLow,
-            reminderBeforeDeadline,
+            reminderDaysBeforeDeadline,
+            reminderTime,
             tutorialPriority,
             lecturePriority,
             quizPriority,
@@ -176,10 +180,15 @@ exports.updateNotifications = async (req, res) => {
             tutorialPriorityChanged ||
             lecturePriorityChanged ||
             quizPriorityChanged;
+        const reminderTimeChanged =
+            user.reminderTime.toString() !== reminderTime.toString() ||
+            user.reminderDaysBeforeDeadline.toString() !==
+                reminderDaysBeforeDeadline.toString();
         user.notifications = notifications;
         user.notificationsHigh = notificationsHigh;
         user.notificationsLow = notificationsLow;
-        user.reminderBeforeDeadline = reminderBeforeDeadline;
+        user.reminderDaysBeforeDeadline = reminderDaysBeforeDeadline;
+        user.reminderTime = reminderTime;
         user.tutorialPriority = tutorialPriority;
         user.lecturePriority = lecturePriority;
         user.quizPriority = quizPriority;
@@ -200,6 +209,9 @@ exports.updateNotifications = async (req, res) => {
                 quizPriorityChanged
             );
         }
+        if (reminderTimeChanged) {
+            await updateUserNotificationsTiming(userid);
+        }
         return res.status(200).json({ success: true, user });
     } catch (error) {
         console.log(error.message);
@@ -218,7 +230,8 @@ exports.getPreferences = async (req, res) => {
             notifications: user.notifications,
             notificationsHigh: user.notificationsHigh,
             notificationsLow: user.notificationsLow,
-            reminderBeforeDeadline: user.reminderBeforeDeadline,
+            reminderDaysBeforeDeadline: user.reminderDaysBeforeDeadline,
+            reminderTime: user.reminderTime,
             tutorialPriority: user.tutorialPriority,
             lecturePriority: user.lecturePriority,
             quizPriority: user.quizPriority,

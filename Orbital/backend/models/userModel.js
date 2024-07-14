@@ -50,9 +50,13 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
         },
-        reminderBeforeDeadline: {
+        reminderDaysBeforeDeadline: {
             type: Number,
-            default: 1440, // 1 day = 1440 minutes
+            default: 1, // 1 day
+        },
+        reminderTime: {
+            type: Number,
+            default: 0, // 12AM is 0
         },
         tutorialPriority: {
             type: String,
