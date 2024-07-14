@@ -252,7 +252,7 @@ exports.createTask = async (req, res) => {
         const course = await Course.findById(req.body.courseid);
         const dueDate = new Date(req.body.dueDate);
         dueDate.setUTCHours(-8, 0, 0, 0);
-        console.log(dueDate);
+        console.log(dueDate.toLocaleString());
         const task = new Task({
             taskName: req.body.taskName,
             dueDate: dueDate,
