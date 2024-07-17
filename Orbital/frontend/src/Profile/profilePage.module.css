@@ -29,7 +29,7 @@
 .headerGroup {
     display: flex;
     position: fixed;
-    top: 5vh;
+    top: 7vh;
     left: 7vw;
 }
 
@@ -74,29 +74,9 @@
     color: rgba(0, 0, 0, 0.6);
 } /*input box placeholder*/
 
-.formGroup input:focus {
-    outline: none;
-    border-color: var(--focus-color);
-    box-shadow: 0 0 5px var(--border-color);
-} /*input box on focus*/
-
-.formContainer button {
-    padding: 10px 30px;
-    margin: 10px;
-    text-decoration: none;
-    letter-spacing: 1px;
-    font-size: 16px;
-    border: 2px solid var(--border-color);
-    border-radius: 30px;
-    color: var(--mainText-color);
-    cursor: pointer;
-    font-weight: bold;
-    background: transparent;
-} /*submission buttons for course popup*/
-
 .formContainer button:hover {
     background: var(--hover-color);
-} /*submission buttons on hover for course popup*/
+}
 
 .linkGroup {
     display: flex;
