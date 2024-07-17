@@ -7,7 +7,7 @@ import {
 } from "../Backend";
 import { useNavigate } from "react-router-dom";
 import styles from "./dashboardPage.module.css";
-import logo from "./smileytransparent.jpg";
+import logo from "../smileytransparent.jpg";
 import { getExistingSubscription, createSubscription } from "../utils/Push";
 import "../Profile/colorPicker.module.css";
 

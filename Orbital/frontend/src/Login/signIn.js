@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { signin, authenticate } from "../Backend";
 import { Navigate } from "react-router-dom";
 import styles from "./loginPage.module.css";
-import logo from "./smileytransparent.jpg";
+import logo from "../smileytransparent.jpg";
 
 // Signin component for the login form
 export function Signin() {

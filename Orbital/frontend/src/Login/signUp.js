@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { signup } from "../Backend";
 import styles from "./loginPage.module.css";
-import logo from "./smileytransparent.jpg";
+import logo from "../smileytransparent.jpg";
 
 // Signup component for the signup form
 function Signup() {

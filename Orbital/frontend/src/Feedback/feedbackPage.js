@@ -2,7 +2,7 @@ import { React, useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./feedbackPage.module.css";
 import { submitFeedback, getColorTheme } from "../Backend";
-import logo from "../Login/smileytransparent.jpg";
+import logo from "../smileytransparent.jpg";
 
 function FeedbackPage() {
     const location = useLocation();
