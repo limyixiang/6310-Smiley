@@ -129,6 +129,10 @@ function SettingsPage() {
         navigate("/landingpage", { state: { user } });
     };
 
+    const onFeedbackPage = () => {
+        navigate("/feedbackpage", { state: { user } });
+    };
+
     const successMessage = () => {
         if (success) {
             return <h4>Settings saved successfully!</h4>;
@@ -248,6 +252,9 @@ function SettingsPage() {
                     <button onClick={onReset}>Reset to default</button>
                     <button onClick={onLandingPage}>
                         Back to Landing Page
+                    </button>
+                    <button onClick={onFeedbackPage}>
+                        Leave us a feedback!
                     </button>
                 </div>
             </div>

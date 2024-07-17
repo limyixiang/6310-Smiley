@@ -10,6 +10,7 @@ const {
     colorThemeChange,
     updateNotifications,
     getPreferences,
+    submitFeedback,
 } = require("../controllers/userController");
 const {
     isSignedIn,
@@ -25,5 +26,6 @@ router.post("/colorthemechange", colorThemeChange);
 router.post("/getcolortheme", getColorTheme);
 router.post("/updatenotifications", updateNotifications);
 router.post("/getpreferences", getPreferences);
+router.post("/submitfeedback", submitFeedback);
 
 module.exports = router;

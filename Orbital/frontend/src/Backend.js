@@ -464,6 +464,24 @@ export const getPreferences = async (userid) => {
     }
 };
 
+export const submitFeedback = async (feedbackDetails) => {
+    try {
+        const response = await axios.post(
+            `${URL}/user/submitfeedback`,
+            JSON.stringify(feedbackDetails),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response;
+    } catch (err) {
+        return err.response;
+    }
+};
+
 // Push Notifications
 export const sendSubscription = (subscription, title, message) => {
     return fetch("http://localhost:8000/notifications/subscribe", {

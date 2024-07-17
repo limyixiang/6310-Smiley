@@ -5,6 +5,7 @@ const {
     updateUserNotificationsTiming,
 } = require("./notificationsController");
 const { updateUserTasksPriority } = require("./taskController");
+const nodemailer = require("nodemailer");
 
 //Get By Id
 exports.getUserById = (req, res, next, id) => {
@@ -238,5 +239,81 @@ exports.getPreferences = async (req, res) => {
         });
     } catch (error) {
         return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+exports.submitFeedback = async (req, res) => {
+    try {
+        // Find user by userid
+        const user = await User.findById(req.body.userid);
+
+        // If user is not found
+        if (!user) {
+            return res
+                .status(404)
+                .json({ error: "User with this email does not exist." });
+        }
+
+        // Set up email transporter with Smiley's mail
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+        });
+
+        //Email configurations
+        const userMailOptions = {
+            from: process.env.EMAIL,
+            to: user.email,
+            subject: "Thank you for your feedback!",
+            html: `<h1>Feedback Received</h1>
+                <h2>Here's the feedback that you have submitted:</h2>
+                <p>Date Submitted: ${new Date()}</p>
+                <p>Feedback Type: ${req.body.feedbackType}</p>
+                <p>Feedback Title: ${req.body.feedbackTitle}</p>
+                <p>Feedback Message: ${req.body.feedbackMessage}</p>
+            `,
+        };
+
+        const devMailOptions = {
+            from: process.env.EMAIL,
+            to: process.env.DEV_EMAILS.split(",").join(", "),
+            subject: "Feedback Received",
+            html: `<h1>Feedback Received</h1>
+                <h2>Here's the feedback that has been submitted:</h2>
+                <p>Date Submitted: ${new Date()}</p>
+                <p>User ID: ${req.body.userid}</p>
+                <p>User Email: ${user.email}</p>
+                <p>User Name: ${user.name}</p>
+                <p>Feedback Type: ${req.body.feedbackType}</p>
+                <p>Feedback Title: ${req.body.feedbackTitle}</p>
+                <p>Feedback Message: ${req.body.feedbackMessage}</p>
+            `,
+        };
+
+        //Send the email
+        transporter.sendMail(userMailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).json({ error: error.message });
+            } else {
+                console.log("Email has been sent to the user.");
+            }
+        });
+
+        transporter.sendMail(devMailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).json({ error: error.message });
+            } else {
+                console.log("Email has been sent to the developer.");
+            }
+        });
+
+        return res.status(200).json({
+            message: "Feedback submitted successfully!",
+        });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
     }
 };

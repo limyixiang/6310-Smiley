@@ -8,6 +8,7 @@ import LandingPage from "./Landing/landingPage.js";
 import CoursePage from "./Course/coursePage.js";
 import ProfilePage from "./Profile/profilePage.js";
 import SettingsPage from "./Settings/settingsPage.js";
+import FeedbackPage from "./Feedback/feedbackPage.js";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 function App() {
@@ -54,6 +55,12 @@ function App() {
                         exact
                         path="/settingspage"
                         element={<SettingsPage />}
+                    />
+                    {/* Route for the FeedbackPage component */}
+                    <Route
+                        exact
+                        path="/feedbackpage"
+                        element={<FeedbackPage />}
                     />
                 </Routes>
             </Router>
