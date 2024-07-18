@@ -49,7 +49,7 @@
     display: flex;
     position: fixed;
     top: 5vh;
-    right: 7vw;
+    right: 10vw;
 } /*hyperlink to other pages*/
 
 .buttonGroup button {
@@ -77,17 +77,17 @@
 } /*profile group*/
 
 .profileGroup i {
-    font-size: 50px;
+    font-size: 60px;
     color: var(--mainText-color);
     cursor: pointer;
 } /*profile image icon*/
 
 .settingsGroup {
-    font-size: 50px;
+    font-size: 30px;
     display: flex;
     position: fixed;
-    top: 5vh;
-    left: 14vw;
+    top: 5.5vh;
+    right: 6vw;
     cursor: pointer;
     color: var(--mainText-color);
 } /*profile group*/
