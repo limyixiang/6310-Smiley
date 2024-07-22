@@ -261,56 +261,80 @@ exports.createTask = async (req, res) => {
             course: course,
         });
         // console.log("reached here");
-        var userTasksByDate = user.tasksByDate;
-        var userTasksByPriority = user.tasksByPriority;
-        var courseTasksByDate = course.tasksByDate;
-        var courseTasksByPriority = course.tasksByPriority;
-
-        // Insert new Task into user's array of tasks
-        // Note that this only takes into acount the dueDate of the task and not the priority of the course yet
-        // as priorities of courses are not implemented yet.
         const newDeadline = new Date(task.dueDate).getTime();
-        let userTasksByDatePromise = insertTaskByDate(
-            userTasksByDate,
-            newDeadline,
-            task
-        );
-        let userTasksByPriorityPromise = insertTaskByPriority(
-            userTasksByPriority,
-            newDeadline,
-            task
-        );
-        let courseTasksByDatePromise = insertTaskByDate(
-            courseTasksByDate,
-            newDeadline,
-            task
-        );
-        let courseTasksByPriorityPromise = insertTaskByPriority(
-            courseTasksByPriority,
-            newDeadline,
-            task
-        );
+        if (res) {
+            var userTasksByDate = user.tasksByDate;
+            var userTasksByPriority = user.tasksByPriority;
+            var courseTasksByDate = course.tasksByDate;
+            var courseTasksByPriority = course.tasksByPriority;
 
-        try {
-            userTasksByDate = await userTasksByDatePromise;
-            userTasksByPriority = await userTasksByPriorityPromise;
-            courseTasksByDate = await courseTasksByDatePromise;
-            courseTasksByPriority = await courseTasksByPriorityPromise;
+            // Insert new Task into user's array of tasks
+            // Note that this only takes into acount the dueDate of the task and not the priority of the course yet
+            // as priorities of courses are not implemented yet.
+            let userTasksByDatePromise = insertTaskByDate(
+                userTasksByDate,
+                newDeadline,
+                task
+            );
+            let userTasksByPriorityPromise = insertTaskByPriority(
+                userTasksByPriority,
+                newDeadline,
+                task
+            );
+            let courseTasksByDatePromise = insertTaskByDate(
+                courseTasksByDate,
+                newDeadline,
+                task
+            );
+            let courseTasksByPriorityPromise = insertTaskByPriority(
+                courseTasksByPriority,
+                newDeadline,
+                task
+            );
 
-            user.set("tasksByDate", userTasksByDate);
-            user.set("tasksByPriority", userTasksByPriority);
-            await user.save({ $inc: { __v: 1 } });
-            // console.log("User saved.");
+            try {
+                userTasksByDate = await userTasksByDatePromise;
+                userTasksByPriority = await userTasksByPriorityPromise;
+                courseTasksByDate = await courseTasksByDatePromise;
+                courseTasksByPriority = await courseTasksByPriorityPromise;
 
-            course.set("tasksByDate", courseTasksByDate);
-            course.set("tasksByPriority", courseTasksByPriority);
-            await course.save({ $inc: { __v: 1 } });
-            // console.log("Course saved.");
+                user.set("tasksByDate", userTasksByDate);
+                user.set("tasksByPriority", userTasksByPriority);
+                await user.save({ $inc: { __v: 1 } });
+                // console.log("User saved.");
 
+                course.set("tasksByDate", courseTasksByDate);
+                course.set("tasksByPriority", courseTasksByPriority);
+                await course.save({ $inc: { __v: 1 } });
+                // console.log("Course saved.");
+
+                await task.save();
+                // console.log("Task created and saved.");
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            // create course creates task without calling API
+            user.tasksByDate = user.tasksByDate.concat(task._id);
+            user.tasksByPriority = user.tasksByPriority.concat(task._id);
+            await user.save();
+
+            var courseTasksByDate = course.tasksByDate;
+            var courseTasksByPriority = course.tasksByPriority;
+            courseTasksByDate = await insertTaskByDate(
+                courseTasksByDate,
+                newDeadline,
+                task
+            );
+            courseTasksByPriority = await insertTaskByPriority(
+                courseTasksByPriority,
+                newDeadline,
+                task
+            );
+            course.tasksByDate = courseTasksByDate;
+            course.tasksByPriority = courseTasksByPriority;
+            await course.save();
             await task.save();
-            // console.log("Task created and saved.");
-        } catch (err) {
-            console.log(err);
         }
         // const jobId = scheduleTaskDeadlineNotification({
         //     courseCode: course.courseCode,
