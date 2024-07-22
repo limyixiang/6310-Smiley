@@ -252,7 +252,7 @@ exports.createTask = async (req, res) => {
         const course = await Course.findById(req.body.courseid);
         const dueDate = new Date(req.body.dueDate);
         dueDate.setUTCHours(-8, 0, 0, 0);
-        console.log(dueDate.toLocaleString());
+        // console.log(dueDate.toLocaleString());
         const task = new Task({
             taskName: req.body.taskName,
             dueDate: dueDate,
@@ -493,6 +493,108 @@ exports.reverseCompleteTask = async (req, res) => {
     }
 };
 
+exports.reorderTasksByDeadline = async (taskIds, courseOrder) => {
+    // console.log(courseOrder);
+    const tasksUnordered = await Task.find({ _id: { $in: taskIds } });
+    // console.log("tasksUnordered", tasksUnordered);
+    const tasksMap = new Map(
+        tasksUnordered.map((task) => [task._id.toString(), task])
+    );
+    // console.log("tasksMap", tasksMap);
+    const tasks = taskIds.map((taskId) => tasksMap.get(taskId.toString()));
+    // const coursesUnordered = await Course.find({ _id: { $in: courseIds } });
+    // const coursesMap = new Map(coursesUnordered.map((course) => [course._id, course]));
+    // const courses = courseIds.map((courseId) => coursesMap.get(courseId));
+    // console.log("tasks before sorting", tasks);
+    tasks.sort((taskA, taskB) => {
+        // Compare by nearest deadline
+        // console.log(taskA.dueDate > taskB.dueDate);
+        if (taskA.dueDate < taskB.dueDate) {
+            // console.log("this actually works");
+            return -1;
+        } else if (taskA.dueDate > taskB.dueDate) {
+            return 1;
+        }
+        // If deadlines are the same, compare by task priority
+        if (taskA.priority === "Low" && taskB.priority === "High") {
+            return 1;
+        } else if (taskA.priority === "High" && taskB.priority === "Low") {
+            return -1;
+        }
+        // console.log(
+        //     taskA.taskName,
+        //     courseOrder.indexOf(taskA.course.toString()),
+        //     taskB.taskName,
+        //     courseOrder.indexOf(taskB.course.toString())
+        // );
+        // if (courseOrder.indexOf(taskA.course.toString()) == -1) {
+        //     const temp = Course.findById(taskA.course);
+        //     console.log("index -1:", temp.courseCode);
+        // }
+        // if (courseOrder.indexOf(taskB.course.toString()) == -1) {
+        //     const temp = Course.findById(taskB.course);
+        //     console.log("index -1:", temp.courseCode);
+        // }
+        // If task priorities are the same, compare by course priority
+        if (
+            courseOrder.indexOf(taskA.course.toString()) <
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return -1;
+        } else if (
+            courseOrder.indexOf(taskA.course.toString()) >
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return 1;
+        }
+        // If course priorities are the same, compare by task name
+        return taskA.taskName.localeCompare(taskB.taskName);
+    });
+    // console.log("tasks sorted by deadline");
+    // console.log(tasks[0]);
+    // return tasks;
+    return tasks.map((task) => task._id);
+};
+
+exports.reorderTasksByPriority = async (taskIds, courseOrder) => {
+    const tasksUnordered = await Task.find({ _id: { $in: taskIds } });
+    const tasksMap = new Map(
+        tasksUnordered.map((task) => [task._id.toString(), task])
+    );
+    const tasks = taskIds.map((taskId) => tasksMap.get(taskId.toString()));
+    tasks.sort((taskA, taskB) => {
+        // Compare by task priority
+        if (taskA.priority === "Low" && taskB.priority === "High") {
+            return 1;
+        } else if (taskA.priority === "High" && taskB.priority === "Low") {
+            return -1;
+        }
+        // If task priorities are the same, compare by nearest deadline
+        if (taskA.dueDate < taskB.dueDate) {
+            return -1;
+        } else if (taskA.dueDate > taskB.dueDate) {
+            return 1;
+        }
+        // If deadlines are the same, compare by course priority
+        if (
+            courseOrder.indexOf(taskA.course.toString()) <
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return -1;
+        } else if (
+            courseOrder.indexOf(taskA.course.toString()) >
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return 1;
+        }
+        // If course priorities are the same, compare by task name
+        return taskA.taskName.localeCompare(taskB.taskName);
+    });
+    // console.log("tasks sorted by priority");
+    // return tasks;
+    return tasks.map((task) => task._id);
+};
+
 // Update user's task priorities
 exports.updateUserTasksPriority = async (
     userid,
@@ -518,6 +620,15 @@ exports.updateUserTasksPriority = async (
             }
             await task.save();
         }
+        user.tasksByDate = await this.reorderTasksByDeadline(
+            user.tasksByDate,
+            user.courses
+        );
+        user.tasksByPriority = await this.reorderTasksByPriority(
+            user.tasksByPriority,
+            user.courses
+        );
+        await user.save();
     } catch (error) {
         console.log(error);
     }

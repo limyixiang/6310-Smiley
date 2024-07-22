@@ -169,7 +169,7 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
                   user.reminderTime * 60 * 60 * 1000
           ); // user-defined time before due date
     // const notificationTime = new Date(Date.now() + 5 * 1000); // 5 seconds after current time
-    console.log(notificationTime);
+    // console.log(notificationTime);
     const daysBetweenDueDateAndToday =
         (dueDate - today) / (24 * 60 * 60 * 1000);
     const messageHelper =

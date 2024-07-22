@@ -20,7 +20,7 @@ function TaskContainer({
     const now = new Date();
     now.setUTCHours(16, 0, 0, 0);
     // Get the first day of the week (assuming Monday is the first day of the week)
-    console.log(now);
+    // console.log(now);
     const firstDayOfWeek = new Date(
         now.setDate(
             now.getDay() === 0
