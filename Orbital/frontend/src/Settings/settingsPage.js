@@ -222,7 +222,7 @@ function SettingsPage() {
     return (
         <div className={styles.mainContainer}>
             <div className={styles.headerGroup}>
-                <h2>Settings Page</h2>
+                <h2>Settings</h2>
             </div>
             <div className={styles.settingsContainer}>
                 <div className={styles.settingItem}>
