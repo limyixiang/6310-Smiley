@@ -236,8 +236,11 @@ function ProfilePage() {
                     Pink
                 </button>
             </div>
-            {successMessage()}
-            {errorMessage()}
+            <div>
+                {successMessage()}
+                <br />
+                {errorMessage()}
+            </div>
             <div className={styles.buttonGroup}>
                 <button onClick={handleProfileUpdate}>Update Profile</button>
             </div>
