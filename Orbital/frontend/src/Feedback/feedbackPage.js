@@ -18,6 +18,7 @@ function FeedbackPage() {
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const themes = useMemo(
         () => ({
@@ -95,19 +96,21 @@ function FeedbackPage() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-
+        setLoading(true);
         if (
             feedbackType === "" ||
             feedbackTitle === "" ||
             feedbackMessage === ""
         ) {
             setError("Please fill in all fields!");
+            setLoading(false);
             return;
         }
 
         submitFeedback(feedbackDetails).then((response) => {
             if (response) {
                 setSuccess(true);
+                setLoading(false);
             }
         });
         setFeedbackDetails((prevState) => ({
@@ -145,6 +148,17 @@ function FeedbackPage() {
                 </div>
             )
         );
+    };
+
+    const loadingMessage = () => {
+        if (loading) {
+            return (
+                <div id="spinner" className={styles.spinnerGroup}>
+                    <div className={styles.spinner}></div>
+                    <p>Your feedback is being submitted...</p>
+                </div>
+            );
+        }
     };
 
     const errorMessage = () => {
@@ -210,6 +224,7 @@ function FeedbackPage() {
                     ></textarea>
                 </div>
                 {successMessage()}
+                {loadingMessage()}
                 {errorMessage()}
             </div>
             <div className={styles.buttonGroup}>
