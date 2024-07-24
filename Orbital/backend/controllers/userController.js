@@ -293,22 +293,12 @@ exports.submitFeedback = async (req, res) => {
             `,
         };
 
-        //Send the email
-        await transporter.sendMail(userMailOptions, (error, info) => {
-            if (error) {
-                return res.status(500).json({ error: error.message });
-            } else {
-                console.log("Email has been sent to the user.");
-            }
-        });
+        // Send the emails
+        await transporter.sendMail(userMailOptions);
+        console.log("Email has been sent to the user.");
 
-        await transporter.sendMail(devMailOptions, (error, info) => {
-            if (error) {
-                return res.status(500).json({ error: error.message });
-            } else {
-                console.log("Email has been sent to the developer.");
-            }
-        });
+        await transporter.sendMail(devMailOptions);
+        console.log("Email has been sent to the developer.");
 
         return res.status(200).json({
             message: "Feedback submitted successfully!",
