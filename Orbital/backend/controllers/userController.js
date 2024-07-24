@@ -294,7 +294,7 @@ exports.submitFeedback = async (req, res) => {
         };
 
         //Send the email
-        transporter.sendMail(userMailOptions, (error, info) => {
+        await transporter.sendMail(userMailOptions, (error, info) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
             } else {
@@ -302,7 +302,7 @@ exports.submitFeedback = async (req, res) => {
             }
         });
 
-        transporter.sendMail(devMailOptions, (error, info) => {
+        await transporter.sendMail(devMailOptions, (error, info) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
             } else {
