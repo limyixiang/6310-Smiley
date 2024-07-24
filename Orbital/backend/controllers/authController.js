@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const { validationResult } = require("express-validator");
 var jwtToken = require("jsonwebtoken");
 var { expressjwt: jwt } = require("express-jwt");
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer"); 
 
 //SIGNUP
 exports.signup = async (req, res) => {
