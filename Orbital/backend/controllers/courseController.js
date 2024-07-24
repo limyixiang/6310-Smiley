@@ -2,7 +2,11 @@ const Course = require("../models/courseModel");
 const User = require("../models/userModel");
 const Task = require("../models/tasksModel");
 const { validationResult } = require("express-validator");
-const { createTask } = require("./taskController");
+const {
+    createTask,
+    reorderTasksByDeadline,
+    reorderTasksByPriority,
+} = require("./taskController");
 const { deleteTaskDeadlineNotification } = require("./notificationsController");
 
 const days = [
@@ -20,6 +24,7 @@ const freqs = {
     "Bi-Weekly": 14,
     Monthly: 28,
 };
+
 // Create a new course
 exports.createCourse = async (req, res) => {
     try {
@@ -31,7 +36,7 @@ exports.createCourse = async (req, res) => {
             });
         }
 
-        const user = await User.findById(req.body.userid);
+        let user = await User.findById(req.body.userid);
         const existingCourses = await Course.find({
             _id: { $in: user.courses },
         });
@@ -50,14 +55,27 @@ exports.createCourse = async (req, res) => {
         });
         const courseOrder = req.body.courseOrder;
         const index = courseOrder.indexOf("temp");
-        courseOrder[index] = course._id;
+        courseOrder[index] = course._id.toString();
         user.courses = courseOrder;
         await course.save();
         await user.save();
+        for (const courseid of req.body.courseOrder) {
+            const course = await Course.findById(courseid);
+            course.priority = req.body.courseOrder.indexOf(courseid);
+            await course.save();
+        }
         const tasks = req.body.tasks;
         for (const task of tasks) {
+            var taskPriority = task.recurringTaskPriorityLevel;
+            if (task.recurringTaskName === "Tutorial") {
+                taskPriority = user.tutorialPriority;
+            } else if (task.recurringTaskName === "Lecture") {
+                taskPriority = user.lecturePriority;
+            } else if (task.recurringTaskName === "Quiz") {
+                taskPriority = user.quizPriority;
+            }
             const refDate = new Date();
-            refDate.setUTCHours(-8, 0, 0, 0);
+            // refDate.setUTCHours(-8, 0, 0, 0);
             const dayOfWeek = days.indexOf(task.reminderDay);
             // console.log(refDate.getDate());
             refDate.setDate(
@@ -69,7 +87,7 @@ exports.createCourse = async (req, res) => {
                     body: {
                         taskName: task.recurringTaskName,
                         dueDate: refDate,
-                        priority: task.recurringTaskPriorityLevel,
+                        priority: taskPriority,
                         userid: req.body.userid,
                         courseid: course._id,
                     },
@@ -80,12 +98,17 @@ exports.createCourse = async (req, res) => {
                 );
             }
         }
+        user = await User.findById(req.body.userid);
+        user.tasksByDate = await reorderTasksByDeadline(
+            user.tasksByDate,
+            courseOrder
+        );
+        user.tasksByPriority = await reorderTasksByPriority(
+            user.tasksByPriority,
+            courseOrder
+        );
+        await user.save();
         console.log("Recurring tasks created successfully");
-        for (const courseid of req.body.courseOrder) {
-            const course = await Course.findById(courseid);
-            course.priority = req.body.courseOrder.indexOf(courseid);
-            await course.save();
-        }
         return res
             .status(201)
             .json({ message: "Course created successfully", data: course });

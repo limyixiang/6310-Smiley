@@ -1,5 +1,6 @@
-import { React, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { React, useEffect, useState, useMemo } from "react";
+import { Helmet } from "react-helmet";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./landingPage.module.css";
 import {
     createCourse,
@@ -11,11 +12,18 @@ import {
     reverseCompleteTask,
     deleteCourse,
     deleteTask,
+    getColorTheme,
+    getPreferences,
 } from "../Backend";
 import CourseContainer from "./courseContainer";
 import TaskContainer from "./taskContainer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 function LandingPage() {
+    const location = useLocation();
+    const { user } = location.state;
+
     const [landingPageValues, setLandingPageValues] = useState({
         refresh: false,
         sortBy: "date",
@@ -32,10 +40,11 @@ function LandingPage() {
     });
 
     const defaultTasks = [
-        { taskName: "Tutorial", taskPriority: "Low" },
-        { taskName: "Lecture", taskPriority: "Low" },
-        { taskName: "Quiz", taskPriority: "High" },
+        { taskName: "Tutorial", taskPriority: "placeholder" },
+        { taskName: "Lecture", taskPriority: "placeholder" },
+        { taskName: "Quiz", taskPriority: "placeholder" },
     ];
+    // console.log(defaultTasks);
 
     const [courseModalTasks, setCourseModalTasks] = useState({
         isSelected: [],
@@ -47,7 +56,6 @@ function LandingPage() {
             (task) => task.taskPriority
         ),
     });
-
     // console.log(courseModalTasks);
 
     const [taskValues, setTaskValues] = useState({
@@ -75,8 +83,51 @@ function LandingPage() {
     const [courses, setCourses] = useState([]);
     const [tasks, setTasks] = useState([]);
 
-    const location = useLocation();
-    const { user } = location.state;
+    const themes = useMemo(
+        () => ({
+            light: {
+                "--mainText-color": "rgb(0, 0, 0)",
+                "--pageBackground-color": "rgb(255, 255, 255)",
+                "--elementBackground-color": "rgb(255, 255, 255)",
+                "--border-color": "rgba(153, 153, 153, 0.4)",
+                "--hover-color": "rgb(217, 217, 217)",
+                "--focus-color": "rgb(211, 211, 211)",
+            },
+            dark: {
+                "--mainText-color": "rgb(187, 187, 187)",
+                "--pageBackground-color": "rgb(0, 0, 0)",
+                "--elementBackground-color": "rgb(23, 23, 23)",
+                "--border-color": "rgba(212, 212, 212, 0.4)",
+                "--hover-color": "grey",
+                "--focus-color": "rgb(67, 67, 67)",
+            },
+            default: {
+                "--mainText-color": "rgb(0, 0, 66)",
+                "--pageBackground-color": "#d8f5fd",
+                "--elementBackground-color": "rgb(248, 254, 255)",
+                "--border-color": "rgba(71, 180, 230, 0.4)",
+                "--hover-color": "#c5edff",
+                "--focus-color": "rgba(118, 198, 235, 0.4)",
+            },
+            green: {
+                "--mainText-color": "rgb(0, 66, 17)",
+                "--pageBackground-color": "rgb(199, 228, 207)",
+                "--elementBackground-color": "rgb(241, 255, 245)",
+                "--border-color": "rgba(0, 160, 35, 0.4)",
+                "--hover-color": "rgb(210, 246, 219)",
+                "--focus-color": "rgba(0, 178, 118, 0.483)",
+            },
+            pink: {
+                "--mainText-color": "rgb(51, 0, 48)",
+                "--pageBackground-color": "#fff2fa",
+                "--elementBackground-color": "rgb(255, 254, 255)",
+                "--border-color": "rgba(255, 139, 249, 0.4)",
+                "--hover-color": "#fee1ff",
+                "--focus-color": "rgba(235, 149, 224, 0.4)",
+            },
+        }),
+        []
+    );
 
     // Fetches courses and tasks for the user everytime a submit is made
     useEffect(() => {
@@ -102,7 +153,23 @@ function LandingPage() {
                 setTemporaryCourses([]);
             })
             .catch((err) => console.error("Error fetching data:", err));
-    }, [refresh, user._id, sortBy]);
+
+        const setThemeColor = (themeName) => {
+            const selectedTheme = themes[themeName];
+            for (const key in selectedTheme) {
+                document.documentElement.style.setProperty(
+                    key,
+                    selectedTheme[key]
+                );
+            }
+        };
+
+        getColorTheme({ userid: user._id })
+            .then((data) => {
+                setThemeColor(data.data);
+            })
+            .catch((err) => console.error("Error fetching data:", err));
+    }, [refresh, user._id, sortBy, themes]);
 
     // Displays error message if there's any
     const errorMessage = () => {
@@ -398,8 +465,58 @@ function LandingPage() {
         setTemporaryCourses(updatedCourses);
     };
 
+    const navigate = useNavigate();
+    const onProfilePage = () => {
+        navigate("/profilepage", { state: { user } });
+    };
+
+    const onDashboardPage = () => {
+        navigate("/", { state: { user } });
+    };
+
+    const onSettingsPage = async () => {
+        const preferences = await getUserNotificationsPreferences();
+        navigate("/settingspage", {
+            state: { user, preferences },
+        });
+    };
+
+    const getUserNotificationsPreferences = async () => {
+        try {
+            const response = await getPreferences({ userid: user._id });
+            if (response) {
+                console.log(response.data);
+                return response.data;
+            }
+        } catch (error) {
+            console.error(
+                "Failed to get user notifications preferences:",
+                error
+            );
+        }
+    };
+
     return (
         <div className={styles.mainContainer}>
+            <Helmet>
+                <link
+                    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+                    rel="stylesheet"
+                />
+            </Helmet>
+            <div className={styles.profileGroup}>
+                <i class="bx bxs-user-circle" onClick={onProfilePage}></i>
+            </div>
+            <div className={styles.settingsGroup}>
+                <FontAwesomeIcon
+                    className={styles.settingsIcon}
+                    icon={faGear}
+                    onClick={() => {
+                        console.log("Settings clicked");
+                        onSettingsPage();
+                    }}
+                />
+            </div>
             <CourseContainer
                 user={user}
                 courses={courses}
@@ -433,8 +550,8 @@ function LandingPage() {
                 handleTaskCheckboxChange={handleTaskCheckboxChange}
                 errorMessage={errorMessage}
             />
-            <div className={styles.linkGroup}>
-                <a href="/">Back to Dashboard</a>
+            <div className={styles.buttonGroup}>
+                <button onClick={onDashboardPage}>Back to Dashboard</button>
             </div>
         </div>
     );

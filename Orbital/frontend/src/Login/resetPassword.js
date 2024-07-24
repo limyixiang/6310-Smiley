@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { forgetPasswordReset } from "../Backend";
 import styles from "./loginPage.module.css";
-import logo from "./smileytransparent.jpg";
+import logo from "../smileytransparent.jpg";
 
 // ResetPassword component for the forget password page
 export function ForgetPassword() {

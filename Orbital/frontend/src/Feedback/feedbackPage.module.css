@@ -1,0 +1,154 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+@import "../Profile/colorPicker.module.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /*ensures that padding and border are included in total width and height*/
+    font-family: "Calibri", sans-serif;
+} /*applies to all CSS files*/
+
+.mainContainer {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--pageBackground-color);
+    background-size: cover;
+    background-position: center;
+    user-select: none;
+} /*acts as the body{}*/
+
+.headerGroup {
+    display: flex;
+    position: fixed;
+    top: 7vh;
+    left: 7vw;
+}
+
+.headerGroup h2 {
+    color: var(--mainText-color);
+}
+
+.feedbackContainer {
+    position: fixed;
+    width: 50%;
+    top: 15vh;
+    left: 7vw;
+    margin: 2vh 0 2vh 0;
+}
+
+.feedbackItem {
+    width: 100%;
+    margin-bottom: 7vh;
+    align-items: center;
+    text-align: left;
+}
+
+.feedbackItem label {
+    font-size: 16px;
+    color: var(--mainText-color);
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.feedbackItem select {
+    width: 100%;
+    margin-right: 20px;
+    background: white;
+    outline: none;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--mainText-color);
+    padding: 8px;
+    cursor: pointer;
+}
+
+.feedbackItem select:focus {
+    outline: none;
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
+}
+
+.feedbackItem input {
+    width: 100%;
+    height: 100%;
+    background: white;
+    outline: none;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--mainText-color);
+    padding: 8.5px;
+}
+
+.feedbackItem textarea {
+    width: 100%;
+    height: 200px;
+    background: white;
+    outline: none;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--mainText-color);
+    padding: 8.5px;
+    resize: none;
+}
+
+.linkGroup {
+    display: flex;
+    position: fixed;
+    top: 5vh;
+    right: 7vw;
+} /*hyperlink to other pages*/
+
+.linkGroup button {
+    border: 2px solid var(--border-color);
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin: 10px;
+    color: var(--mainText-color);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+    background: transparent;
+} /*hyperlink text*/
+
+.linkGroup button:hover {
+    background-color: var(--hover-color);
+    cursor: pointer;
+} /*hyperlink on hover*/
+
+.buttonGroup {
+    display: flex;
+    position: fixed;
+    bottom: 10vh;
+    left: 5vw;
+}
+
+.buttonGroup button {
+    border: 2px solid var(--border-color);
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin-left: 20px;
+    color: var(--mainText-color);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+    background: transparent;
+}
+
+.buttonGroup button:hover {
+    background-color: var(--hover-color);
+    cursor: pointer;
+}

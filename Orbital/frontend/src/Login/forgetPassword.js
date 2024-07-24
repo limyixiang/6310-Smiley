@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 // import { Navigate } from 'react-router-dom';
 import { forgetPasswordAuthentication } from "../Backend";
 import styles from "./loginPage.module.css";
-import logo from "./smileytransparent.jpg";
+import logo from "../smileytransparent.jpg";
 
 // ForgetPassword component for the forget password page
 export function ForgetPassword() {

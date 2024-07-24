@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const VERCEL_URL = "https://6310-smiley-server.vercel.app";
-// const LOCAL_URL = "http://localhost:8000";
-const URL = VERCEL_URL;
+// const VERCEL_URL = "https://6310-smiley-server.vercel.app";
+const LOCAL_URL = "http://localhost:8000";
+const URL = LOCAL_URL;
 
 //USER AND AUTH ROUTES
 
@@ -334,6 +334,25 @@ export const getCourses = async (user) => {
 };
 
 // User
+export const getUserName = async (userid) => {
+    // API call to get user name
+    try {
+        const response = await axios.post(
+            `${URL}/user/getUserName`,
+            JSON.stringify(userid),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
 export const updateSubscriptions = async (userid, subscription) => {
     // API call to update subscriptions
     try {
@@ -350,6 +369,116 @@ export const updateSubscriptions = async (userid, subscription) => {
         return response.data;
     } catch (err) {
         return err.response.data;
+    }
+};
+
+export const profileChange = async (userid, name) => {
+    // API call to change profile
+    try {
+        const response = await axios.post(
+            `${URL}/user/profilechange`,
+            JSON.stringify({ userid, name }),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+export const colorThemeChange = async (userid, theme) => {
+    try {
+        const response = await axios.post(
+            `${URL}/user/colorthemechange`,
+            JSON.stringify({ userid, theme }),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+export const getColorTheme = async (userid) => {
+    try {
+        const response = await axios.post(
+            `${URL}/user/getcolortheme`,
+            JSON.stringify(userid),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+export const updateNotifications = async (preferences) => {
+    try {
+        console.log(preferences);
+        const response = await axios.post(
+            `${URL}/user/updatenotifications`,
+            JSON.stringify(preferences),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+export const getPreferences = async (userid) => {
+    try {
+        const response = await axios.post(
+            `${URL}/user/getpreferences`,
+            JSON.stringify(userid),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response;
+    } catch (err) {
+        return err.response;
+    }
+};
+
+export const submitFeedback = async (feedbackDetails) => {
+    try {
+        const response = await axios.post(
+            `${URL}/user/submitfeedback`,
+            JSON.stringify(feedbackDetails),
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response;
+    } catch (err) {
+        return err.response;
     }
 };
 

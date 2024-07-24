@@ -3,6 +3,8 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
 
+@import "../Profile/colorPicker.module.css";
+
 * {
     margin: 0;
     padding: 0;
@@ -18,7 +20,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(#e8f7ff, #e5fffe);
+    background: var(--pageBackground-color);
     background-size: cover;
     background-position: center;
     user-select: none;
@@ -43,28 +45,52 @@
     padding: 0 5vw 0 5vw;
 } /*right*/
 
-.linkGroup {
+.buttonGroup {
     display: flex;
     position: fixed;
     top: 5vh;
-    right: 7vw;
+    right: 10vw;
 } /*hyperlink to other pages*/
 
-.linkGroup a {
-    border: 2px solid rgba(0, 110, 255, 0.3);
+.buttonGroup button {
+    border: 2px solid var(--border-color);
     border-radius: 30px;
     padding: 10px 30px;
-    color: #000055;
+    color: var(--mainText-color);
+    background: transparent;
     text-decoration: none;
     font-weight: bold;
     letter-spacing: 1px;
     font-size: 16px;
 } /*hyperlink text*/
 
-.linkGroup a:hover {
-    background-color: #c6e2ff;
+.buttonGroup button:hover {
+    background-color: var(--hover-color);
     cursor: pointer;
 } /*hyperlink on hover*/
+
+.profileGroup {
+    display: flex;
+    position: fixed;
+    top: 5vh;
+    left: 7vw;
+} /*profile group*/
+
+.profileGroup i {
+    font-size: 60px;
+    color: var(--mainText-color);
+    cursor: pointer;
+} /*profile image icon*/
+
+.settingsGroup {
+    font-size: 30px;
+    display: flex;
+    position: fixed;
+    top: 5.5vh;
+    right: 6vw;
+    cursor: pointer;
+    color: var(--mainText-color);
+} /*profile group*/
 
 /*CourseContainer*/
 .coursesHeader {
@@ -75,7 +101,7 @@
 } /*header and button*/
 
 .coursesHeader h2 {
-    color: #000055;
+    color: var(--mainText-color);
     font-size: 25px;
     text-align: left;
     letter-spacing: 0.05vw;
@@ -87,15 +113,16 @@
     border: none;
     outline: none;
     border-radius: 30px;
-    color: #fff;
+    border: 2px solid var(--border-color);
+    color: var(--mainText-color);
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    background: linear-gradient(to right, #3227b0, #408bfb);
+    background: transparent;
 } /*Add a course button*/
 
 .coursesHeader button:hover {
-    background: linear-gradient(to right, #408bfb, #3227b0);
+    background: var(--hover-color);
 } /*Add a course button on hover*/
 
 .coursesList {
@@ -113,19 +140,20 @@
     padding: 10px;
     border: none;
     border-radius: 20px;
-    background-color: #fff;
+    background-color: var(--elementBackground-color);
     cursor: pointer;
     margin: 20px 20px 20px 20px;
     overflow: auto;
     word-wrap: break-word;
     position: relative;
-    box-shadow: inset 5px 5px 50px rgb(92, 187, 255), 5px 5px 5px #000055,
-        -5px -5px 5px rgb(92, 187, 255, 0.6);
+    box-shadow: inset 5px 5px 20px var(--border-color),
+        inset -5px -5px 20px var(--border-color),
+        5px 5px 5px var(--mainText-color), -5px -5px 5px var(--border-color);
 }
 
 .courseItem:hover {
     cursor: pointer;
-    background-color: #deeeff;
+    background-color: var(--hover-color);
 }
 
 .courseItemText {
@@ -134,7 +162,7 @@
     left: 50%;
     translate: -50% -50%;
     font-size: 24px;
-    color: #000055;
+    color: var(--mainText-color);
 }
 
 .courseTrashcan {
@@ -149,12 +177,12 @@
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    background: rgb(241, 250, 255);
+    background: var(--pageBackground-color);
     padding: 4vh 2vw 4vh 2vw;
     border-radius: 10px;
-    border: 2px solid rgba(8, 5, 76, 0.2);
-    box-shadow: 0 0 20px rgba(133, 212, 249, 0.5);
-    color: #000055;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 0 20px var(--border-color);
+    color: var(--mainText-color);
 } /*popup box styling*/
 
 .backdropCoursePopup {
@@ -179,7 +207,7 @@
 
 .formGroup label {
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
 } /*input box label*/
 
 .formGroup input {
@@ -187,21 +215,21 @@
     height: 100%;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
     padding: 8.5px;
 } /*input box content*/
 
 .formGroup input::placeholder {
-    color: rgba(0, 0, 85, 0.6);
+    color: rgba(0, 0, 0, 0.6);
 } /*input box placeholder*/
 
 .formGroup input:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*input box on focus*/
 
 /*remindergroup contains dropdowncontainer and checkboxcontainer*/
@@ -222,7 +250,7 @@
     width: 15px;
     height: 15px;
     cursor: pointer;
-    accent-color: rgb(3, 97, 212);
+    accent-color: var(--mainText-color);
 } /*checkbox box*/
 
 .dropdownContainer {
@@ -236,18 +264,18 @@
     margin: 0 0 0 3vw;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
     padding: 8px;
     cursor: pointer;
 } /*dropdown box*/
 
 .dropdownContainer select:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*dropdown box on focus*/
 
 .reminderGroupOthers {
@@ -266,22 +294,22 @@
     height: 100%;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
     padding: 8.5px;
     margin: 0 0 0 3vw;
 } /*input box content for other tasks*/
 
 .checkboxContainerOthers input[type="text"]::placeholder {
-    color: rgba(0, 0, 85, 0.6);
+    color: rgba(0, 0, 0, 0.6);
 } /*input box placeholder for other tasks*/
 
 .checkboxContainerOthers input[type="text"]:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*input box on focus*/
 
 .checkboxContainerOthers input[type="checkbox"] {
@@ -289,7 +317,7 @@
     width: 15px;
     height: 15px;
     cursor: pointer;
-    accent-color: rgb(3, 97, 212);
+    accent-color: var(--mainText-color);
 } /*checkbox box for other tasks*/
 
 .dropdownContainerOthers {
@@ -303,18 +331,18 @@
     width: 21%;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
     padding: 8px;
     cursor: pointer;
 } /*dropdown box for other tasks*/
 
 .dropdownContainerOthers select:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*dropdown box on focus for other tasks*/
 
 .addACoursePopup button {
@@ -323,23 +351,23 @@
     text-decoration: none;
     letter-spacing: 1px;
     font-size: 16px;
-    border: none;
+    border: 2px solid var(--border-color);
     border-radius: 30px;
-    color: #fff;
+    color: var(--mainText-color);
     cursor: pointer;
     font-weight: bold;
-    background: linear-gradient(to right, #3227b0, #408bfb);
+    background: transparent;
 } /*submission buttons for course popup*/
 
 .addACoursePopup button:hover {
-    background: linear-gradient(to right, #408bfb, #3227b0);
+    background: var(--hover-color);
 } /*submission buttons on hover for course popup*/
 
 .courseDraggable {
     padding: 16px;
     margin: 1.5vh 0 1.5vh 0;
-    background-color: #fff;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    background-color: var(--elementBackground-color);
+    border: 1.5px solid var(--border-color);
     border-radius: 5px;
     cursor: grab;
     transition: background-color 0.2s ease;
@@ -348,7 +376,7 @@
 } /*course draggable on page 2 popup*/
 
 .courseDraggable:hover {
-    background-color: #c6e2ff;
+    background-color: var(--hover-color);
 } /*course draggable on hover on page 2 popup*/
 
 .spinnerGroup {
@@ -359,7 +387,7 @@
     margin-bottom: 20px;
     text-align: center;
     font-size: 12px;
-    color: black;
+    color: var(--mainText-color);
 } /*spinner container*/
 
 .spinner {
@@ -403,7 +431,7 @@
 
 /*TaskContainer*/
 .tasksHeader {
-    color: #000055;
+    color: var(--mainText-color);
     font-size: 25px;
     text-align: left;
     letter-spacing: 0.05vw;
@@ -418,7 +446,7 @@
 
 .sortByDropdownContainer label {
     font-size: 12px;
-    color: #000055;
+    color: var(--mainText-color);
 } /*sortby filterby dropdown label*/
 
 .sortByDropdownContainer select {
@@ -426,36 +454,36 @@
     margin: 0 0 0 10px;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 30px;
     font-size: 12px;
-    color: #000055;
+    color: var(--mainText-color);
     cursor: pointer;
     padding-left: 5px;
 } /*sortby filterby dropdown box*/
 
 .sortByDropdownContainer select:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*sortby filterby dropdown box on focus*/
 
 .addTaskButton {
     margin: 10px 0 0 0;
     width: 100%;
     height: 45px;
-    border: none;
     outline: none;
     border-radius: 30px;
-    color: #fff;
+    border: 2px solid var(--border-color);
+    color: var(--mainText-color);
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    background: linear-gradient(to right, #3227b0, #408bfb);
+    background: transparent;
 } /*add a task button*/
 
 .addTaskButton:hover {
-    background: linear-gradient(to right, #408bfb, #3227b0);
+    background: var(--hover-color);
 } /*add a task button on hover*/
 
 .tasksList {
@@ -469,8 +497,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #fff;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    background-color: var(--elementBackground-color);
+    border: 1.5px solid var(--border-color);
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 5px;
@@ -483,7 +511,7 @@
     width: 15px;
     height: 15px;
     cursor: pointer;
-    accent-color: rgb(3, 97, 212);
+    accent-color: var(--mainText-color);
 }
 
 .taskItem {
@@ -493,7 +521,7 @@
 }
 
 .taskDescription {
-    color: #000055;
+    color: var(--mainText-color);
     font-size: 16px;
     text-align: left;
 }
@@ -516,7 +544,7 @@
 
 .landingProgressBarContainer p {
     text-align: left;
-    color: #000055;
+    color: var(--mainText-color);
 }
 
 .progressContainer {
@@ -524,13 +552,13 @@
     height: 15px;
     background-color: white;
     border-radius: 30px;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     margin: 10px 0 0 0;
 }
 
 .progressBar {
     height: 100%;
-    background-color: #c6e2ff;
+    background-color: var(--hover-color);
     border-radius: 30px;
     text-align: right;
     transition: width 0.2s ease-in-out;
@@ -540,7 +568,7 @@
     position: relative;
     top: -4px;
     padding: 10px;
-    color: #000055;
+    color: var(--mainText-color);
     font-weight: bold;
     font-size: 12px;
 }
@@ -551,12 +579,13 @@
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    background: rgb(241, 250, 255);
+    background: var(--pageBackground-color);
     padding: 4vh 2vw 4vh 2vw;
     border-radius: 10px;
-    border: 2px solid rgba(8, 5, 76, 0.2);
-    box-shadow: 0 0 20px rgba(133, 212, 249, 0.5);
-    color: #000055;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 0 20px var(--border-color);
+    color: var(--mainText-color);
+    text-align: left;
 } /*popup box styling*/
 
 .backdropTaskPopup {
@@ -581,25 +610,25 @@
 
 .dropdownContainer2 label {
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
 } /*dropdown box label*/
 
 .dropdownContainer2 select {
     width: 100%;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
     cursor: pointer;
     padding: 8px;
 } /*dropdown box*/
 
 .dropdownContainer2 select:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*dropdown box on focus*/
 
 .formGroup2 {
@@ -609,7 +638,7 @@
 
 .formGroup2 label {
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
 } /*input box label*/
 
 .formGroup2 input {
@@ -617,21 +646,21 @@
     height: 100%;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
     padding: 8.5px;
 } /*input box content*/
 
 .formGroup2 input::placeholder {
-    color: rgba(0, 0, 85, 0.6);
+    color: rgba(0, 0, 0, 0.6);
 } /*input box placeholder*/
 
 .formGroup2 input:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*input box on focus*/
 
 .deadlineGroup {
@@ -641,7 +670,7 @@
 
 .deadlineGroup label {
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
 } /*date picker box label*/
 
 .deadlineGroup input {
@@ -649,21 +678,21 @@
     height: 100%;
     background: white;
     outline: none;
-    border: 1.5px solid rgba(0, 110, 255, 0.5);
+    border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
-    color: #000055;
+    color: var(--mainText-color);
     padding: 8.5px;
 } /*date picker box content*/
 
 .deadlineGroup input::placeholder {
-    color: rgba(0, 0, 85, 0.6);
+    color: rgba(0, 0, 0, 0.6);
 } /*date picker box placeholder*/
 
 .deadlineGroup input:focus {
     outline: none;
-    border-color: #7cc8ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: var(--focus-color);
+    box-shadow: 0 0 5px var(--border-color);
 } /*date picker box on focus*/
 
 .deadlineGroup input[type="date"]::-webkit-calendar-picker-indicator {
@@ -676,22 +705,22 @@
     text-decoration: none;
     letter-spacing: 1px;
     font-size: 16px;
-    border: none;
+    border: 2px solid var(--border-color);
     border-radius: 30px;
-    color: #fff;
+    color: var(--mainText-color);
     cursor: pointer;
     font-weight: bold;
-    background: linear-gradient(to right, #3227b0, #408bfb);
+    background: transparent;
 } /*submission buttons for task popup*/
 
 .addATaskPopup button:hover {
-    background: linear-gradient(to right, #408bfb, #3227b0);
+    background: var(--hover-color);
 } /*submission buttons on hover for task popup*/
 
 /*applies to all trashcan icon*/
 .trashcan {
     padding: 10px 10px;
-    color: rgba(0, 0, 0, 0.5);
+    color: grey;
 } /*trashcan icon*/
 
 .trashcan:hover {

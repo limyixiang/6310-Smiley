@@ -252,7 +252,7 @@ exports.createTask = async (req, res) => {
         const course = await Course.findById(req.body.courseid);
         const dueDate = new Date(req.body.dueDate);
         dueDate.setUTCHours(-8, 0, 0, 0);
-        console.log(new Date(dueDate));
+        // console.log(dueDate.toLocaleString());
         const task = new Task({
             taskName: req.body.taskName,
             dueDate: dueDate,
@@ -261,56 +261,80 @@ exports.createTask = async (req, res) => {
             course: course,
         });
         // console.log("reached here");
-        var userTasksByDate = user.tasksByDate;
-        var userTasksByPriority = user.tasksByPriority;
-        var courseTasksByDate = course.tasksByDate;
-        var courseTasksByPriority = course.tasksByPriority;
-
-        // Insert new Task into user's array of tasks
-        // Note that this only takes into acount the dueDate of the task and not the priority of the course yet
-        // as priorities of courses are not implemented yet.
         const newDeadline = new Date(task.dueDate).getTime();
-        let userTasksByDatePromise = insertTaskByDate(
-            userTasksByDate,
-            newDeadline,
-            task
-        );
-        let userTasksByPriorityPromise = insertTaskByPriority(
-            userTasksByPriority,
-            newDeadline,
-            task
-        );
-        let courseTasksByDatePromise = insertTaskByDate(
-            courseTasksByDate,
-            newDeadline,
-            task
-        );
-        let courseTasksByPriorityPromise = insertTaskByPriority(
-            courseTasksByPriority,
-            newDeadline,
-            task
-        );
+        if (res) {
+            var userTasksByDate = user.tasksByDate;
+            var userTasksByPriority = user.tasksByPriority;
+            var courseTasksByDate = course.tasksByDate;
+            var courseTasksByPriority = course.tasksByPriority;
 
-        try {
-            userTasksByDate = await userTasksByDatePromise;
-            userTasksByPriority = await userTasksByPriorityPromise;
-            courseTasksByDate = await courseTasksByDatePromise;
-            courseTasksByPriority = await courseTasksByPriorityPromise;
+            // Insert new Task into user's array of tasks
+            // Note that this only takes into acount the dueDate of the task and not the priority of the course yet
+            // as priorities of courses are not implemented yet.
+            let userTasksByDatePromise = insertTaskByDate(
+                userTasksByDate,
+                newDeadline,
+                task
+            );
+            let userTasksByPriorityPromise = insertTaskByPriority(
+                userTasksByPriority,
+                newDeadline,
+                task
+            );
+            let courseTasksByDatePromise = insertTaskByDate(
+                courseTasksByDate,
+                newDeadline,
+                task
+            );
+            let courseTasksByPriorityPromise = insertTaskByPriority(
+                courseTasksByPriority,
+                newDeadline,
+                task
+            );
 
-            user.set("tasksByDate", userTasksByDate);
-            user.set("tasksByPriority", userTasksByPriority);
-            await user.save({ $inc: { __v: 1 } });
-            // console.log("User saved.");
+            try {
+                userTasksByDate = await userTasksByDatePromise;
+                userTasksByPriority = await userTasksByPriorityPromise;
+                courseTasksByDate = await courseTasksByDatePromise;
+                courseTasksByPriority = await courseTasksByPriorityPromise;
 
-            course.set("tasksByDate", courseTasksByDate);
-            course.set("tasksByPriority", courseTasksByPriority);
-            await course.save({ $inc: { __v: 1 } });
-            // console.log("Course saved.");
+                user.set("tasksByDate", userTasksByDate);
+                user.set("tasksByPriority", userTasksByPriority);
+                await user.save({ $inc: { __v: 1 } });
+                // console.log("User saved.");
 
+                course.set("tasksByDate", courseTasksByDate);
+                course.set("tasksByPriority", courseTasksByPriority);
+                await course.save({ $inc: { __v: 1 } });
+                // console.log("Course saved.");
+
+                await task.save();
+                // console.log("Task created and saved.");
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            // create course creates task without calling API
+            user.tasksByDate = user.tasksByDate.concat(task._id);
+            user.tasksByPriority = user.tasksByPriority.concat(task._id);
+            await user.save();
+
+            var courseTasksByDate = course.tasksByDate;
+            var courseTasksByPriority = course.tasksByPriority;
+            courseTasksByDate = await insertTaskByDate(
+                courseTasksByDate,
+                newDeadline,
+                task
+            );
+            courseTasksByPriority = await insertTaskByPriority(
+                courseTasksByPriority,
+                newDeadline,
+                task
+            );
+            course.tasksByDate = courseTasksByDate;
+            course.tasksByPriority = courseTasksByPriority;
+            await course.save();
             await task.save();
-            // console.log("Task created and saved.");
-        } catch (err) {
-            console.log(err);
         }
         // const jobId = scheduleTaskDeadlineNotification({
         //     courseCode: course.courseCode,
@@ -324,8 +348,9 @@ exports.createTask = async (req, res) => {
         const jobs = await scheduleTaskDeadlineNotification({
             courseCode: course.courseCode,
             dueDate: newDeadline,
-            user: user,
+            userid: req.body.userid,
             taskName: task.taskName,
+            taskPriority: task.priority,
         });
         // might want to append new jobs to already existing jobs next time instead of completely overwriting
         task.set("notifications", jobs);
@@ -476,20 +501,159 @@ exports.reverseCompleteTask = async (req, res) => {
                 .json({ message: "Task already not completed" });
         }
         task.status = "Todo";
-        const newDeadline = new Date(task.dueDate).getTime();
-        // const jobId = scheduleTaskDeadlineNotification({
-        //     courseCode: task.course.courseCode,
-        //     dueDate: newDeadline,
-        //     user: task.user,
-        //     taskName: task.taskName,
-        // });
-        // task.set("notification", jobId);
-        await enableTaskDeadlineNotification(task);
+        const user = await User.findById(task.user);
+        if (
+            (task.priority === "High" && user.notificationsHigh) ||
+            (task.priority === "Low" && user.notificationsLow)
+        ) {
+            await enableTaskDeadlineNotification(task);
+        }
         await task.save();
         return res
             .status(200)
             .json({ message: "Completion of task reversed successfully" });
     } catch (error) {
         return res.status(500).json({ error: error.message });
+    }
+};
+
+exports.reorderTasksByDeadline = async (taskIds, courseOrder) => {
+    // console.log(courseOrder);
+    const tasksUnordered = await Task.find({ _id: { $in: taskIds } });
+    // console.log("tasksUnordered", tasksUnordered);
+    const tasksMap = new Map(
+        tasksUnordered.map((task) => [task._id.toString(), task])
+    );
+    // console.log("tasksMap", tasksMap);
+    const tasks = taskIds.map((taskId) => tasksMap.get(taskId.toString()));
+    // const coursesUnordered = await Course.find({ _id: { $in: courseIds } });
+    // const coursesMap = new Map(coursesUnordered.map((course) => [course._id, course]));
+    // const courses = courseIds.map((courseId) => coursesMap.get(courseId));
+    // console.log("tasks before sorting", tasks);
+    tasks.sort((taskA, taskB) => {
+        // Compare by nearest deadline
+        // console.log(taskA.dueDate > taskB.dueDate);
+        if (taskA.dueDate < taskB.dueDate) {
+            // console.log("this actually works");
+            return -1;
+        } else if (taskA.dueDate > taskB.dueDate) {
+            return 1;
+        }
+        // If deadlines are the same, compare by task priority
+        if (taskA.priority === "Low" && taskB.priority === "High") {
+            return 1;
+        } else if (taskA.priority === "High" && taskB.priority === "Low") {
+            return -1;
+        }
+        // console.log(
+        //     taskA.taskName,
+        //     courseOrder.indexOf(taskA.course.toString()),
+        //     taskB.taskName,
+        //     courseOrder.indexOf(taskB.course.toString())
+        // );
+        // if (courseOrder.indexOf(taskA.course.toString()) == -1) {
+        //     const temp = Course.findById(taskA.course);
+        //     console.log("index -1:", temp.courseCode);
+        // }
+        // if (courseOrder.indexOf(taskB.course.toString()) == -1) {
+        //     const temp = Course.findById(taskB.course);
+        //     console.log("index -1:", temp.courseCode);
+        // }
+        // If task priorities are the same, compare by course priority
+        if (
+            courseOrder.indexOf(taskA.course.toString()) <
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return -1;
+        } else if (
+            courseOrder.indexOf(taskA.course.toString()) >
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return 1;
+        }
+        // If course priorities are the same, compare by task name
+        return taskA.taskName.localeCompare(taskB.taskName);
+    });
+    // console.log("tasks sorted by deadline");
+    // console.log(tasks[0]);
+    // return tasks;
+    return tasks.map((task) => task._id);
+};
+
+exports.reorderTasksByPriority = async (taskIds, courseOrder) => {
+    const tasksUnordered = await Task.find({ _id: { $in: taskIds } });
+    const tasksMap = new Map(
+        tasksUnordered.map((task) => [task._id.toString(), task])
+    );
+    const tasks = taskIds.map((taskId) => tasksMap.get(taskId.toString()));
+    tasks.sort((taskA, taskB) => {
+        // Compare by task priority
+        if (taskA.priority === "Low" && taskB.priority === "High") {
+            return 1;
+        } else if (taskA.priority === "High" && taskB.priority === "Low") {
+            return -1;
+        }
+        // If task priorities are the same, compare by nearest deadline
+        if (taskA.dueDate < taskB.dueDate) {
+            return -1;
+        } else if (taskA.dueDate > taskB.dueDate) {
+            return 1;
+        }
+        // If deadlines are the same, compare by course priority
+        if (
+            courseOrder.indexOf(taskA.course.toString()) <
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return -1;
+        } else if (
+            courseOrder.indexOf(taskA.course.toString()) >
+            courseOrder.indexOf(taskB.course.toString())
+        ) {
+            return 1;
+        }
+        // If course priorities are the same, compare by task name
+        return taskA.taskName.localeCompare(taskB.taskName);
+    });
+    // console.log("tasks sorted by priority");
+    // return tasks;
+    return tasks.map((task) => task._id);
+};
+
+// Update user's task priorities
+exports.updateUserTasksPriority = async (
+    userid,
+    tutorialPriorityChanged,
+    lecturePriorityChanged,
+    quizPriorityChanged
+) => {
+    try {
+        const user = await User.findById(userid);
+        if (!user) {
+            return { success: false, error: "User not found." };
+        }
+        const userTasks = await Task.find({
+            _id: { $in: user.tasksByPriority },
+        });
+        for (const task of userTasks) {
+            if (tutorialPriorityChanged && task.taskName === "Tutorial") {
+                task.priority = user.tutorialPriority;
+            } else if (lecturePriorityChanged && task.taskName === "Lecture") {
+                task.priority = user.lecturePriority;
+            } else if (quizPriorityChanged && task.taskName === "Quiz") {
+                task.priority = user.quizPriority;
+            }
+            await task.save();
+        }
+        user.tasksByDate = await this.reorderTasksByDeadline(
+            user.tasksByDate,
+            user.courses
+        );
+        user.tasksByPriority = await this.reorderTasksByPriority(
+            user.tasksByPriority,
+            user.courses
+        );
+        await user.save();
+    } catch (error) {
+        console.log(error);
     }
 };

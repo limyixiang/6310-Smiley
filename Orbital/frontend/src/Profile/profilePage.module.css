@@ -1,0 +1,163 @@
+/* Include this at the top of CSS file */
+@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Calibri:wght@300&display=swap");
+
+@import "./colorPicker.module.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /*ensures that padding and border are included in total width and height*/
+    font-family: "Calibri", sans-serif;
+} /*applies to all CSS files*/
+
+.mainContainer {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--pageBackground-color);
+    background-size: cover;
+    background-position: center;
+    user-select: none;
+} /*acts as the body{}*/
+
+.headerGroup {
+    display: flex;
+    position: fixed;
+    top: 7vh;
+    left: 7vw;
+}
+
+.headerGroup h2 {
+    color: var(--mainText-color);
+}
+
+.formContainer {
+    display: flex;
+    position: fixed;
+    top: 15vh;
+    left: 7vw;
+    width: 50vw;
+    margin: 2vh 0 2vh 0;
+}
+
+.formGroup {
+    width: 100%;
+    display: flex;
+} /*input box and label*/
+
+.formGroup label {
+    font-size: 16px;
+    color: var(--mainText-color);
+    text-align: left;
+    font-weight: bold;
+} /*input box label*/
+
+.formGroup input {
+    width: 100%;
+    height: 100%;
+    background: white;
+    outline: none;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--mainText-color);
+    padding: 8.5px;
+} /*input box content*/
+
+.formGroup input::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+} /*input box placeholder*/
+
+.formContainer button:hover {
+    background: var(--hover-color);
+}
+
+.linkGroup {
+    display: flex;
+    position: fixed;
+    top: 5vh;
+    right: 7vw;
+} /*hyperlink to other pages*/
+
+.linkGroup button {
+    border: 2px solid var(--border-color);
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin: 10px;
+    color: var(--mainText-color);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+    background: transparent;
+} /*hyperlink text*/
+
+.linkGroup button:hover {
+    background-color: var(--hover-color);
+    cursor: pointer;
+} /*hyperlink on hover*/
+
+.colorContainer {
+    display: flex;
+    position: fixed;
+    top: 30vh;
+    left: 7vw;
+    width: 100%;
+    align-items: baseline;
+}
+
+.colorContainer p {
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--mainText-color);
+}
+
+.colorContainer button {
+    border: 2px solid var(--border-color);
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin-left: 20px;
+    color: var(--mainText-color);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+    background: transparent;
+}
+
+.colorContainer button:hover {
+    background-color: var(--hover-color);
+    cursor: pointer;
+}
+
+.buttonGroup {
+    display: flex;
+    position: fixed;
+    bottom: 10vh;
+    left: 5vw;
+}
+
+.buttonGroup button {
+    border: 2px solid var(--border-color);
+    border-radius: 30px;
+    padding: 10px 30px;
+    margin-left: 20px;
+    color: var(--mainText-color);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 16px;
+    background: transparent;
+}
+
+.buttonGroup button:hover {
+    background-color: var(--hover-color);
+    cursor: pointer;
+}
