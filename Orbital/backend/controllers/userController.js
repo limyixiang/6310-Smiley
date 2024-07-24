@@ -270,7 +270,7 @@ exports.submitFeedback = async (req, res) => {
             subject: "Thank you for your feedback!",
             html: `<h1>Feedback Received</h1>
                 <h2>Here's the feedback that you have submitted:</h2>
-                <p>Date Submitted: ${new Date()}</p>
+                <p>Date Submitted: ${new Date().toLocaleString()}</p>
                 <p>Feedback Type: ${req.body.feedbackType}</p>
                 <p>Feedback Title: ${req.body.feedbackTitle}</p>
                 <p>Feedback Message: ${req.body.feedbackMessage}</p>
@@ -283,7 +283,7 @@ exports.submitFeedback = async (req, res) => {
             subject: "Feedback Received",
             html: `<h1>Feedback Received</h1>
                 <h2>Here's the feedback that has been submitted:</h2>
-                <p>Date Submitted: ${new Date()}</p>
+                <p>Date Submitted: ${new Date().toLocaleString()}</p>
                 <p>User ID: ${req.body.userid}</p>
                 <p>User Email: ${user.email}</p>
                 <p>User Name: ${user.name}</p>
