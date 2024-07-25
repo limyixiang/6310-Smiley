@@ -161,7 +161,7 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
     const dueToday = dueDate === today.getTime();
     // console.log("dueToday:", dueToday);
     const notificationTime = dueToday
-        ? new Date(Date.now() + 10 * 1000) // 10 seconds after current time
+        ? new Date(Date.now() + 0 * 1000) // 0 seconds after current time
         : // : new Date(dueDate - 24 * 60 * 60 * 1000); // 1 day before due date
           new Date(
               dueDate -
