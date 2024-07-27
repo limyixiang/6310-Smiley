@@ -39,7 +39,7 @@ const Dashboard = () => {
 
         setTimeout(() => {
             setIsQuoteDisabled(false);
-        }, 1000);
+        }, 500);
     };
 
     // Updates username in dashboard on change in profile page
@@ -180,7 +180,11 @@ const Dashboard = () => {
             <div className={styles.quoteGroup}>
                 <p>" {quote} "</p>
                 <p>- {author}</p>
-                <button onClick={handleFetchQuote} disabled={isQuoteDisabled}>
+                <button
+                    className={isQuoteDisabled ? styles.disabled : ""}
+                    onClick={handleFetchQuote}
+                    disabled={isQuoteDisabled}
+                >
                     New Quote
                 </button>
             </div>

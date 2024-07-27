@@ -128,6 +128,11 @@
     cursor: pointer;
 }
 
+.quoteGroup button.disabled {
+    cursor: not-allowed;
+    background-color: rgba(0, 124, 185, 0.1); /* Optional: Change background color to indicate disabled state */
+}
+
 /*Applies to all dashboard pages*/
 .welcomeMessage {
     position: fixed;
