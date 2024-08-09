@@ -49,6 +49,7 @@ function TaskContainer({
         viewTasks === "thisWeek" ? currentWeekTasks : nextWeekTasks;
 
     const getPercentageCompleted = () => {
+        if (displayedTasks.length === 0) return 100;
         const completedTasks = displayedTasks.filter(
             (task) => task.status === "Done"
         );

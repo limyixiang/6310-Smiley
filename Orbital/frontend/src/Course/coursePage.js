@@ -160,7 +160,7 @@ function CoursePage() {
         const completed = completedTasks.length;
         const incomplete = incompleteTasks.length;
         const total = completed + incomplete;
-        if (total === 0) return 0;
+        if (total === 0) return 100;
         return Math.round((completed / total) * 100);
     };
 
@@ -186,7 +186,7 @@ function CoursePage() {
         }).length;
         const totalCurrentWeekTasks =
             currentWeekCompletedTasks + currentWeekIncompleteTasks;
-        if (totalCurrentWeekTasks === 0) return 0;
+        if (totalCurrentWeekTasks === 0) return 100;
         return Math.round(
             (currentWeekCompletedTasks / totalCurrentWeekTasks) * 100
         );
