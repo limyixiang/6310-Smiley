@@ -168,6 +168,7 @@ function ProfilePage() {
             })
             .catch();
     };
+
     const onSignout = () => {
         signout(); // Perform signout action
         console.log("Signed out");
