@@ -6,11 +6,6 @@ const taskSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    // temporarily false (maybe we dont need this)
-    description: {
-        type: String,
-        required: false,
-    },
     dueDate: {
         type: Date,
         required: true,
@@ -19,11 +14,6 @@ const taskSchema = new mongoose.Schema({
         type: String,
         enum: ["High", "Low"],
         required: true,
-    },
-    // temporarily false, remember to change to true
-    reminders: {
-        type: Boolean,
-        required: false,
     },
     status: {
         type: String,

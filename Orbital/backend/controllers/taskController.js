@@ -247,12 +247,10 @@ exports.createTask = async (req, res) => {
                 error: errors.array()[0].msg,
             });
         }
-        // console.log(req);
         const user = await User.findById(req.body.userid);
         const course = await Course.findById(req.body.courseid);
         const dueDate = new Date(req.body.dueDate);
         dueDate.setUTCHours(-8, 0, 0, 0);
-        // console.log(dueDate.toLocaleString());
         const task = new Task({
             taskName: req.body.taskName,
             dueDate: dueDate,
@@ -260,7 +258,6 @@ exports.createTask = async (req, res) => {
             user: user,
             course: course,
         });
-        // console.log("reached here");
         const newDeadline = new Date(task.dueDate).getTime();
         if (res) {
             var userTasksByDate = user.tasksByDate;
@@ -301,15 +298,12 @@ exports.createTask = async (req, res) => {
                 user.set("tasksByDate", userTasksByDate);
                 user.set("tasksByPriority", userTasksByPriority);
                 await user.save({ $inc: { __v: 1 } });
-                // console.log("User saved.");
 
                 course.set("tasksByDate", courseTasksByDate);
                 course.set("tasksByPriority", courseTasksByPriority);
                 await course.save({ $inc: { __v: 1 } });
-                // console.log("Course saved.");
 
                 await task.save();
-                // console.log("Task created and saved.");
             } catch (err) {
                 console.log(err);
             }
@@ -336,15 +330,6 @@ exports.createTask = async (req, res) => {
             await course.save();
             await task.save();
         }
-        // const jobId = scheduleTaskDeadlineNotification({
-        //     courseCode: course.courseCode,
-        //     dueDate: newDeadline,
-        //     user: user,
-        //     taskName: task.taskName,
-        // });
-        // console.log(jobId);
-        // task.set("notification", jobId);
-        // await task.save();
         const jobs = await scheduleTaskDeadlineNotification({
             courseCode: course.courseCode,
             dueDate: newDeadline,
@@ -418,7 +403,6 @@ exports.deleteTask = async (req, res) => {
         });
     } catch (error) {
         // Handle errors
-        // console.error(error);
         res.status(500).json({
             success: false,
             error: "Internal server error.",
@@ -482,7 +466,6 @@ exports.completeTask = async (req, res) => {
             return res.status(200).json({ message: "Task already completed" });
         }
         task.status = "Done";
-        // await cancelTaskDeadlineNotification(task);
         await disableTaskDeadlineNotification(task);
         await task.save();
         return res.status(200).json({ message: "Task completed successfully" });
@@ -518,23 +501,14 @@ exports.reverseCompleteTask = async (req, res) => {
 };
 
 exports.reorderTasksByDeadline = async (taskIds, courseOrder) => {
-    // console.log(courseOrder);
     const tasksUnordered = await Task.find({ _id: { $in: taskIds } });
-    // console.log("tasksUnordered", tasksUnordered);
     const tasksMap = new Map(
         tasksUnordered.map((task) => [task._id.toString(), task])
     );
-    // console.log("tasksMap", tasksMap);
     const tasks = taskIds.map((taskId) => tasksMap.get(taskId.toString()));
-    // const coursesUnordered = await Course.find({ _id: { $in: courseIds } });
-    // const coursesMap = new Map(coursesUnordered.map((course) => [course._id, course]));
-    // const courses = courseIds.map((courseId) => coursesMap.get(courseId));
-    // console.log("tasks before sorting", tasks);
     tasks.sort((taskA, taskB) => {
         // Compare by nearest deadline
-        // console.log(taskA.dueDate > taskB.dueDate);
         if (taskA.dueDate < taskB.dueDate) {
-            // console.log("this actually works");
             return -1;
         } else if (taskA.dueDate > taskB.dueDate) {
             return 1;
@@ -545,20 +519,6 @@ exports.reorderTasksByDeadline = async (taskIds, courseOrder) => {
         } else if (taskA.priority === "High" && taskB.priority === "Low") {
             return -1;
         }
-        // console.log(
-        //     taskA.taskName,
-        //     courseOrder.indexOf(taskA.course.toString()),
-        //     taskB.taskName,
-        //     courseOrder.indexOf(taskB.course.toString())
-        // );
-        // if (courseOrder.indexOf(taskA.course.toString()) == -1) {
-        //     const temp = Course.findById(taskA.course);
-        //     console.log("index -1:", temp.courseCode);
-        // }
-        // if (courseOrder.indexOf(taskB.course.toString()) == -1) {
-        //     const temp = Course.findById(taskB.course);
-        //     console.log("index -1:", temp.courseCode);
-        // }
         // If task priorities are the same, compare by course priority
         if (
             courseOrder.indexOf(taskA.course.toString()) <
@@ -574,9 +534,6 @@ exports.reorderTasksByDeadline = async (taskIds, courseOrder) => {
         // If course priorities are the same, compare by task name
         return taskA.taskName.localeCompare(taskB.taskName);
     });
-    // console.log("tasks sorted by deadline");
-    // console.log(tasks[0]);
-    // return tasks;
     return tasks.map((task) => task._id);
 };
 
@@ -614,8 +571,6 @@ exports.reorderTasksByPriority = async (taskIds, courseOrder) => {
         // If course priorities are the same, compare by task name
         return taskA.taskName.localeCompare(taskB.taskName);
     });
-    // console.log("tasks sorted by priority");
-    // return tasks;
     return tasks.map((task) => task._id);
 };
 

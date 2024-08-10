@@ -69,7 +69,6 @@ function SettingsPage() {
 
     useEffect(() => {
         getPreferences({ userid: user._id }).then((response) => {
-            // console.log(response);
             if (response) {
                 setNotificationPreferences({
                     notifications: response.data.notifications,
@@ -129,7 +128,6 @@ function SettingsPage() {
     );
 
     const handleInputChange = (name) => (event) => {
-        // console.log(name);
         setSuccess(false);
         if (name === "notifications" && !event.target.checked) {
             setNotificationPreferences((prevState) => ({

@@ -75,14 +75,11 @@ exports.createCourse = async (req, res) => {
                 taskPriority = user.quizPriority;
             }
             const refDate = new Date();
-            // refDate.setUTCHours(-8, 0, 0, 0);
             const dayOfWeek = days.indexOf(task.reminderDay);
-            // console.log(refDate.getDate());
             refDate.setDate(
                 refDate.getDate() + ((dayOfWeek + 7 - refDate.getDay()) % 7)
             );
             for (let i = 0; i < task.reminderNumberOfRepeats; i++) {
-                // console.log("Creating task...");
                 await createTask({
                     body: {
                         taskName: task.recurringTaskName,
@@ -92,7 +89,6 @@ exports.createCourse = async (req, res) => {
                         courseid: course._id,
                     },
                 });
-                // console.log("Task created...");
                 refDate.setDate(
                     refDate.getDate() + freqs[task.reminderFrequency]
                 );
@@ -175,7 +171,6 @@ exports.deleteCourse = async (req, res) => {
         });
     } catch (error) {
         // Handle errors
-        // console.error(error);
         res.status(500).json({
             success: false,
             error: "Internal server error.",
@@ -191,7 +186,6 @@ exports.getCourses = async (req, res) => {
             return res.status(404).json({ error: "User not found." });
         }
         await user.populate("courses");
-        // console.log(user.courses);
         return res.json(user.courses);
     } catch (error) {
         return res.status(500).json({ error: error.message });
