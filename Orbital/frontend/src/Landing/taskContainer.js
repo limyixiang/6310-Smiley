@@ -20,7 +20,6 @@ function TaskContainer({
     const now = new Date();
     now.setUTCHours(16, 0, 0, 0);
     // Get the first day of the week (assuming Monday is the first day of the week)
-    // console.log(now);
     const firstDayOfWeek = new Date(
         now.setDate(
             now.getDay() === 0
@@ -35,13 +34,11 @@ function TaskContainer({
         const dueDate = new Date(task.dueDate);
         return dueDate >= firstDayOfWeek && dueDate <= lastDayOfWeek;
     });
-    // console.log(new Date(lastDayOfWeek));
     // Filter tasks that are due the next week
     const nextWeekTasks = tasks.filter((task) => {
         const dueDate = new Date(task.dueDate);
         const nextWeekLastDay = new Date(lastDayOfWeek);
         nextWeekLastDay.setDate(nextWeekLastDay.getDate() + 7);
-        // nextWeekLastDay.setUTCHours(-8, 0, 0, 0);
         return dueDate > lastDayOfWeek && dueDate <= nextWeekLastDay;
     });
 
@@ -49,6 +46,7 @@ function TaskContainer({
         viewTasks === "thisWeek" ? currentWeekTasks : nextWeekTasks;
 
     const getPercentageCompleted = () => {
+        if (displayedTasks.length === 0) return 100;
         const completedTasks = displayedTasks.filter(
             (task) => task.status === "Done"
         );

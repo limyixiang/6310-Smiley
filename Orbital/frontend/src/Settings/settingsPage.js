@@ -2,7 +2,12 @@ import { React, useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./settingsPage.module.css";
 import ToggleSwitch from "./toggleSwitch";
-import { updateNotifications, getPreferences, getColorTheme } from "../Backend";
+import {
+    updateNotifications,
+    getPreferences,
+    getColorTheme,
+    colorThemeChange,
+} from "../Backend";
 
 function SettingsPage() {
     const location = useLocation();
@@ -14,6 +19,7 @@ function SettingsPage() {
 
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [colorChanged, setColorChanged] = useState(false);
 
     const themes = useMemo(
         () => ({
@@ -63,7 +69,6 @@ function SettingsPage() {
 
     useEffect(() => {
         getPreferences({ userid: user._id }).then((response) => {
-            // console.log(response);
             if (response) {
                 setNotificationPreferences({
                     notifications: response.data.notifications,
@@ -94,7 +99,9 @@ function SettingsPage() {
                 setThemeColor(data.data);
             })
             .catch((err) => console.error("Error fetching data:", err));
-    }, [user._id, themes]);
+
+        setColorChanged(false);
+    }, [user._id, themes, colorChanged]);
 
     const {
         notifications,
@@ -121,7 +128,6 @@ function SettingsPage() {
     );
 
     const handleInputChange = (name) => (event) => {
-        // console.log(name);
         setSuccess(false);
         if (name === "notifications" && !event.target.checked) {
             setNotificationPreferences((prevState) => ({
@@ -144,6 +150,17 @@ function SettingsPage() {
                 [name]: event.target.value,
             }));
         }
+    };
+
+    const handleColorThemeChange = async (theme) => {
+        colorThemeChange(user._id, theme)
+            .then((data) => {
+                if (data.error) {
+                } else {
+                    setColorChanged(true);
+                }
+            })
+            .catch();
     };
 
     const onSave = async () => {
@@ -314,12 +331,30 @@ function SettingsPage() {
                         <option value="High">High</option>
                     </select>
                 </div>
-                {loadingMessage()}
-                {successMessage()}
+                <div className={styles.colorContainer}>
+                    <p>CHANGE THEME:</p>
+                    <button onClick={() => handleColorThemeChange("default")}>
+                        Default Blue
+                    </button>
+                    <button onClick={() => handleColorThemeChange("light")}>
+                        Light
+                    </button>
+                    <button onClick={() => handleColorThemeChange("dark")}>
+                        Dark
+                    </button>
+                    <button onClick={() => handleColorThemeChange("green")}>
+                        Green
+                    </button>
+                    <button onClick={() => handleColorThemeChange("pink")}>
+                        Pink
+                    </button>
+                </div>
                 <div className={styles.buttonGroup}>
                     <button onClick={onSave}>Save</button>
                     <button onClick={onReset}>Reset to Default</button>
                 </div>
+                {loadingMessage()}
+                {successMessage()}
                 <div className={styles.linkGroup}>
                     <button onClick={onLandingPage}>
                         Back to Landing Page

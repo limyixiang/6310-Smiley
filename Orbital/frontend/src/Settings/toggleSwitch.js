@@ -2,13 +2,6 @@ import React from "react";
 import styles from "./toggleSwitch.module.css";
 
 function ToggleSwitch({ toggled, name, handleInputChange, disabled }) {
-    // const toggle = () => {
-    //     setNotificationPreferences({
-    //         ...notificationPreferences,
-    //         event: !event,
-    //     });
-    // };
-
     return (
         <label className={styles.switch}>
             <input

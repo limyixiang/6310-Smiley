@@ -43,15 +43,6 @@ agenda.define("send web push", async (job) => {
     }
 });
 
-// exports.subscribe = async (req, res) => {
-//     const { subscription, title, message } = req.body;
-//     const payload = JSON.stringify({ title, message });
-//     webpush
-//         .sendNotification(subscription, payload)
-//         .catch((err) => console.error("err", err));
-//     res.status(200).json({ success: true });
-// };
-
 exports.subscribe = async (req, res) => {
     const { subscription, title, message } = req.body;
     // Schedule the notification immediately upon subscription
@@ -66,13 +57,9 @@ exports.subscribe = async (req, res) => {
 agenda.define("scheduleWeeklySummaryNotification", async () => {
     const users = await User.find();
     console.log("scheduling weekly summary notification");
-    // const users = await User.find({ email: "test@gmail.com" });
-    // const users = await User.find({ email: "e1121685@u.nus.edu" });
-    // const users = await User.find({ email: "e1157341@u.nus.edu" });
 
     for (const user of users) {
         const subscriptions = user.subscriptions;
-        // console.log(subscriptions.length);
         if (subscriptions.length === 0 || user.notifications === false) {
             continue;
         }
@@ -83,7 +70,6 @@ agenda.define("scheduleWeeklySummaryNotification", async () => {
         const endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(endOfWeek.getDate() + 7);
         endOfWeek.setUTCMilliseconds(endOfWeek.getUTCMilliseconds() - 1);
-        // console.log(startOfWeek, endOfWeek);
 
         const userTasks = await Task.find({
             _id: { $in: user.tasksByDate },
@@ -94,7 +80,6 @@ agenda.define("scheduleWeeklySummaryNotification", async () => {
             )
         );
         const taskCount = userTasks.length;
-        // console.log(taskCount);
 
         if (taskCount === 0) {
             continue;
@@ -121,7 +106,6 @@ agenda.define("scheduleWeeklySummaryNotification", async () => {
             if (subscription == null) {
                 continue;
             }
-            // console.log(subscription);
             try {
                 await agenda.schedule("in 1 seconds", "send web push", {
                     subscription,
@@ -139,7 +123,6 @@ agenda.define("scheduleWeeklySummaryNotification", async () => {
 (async function () {
     await agenda.start();
     await agenda.every("0 9 * * 0", "scheduleWeeklySummaryNotification");
-    // await agenda.every("20 20 * * 6", "scheduleWeeklySummaryNotification"); // testing
 })();
 
 agenda.on("success", async (job) => {
@@ -154,22 +137,17 @@ agenda.on("success", async (job) => {
 
 exports.scheduleTaskDeadlineNotification = async (task) => {
     const { courseCode, dueDate, userid, taskName, taskPriority } = task;
-    // console.log(dueDate, taskName);
     const user = await User.findById(userid);
     const today = new Date();
     today.setUTCHours(-8, 0, 0, 0);
     const dueToday = dueDate === today.getTime();
-    // console.log("dueToday:", dueToday);
     const notificationTime = dueToday
         ? new Date(Date.now() + 0 * 1000) // 0 seconds after current time
-        : // : new Date(dueDate - 24 * 60 * 60 * 1000); // 1 day before due date
-          new Date(
+        : new Date(
               dueDate -
                   user.reminderDaysBeforeDeadline * 24 * 60 * 60 * 1000 +
                   user.reminderTime * 60 * 60 * 1000
           ); // user-defined time before due date
-    // const notificationTime = new Date(Date.now() + 5 * 1000); // 5 seconds after current time
-    // console.log(notificationTime);
     const daysBetweenDueDateAndToday =
         (dueDate - today) / (24 * 60 * 60 * 1000);
     const messageHelper =
@@ -199,8 +177,6 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
                     message,
                 }
             );
-            // console.log(job);
-            // console.log(job.attrs._id);
             jobs.push(job.attrs._id);
             if (taskPriority === "High" && user.notificationsHigh === false) {
                 await agenda.disable({ _id: job.attrs._id });
@@ -214,17 +190,14 @@ exports.scheduleTaskDeadlineNotification = async (task) => {
             console.log(error);
         }
     }
-    // console.log(jobs);
     return jobs;
 };
 
 exports.disableTaskDeadlineNotification = async (taskId) => {
     const task = await Task.findById(taskId);
     const jobs = task.notifications;
-    // console.log(jobs);
     for (const jobId of jobs) {
         await agenda.disable({ _id: jobId });
-        // console.log("disabled");
     }
 };
 
@@ -232,7 +205,6 @@ exports.enableTaskDeadlineNotification = async (taskId) => {
     const task = await Task.findById(taskId);
     const user = await User.findById(task.user._id);
     const jobs = task.notifications;
-    // console.log(jobs);
     const today = new Date();
     today.setUTCHours(-8, 0, 0, 0);
     const dueToday = task.dueDate.getTime() === today.getTime();
@@ -247,8 +219,6 @@ exports.enableTaskDeadlineNotification = async (taskId) => {
               daysLeft === 1 ? "day" : "days"
           }.`
         : `Your task "${task.taskName}" is due in ${user.reminderDaysBeforeDeadline} days.`;
-    // const testMessage = "Test Message";
-    // console.log(dueToday);
     for (const jobId of jobs) {
         const job = await agenda.jobs({ _id: jobId });
         if (job.length > 0) {
@@ -256,17 +226,14 @@ exports.enableTaskDeadlineNotification = async (taskId) => {
             await job[0].save();
         }
         await agenda.enable({ _id: jobId });
-        // console.log("enabled");
     }
 };
 
 exports.deleteTaskDeadlineNotification = async (taskId) => {
     const task = await Task.findById(taskId);
     const jobs = task.notifications;
-    // console.log(jobs);
     for (const jobId of jobs) {
         await agenda.cancel({ _id: jobId });
-        // console.log("cancelled");
     }
 };
 
@@ -309,20 +276,9 @@ exports.updateUserNotificationsTiming = async (userid) => {
         if (daysLeft < 0) {
             continue;
         }
-        // console.log(daysLeft);
         for (const jobId of jobs) {
             const job = await agenda.jobs({ _id: jobId });
             if (job.length > 0) {
-                // if we want to prevent rescheduling of jobs that have already been executed
-                // if (
-                //     job[0].attrs.nextRunAt === null ||
-                //     job[0].attrs.nextRunAt < now ||
-                //     job[0].attrs.lastFinishedAt !== null
-                // ) {
-                //     // console.log("Job has already been executed.");
-                //     // console.log(job);
-                //     continue; // Skip this job as it's considered finished
-                // }
                 const notificationTime = new Date(
                     task.dueDate -
                         user.reminderDaysBeforeDeadline * 24 * 60 * 60 * 1000 +
@@ -354,7 +310,6 @@ const gracefulShutdown = async () => {
     await agenda.stop();
     await agenda.close();
     console.log("Agenda stopped, exiting...");
-    // process.exit(0);
 };
 
 // Attach graceful shutdown to relevant signals, e.g., SIGINT from pressing Ctrl+C

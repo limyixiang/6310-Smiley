@@ -35,7 +35,6 @@ exports.getUser = (req, res) => {
 
 exports.getUserName = async (req, res) => {
     try {
-        // console.log(req.body);
         const { userid } = req.body;
         const user = await User.findById(userid);
         if (!user) {
@@ -50,8 +49,6 @@ exports.getUserName = async (req, res) => {
 exports.updateSubscriptions = async (req, res) => {
     try {
         const { userid, subscription: sub } = req.body;
-        // console.log(sub);
-        // console.log("Subscription:", subscription);
         const user = await User.findById(userid);
         const subscription = new Subscription({
             endpoint: sub.endpoint,
@@ -62,7 +59,6 @@ exports.updateSubscriptions = async (req, res) => {
             },
         });
         const existingSubscriptions = await Subscription.find({ user: user });
-        // console.log(user);
         if (!user) {
             return res.status(400).json({
                 error: "User not found",
@@ -78,16 +74,11 @@ exports.updateSubscriptions = async (req, res) => {
                 (sub) => sub.endpoint === subscription.endpoint
             );
             if (!exists) {
-                // console.log("Current subscriptions:", user.subscriptions);
                 user.subscriptions.push(subscription);
-                // console.log("Subscription added");
                 await user.save();
                 await subscription.save();
             }
         }
-        // for (const sub of existingSubscriptions) {
-        //     console.log(sub.endpoint);
-        // }
         return res.status(200).json({
             success: true,
         });
@@ -106,7 +97,6 @@ exports.profileChange = async (req, res) => {
         const user = await User.findByIdAndUpdate(userid, {
             name: name,
         });
-        // console.log(user);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -126,7 +116,6 @@ exports.profileChange = async (req, res) => {
 exports.colorThemeChange = async (req, res) => {
     try {
         const { userid, theme } = req.body;
-        // console.log(userid, theme);
         const user = await User.findByIdAndUpdate(userid, {
             colorTheme: theme,
         });
@@ -142,7 +131,6 @@ exports.colorThemeChange = async (req, res) => {
 exports.getColorTheme = async (req, res) => {
     try {
         const { userid } = req.body;
-        // console.log(req.body);
         const user = await User.findById(userid);
         if (!user) {
             return res.status(404).json({ error: "User not found." });
@@ -166,7 +154,6 @@ exports.updateNotifications = async (req, res) => {
             lecturePriority,
             quizPriority,
         } = req.body;
-        console.log(req.body);
         const user = await User.findById(userid);
         if (!user) {
             return res.status(404).json({ error: "User not found." });

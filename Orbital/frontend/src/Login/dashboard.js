@@ -106,18 +106,12 @@ const Dashboard = () => {
         getExistingSubscription().then(async (subscription) => {
             if (subscription) {
                 const subscriptionJson = subscription.toJSON();
-                // console.log("Auth key:", subscriptionJson.keys.auth);
-                // console.log("p256dh key:", subscriptionJson.keys.p256dh);
-                // console.log(subscriptionJson.keys);
-                // Optionally, send the subscription to your backend for storage or updates
                 updateSubscriptions(user._id, subscriptionJson);
             } else {
                 console.log("No existing subscription found.");
-                // Here you might want to call a function to create a new subscription
                 console.log("Creating new subscription");
                 const newSubscription = await createSubscription(user);
                 const subscriptionJson = newSubscription.toJSON();
-                // console.log(subscriptionJson.keys);
                 updateSubscriptions(user._id, subscriptionJson);
             }
         });
